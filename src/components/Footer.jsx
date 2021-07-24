@@ -11,7 +11,7 @@ class Footer extends Component {
             <span className="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="https://vcraftlabs.com/" target="_blank" rel="noopener noreferrer">vcraftlabs.com </a>2020</span>
             <span className="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Powered by {" "}
               <a href="https://vcraftlabs.com/" target="_blank" rel="noopener noreferrer"> 
-                <img id="brand-logo" src={brandlogo} alt="logo"/>
+                {/* <img id="brand-logo" src={brandlogo} alt="logo"/> */}&nbsp;<h3 style={{display:'inline'}}>Plot Network</h3>
               </a>   
             </span>
           </div>

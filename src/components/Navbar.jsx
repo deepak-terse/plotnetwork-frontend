@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Trans } from 'react-i18next';
-import logomini from '../assets/images/logo-mini.png';
+import logomini from '../assets/images/logo_short.png';
 import face15 from '../assets/images/faces-clipart/pic-1.png';
 
 class Navbar extends Component {
@@ -87,7 +87,7 @@ class Navbar extends Component {
               <Dropdown.Toggle as="a" className="nav-link cursor-pointer no-caret">
                 <div className="navbar-profile">
                   <img className="img-xs rounded-circle" src={face15} alt="profile" />
-                  <p className="mb-0 d-none d-sm-block navbar-profile-name"><Trans>Deepak Terse</Trans></p>
+                  <p className="mb-0 d-none d-sm-block navbar-profile-name"><Trans>Admin</Trans></p>
                   <i className="mdi mdi-menu-down d-none d-sm-block"></i>
                 </div>
               </Dropdown.Toggle>

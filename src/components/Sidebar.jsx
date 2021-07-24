@@ -3,8 +3,8 @@ import { RouteComponentProps, Link, withRouter } from 'react-router-dom';
 import { Collapse, Dropdown } from 'react-bootstrap';
 import { Trans } from 'react-i18next';
 
-import logo from '../assets/images/logo.webp';
-import logomini from '../assets/images/logo-mini.png';
+import logo from '../assets/images/logo_long.png';
+import logomini from '../assets/images/logo_short.png';
 import face15 from '../assets/images/faces-clipart/pic-1.png';
 
 class Sidebar extends Component {

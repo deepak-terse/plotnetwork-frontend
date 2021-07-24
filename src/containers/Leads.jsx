@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import '../styles/Home.module.scss';
+import { getAllLeads } from '../utils/gsheet_utils';
 
 class Leads extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            leads: getAllLeads()
+        }
+        console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$ ", getAllLeads());
     }
 
     render() {
+        const { leads } = this.state; 
+        const statusClass = {
+            "OPEN": "badge badge-success",
+            "CLOSE": "badge badge-danger",
+            "ON HOLD": "badge badge-info"
+        }
         return (
             <React.Fragment>
                 <div className="row">
@@ -25,62 +36,28 @@ class Leads extends Component {
                                                 <th> Lead Name </th>
                                                 <th> Lead Phone Number </th>
                                                 <th> Lead Email Address </th>
+                                                <th> Sales Manager </th>
                                                 <th> Message </th>
                                                 <th> Virtual Meet Time </th>
                                                 <th> Status </th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td> May 15, 2015 </td>
-                                                <td> Herman Beck </td>
-                                                <td> Deepak Beck </td>
-                                                <th> 8097872267 </th>
-                                                <th> deepakterse@gmail.com </th>
-                                                <th> Want to meet </th>
-                                                <th> 2021-05-07 3:00 </th>
-                                                <td><label className="badge badge-danger">Pending</label></td>
-                                            </tr>
-                                            <tr>
-                                                <td> May 15, 2015 </td>
-                                                <td> Herman Beck </td>
-                                                <td> Deepak Beck </td>
-                                                <th> 8097872267 </th>
-                                                <th> deepakterse@gmail.com </th>
-                                                <th> Want to meet </th>
-                                                <th> 2021-05-07 3:00 </th>
-                                                <td><label className="badge badge-warning">In progress</label></td>
-                                            </tr>
-                                            <tr>
-                                                <td> May 15, 2015 </td>
-                                                <td> Herman Beck </td>
-                                                <td> Deepak Beck </td>
-                                                <th> 8097872267 </th>
-                                                <th> deepakterse@gmail.com </th>
-                                                <th> Want to meet </th>
-                                                <th> 2021-05-07 3:00 </th>
-                                                <td><label className="badge badge-info">Fixed</label></td>
-                                            </tr>
-                                            <tr>
-                                                <td> May 15, 2015 </td>
-                                                <td> Herman Beck </td>
-                                                <td> Deepak Beck </td>
-                                                <th> 8097872267 </th>
-                                                <th> deepakterse@gmail.com </th>
-                                                <th> Want to meet </th>
-                                                <th> 2021-05-07 3:00 </th>
-                                                <td><label className="badge badge-success">Completed</label></td>
-                                            </tr>
-                                            <tr>
-                                                <td> May 15, 2015 </td>
-                                                <td> Herman Beck </td>
-                                                <td> Deepak Beck </td>
-                                                <th> 8097872267 </th>
-                                                <th> deepakterse@gmail.com </th>
-                                                <th> Want to meet </th>
-                                                <th> 2021-05-07 3:00 </th>
-                                                <td><label className="badge badge-warning">In progress</label></td>
-                                            </tr>
+                                            {(
+                                                leads.reverse().map((lead, index) => 
+                                                    <tr key={index}>
+                                                        <td> {lead["date"]} </td>
+                                                        <td> {lead["Broker_Name"]} </td>
+                                                        <td> {lead["Lead-Name"]} </td>
+                                                        <th> {lead["Lead-Phone-Number"]} </th>
+                                                        <th> {lead["Lead-Email-Address"]} </th>
+                                                        <td> {lead["Sales_Manager"]} </td>
+                                                        <th> {lead["Message"]} </th>
+                                                        <th> {lead["Virtual-Meet-Date-Time"]} </th>
+                                                        <td><label className={statusClass[lead["Status"]]}>{lead["Status"]}</label></td>
+                                                    </tr>
+                                                )
+                                            )}
                                         </tbody>
                                     </table>
                                 </div>
