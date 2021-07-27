@@ -5,6 +5,8 @@ import Spinner from './components/Spinner';
 
 const Dashboard = lazy(() => import('./containers/Dashboard'));
 const Leads = lazy(() => import('./containers/Leads'));
+const Brokers = lazy(() => import('./containers/Brokers'));
+const SalesTeam = lazy(() => import('./containers/SalesTeam'));
 const Login = lazy(() => import('./containers/Login'));
 
 const Error404 = lazy(() => import('./components/Error404'));
@@ -18,6 +20,8 @@ class AppRoutes extends Component {
         <Switch>
           <Route exact path="/dashboard" component={ Dashboard } />
           <Route exact path="/leads" component={ Leads } />
+          <Route exact path="/brokers" component={ Brokers } />
+          <Route exact path="/salesteam" component={ SalesTeam } />
           <Route exact path="/login" component={ Login } />
 
           <Route path="/404" component={ Error404 } />

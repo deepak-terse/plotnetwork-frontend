@@ -33,7 +33,7 @@ class Sidebar extends Component {
         </div>
         <ul className="nav">
           <li className="nav-item nav-category">
-            <span className="nav-link"><Trans>Navigation</Trans></span>
+            <span className="nav-link"><Trans>Quick Access</Trans></span>
           </li>
           <li className={ this.isPathActive('/dashboard') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
             <Link className="nav-link" to="/dashboard">
@@ -45,6 +45,21 @@ class Sidebar extends Component {
             <Link className="nav-link" to="/leads">
               <span className="menu-icon"><i className="mdi mdi-account-multiple"></i></span>
               <span className="menu-title"><Trans>Leads</Trans></span>
+            </Link>
+          </li>
+          <li className="nav-item nav-category">
+            <span className="nav-link"><Trans>Setup</Trans></span>
+          </li>
+          <li className={ this.isPathActive('/brokers') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
+            <Link className="nav-link" to="/brokers">
+              <span className="menu-icon"><i className="mdi mdi-account-multiple"></i></span>
+              <span className="menu-title"><Trans>Brokers</Trans></span>
+            </Link>
+          </li>
+          <li className={ this.isPathActive('/salesteam') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
+            <Link className="nav-link" to="/salesteam">
+              <span className="menu-icon"><i className="mdi mdi-account-multiple"></i></span>
+              <span className="menu-title"><Trans>Sales Team</Trans></span>
             </Link>
           </li>
         </ul>

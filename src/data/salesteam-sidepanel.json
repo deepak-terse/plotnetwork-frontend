@@ -1,0 +1,33 @@
+{
+    "title": "Sales Manager Form",
+    "subtitle": "Fill the below form to add/update Sales Manager",
+    "fields": [
+        {
+            "id": "name",
+            "label": "Full Name",
+            "type": "text",
+            "value": "",
+            "placeholder": "Sachin Nalawade",
+            "hidden": false,
+            "disabled": false
+        },
+        {
+            "id": "mobileNumber",
+            "label": "Mobile Number",
+            "type": "text",
+            "value": "",
+            "placeholder": "8888888888",
+            "hidden": false,
+            "disabled": false
+        },
+        {
+            "id": "email",
+            "label": "Email ID",
+            "type": "text",
+            "value": "",
+            "placeholder": "deepak@gmail.com",
+            "hidden": false,
+            "disabled": false
+        }
+    ]
+}

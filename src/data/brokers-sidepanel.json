@@ -1,0 +1,69 @@
+{
+    "title": "Brokers Form",
+    "subtitle": "Fill the below form to add/update Broker",
+    "fields": [
+        {
+            "id": "name",
+            "label": "Full Name",
+            "type": "text",
+            "value": "",
+            "placeholder": "Sachin Nalawade",
+            "hidden": false,
+            "disabled": false
+        },
+        {
+            "id": "salesManager",
+            "label": "Sales Manager",
+            "type": "text",
+            "value": "",
+            "placeholder": "Abhijit Singh",
+            "hidden": false,
+            "disabled": false
+        },
+        {
+            "id": "companyName",
+            "label": "Company Name",
+            "type": "text",
+            "value": "",
+            "placeholder": "Individual",
+            "hidden": false,
+            "disabled": false
+        },
+        {
+            "id": "reraNumber",
+            "label": "RERA Number",
+            "type": "text",
+            "value": "",
+            "placeholder": "A51900010107",
+            "hidden": false,
+            "disabled": false
+        },
+        {
+            "id": "mobileNumber",
+            "label": "Mobile Number",
+            "type": "text",
+            "value": "",
+            "placeholder": "8888888888",
+            "hidden": false,
+            "disabled": false
+        },
+        {
+            "id": "address",
+            "label": "Address",
+            "type": "text",
+            "value": "",
+            "placeholder": "Yudhisthir, 2nd floor, flat no. 4, Dadar west",
+            "hidden": false,
+            "disabled": false
+        },
+        {
+            "id": "email",
+            "label": "Email ID",
+            "type": "text",
+            "value": "",
+            "placeholder": "deepak@gmail.com",
+            "hidden": false,
+            "disabled": false
+        }
+    ]
+}

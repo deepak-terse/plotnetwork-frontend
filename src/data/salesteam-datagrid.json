@@ -1,0 +1,45 @@
+{
+    "title": "Sales Manager List",
+    "tableHeaders": [
+        { "key":"name", "label":"Name" },
+        { "key":"mobileNumber", "label":"Mobile Number"},
+        { "key":"email", "label":"Email ID"}
+    ],
+    "tableData": [
+        {
+            "name": "Abhijit Singh",
+            "mobileNumber": "9819223231",
+            "email": "abhijit@gmail.com"
+        },
+        {
+            "name": "Arjun Sharma",
+            "mobileNumber": "9819223231",
+            "email": "arjun@gmail.com"
+        },
+        {
+            "name": "Sarita Jain",
+            "mobileNumber": "9819223231",
+            "email": "sarita@gmail.com"
+        },
+        {
+            "name": "Mahesh Tambe",
+            "mobileNumber": "9819223231",
+            "email": "mahesh@gmail.com"
+        },
+        {
+            "name": "Anil Rathod ",
+            "mobileNumber": "9819223231",
+            "email": "anil@gmail.com"
+        },
+        {
+            "name": "Archana Mam",
+            "mobileNumber": "9819223231",
+            "email": "archana@gmail.com"
+        }
+    ],
+    "buttons": [
+        {
+            "label":  "Add Sales Manager"
+        }
+    ]
+}

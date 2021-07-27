@@ -1,0 +1,289 @@
+{
+    "title": "Brokers List",
+    "tableHeaders": [
+        { "key":"name", "label":"Name" },
+        { "key":"salesManager", "label":"Sales Manager" },
+        { "key":"companyName", "label":"Company Name" },
+        { "key":"reraNumber", "label":"RERA Number" },
+        { "key":"mobileNumber", "label":"Mobile Number"},
+        { "key":"address", "label":"Address" },
+        { "key":"email", "label":"Email ID"}
+    ],
+    "tableData": [
+        {
+          "name": "Praful Jadhav",
+          "salesManager": "Abhijit Singh",
+          "companyName": "Individual",
+          "reraNumber": "A51700028502",
+          "mobileNumber": "9819223231",
+          "address": "Sadanand2/7, Shivaji Colony Road, Near Vital Mandir, Parnkuti, Kalyan East, Dist. Thane, Pin: 421306",
+          "email": "praful.jadhav78@gmail.com"
+        },
+        {
+          "name": "Sachin Nalawade",
+          "salesManager": "Abhijit Singh",
+          "companyName": "Individual",
+          "reraNumber": "A51900010107",
+          "mobileNumber": "9930039696",
+          "address": "Yudhisthir, 2nd floor, flat no. 4, Dadar west",
+          "email": "sachin2000s@hotmail.com"
+        },
+        {
+          "name": "Tanmoy Barua",
+          "salesManager": "Abhijit Singh",
+          "companyName": "Propertiz TB Real Estate Advisory",
+          "reraNumber": "A51800003450",
+          "mobileNumber": "7718990283",
+          "address": "Usha Garden,Malad west, Mumbai, Pin: 400064",
+          "email": "propertiztb@gmail.com"
+        },
+        {
+          "name": "Jogesh Nair - Pincode realty",
+          "salesManager": "Arjun Sharma",
+          "companyName": "Pincode Realty",
+          "reraNumber": "A51800025451",
+          "mobileNumber": "9930853916",
+          "address": "Kandhari Colony BLDG No 4 Flat no 1 opp mani lunch home chembur east",
+          "email": "sales@pinkode.in"
+        },
+        {
+          "name": "Govind gupta",
+          "salesManager": "Arjun Sharma",
+          "companyName": "Risheeka Estate",
+          "reraNumber": "A51700001714",
+          "mobileNumber": "9829941556",
+          "address": "Prabadevi",
+          "email": ""
+        },
+        {
+          "name": "Sushil",
+          "salesManager": "Arjun Sharma",
+          "companyName": "Sushil",
+          "reraNumber": "A51900003123",
+          "mobileNumber": "9504534534",
+          "address": "Saykutieakjut Soceity A WING 9TH Floor 901",
+          "email": "sushil.1407@yahoo.co.in"
+        },
+        {
+          "name": "Kamal kukreja",
+          "salesManager": "Arjun Sharma",
+          "companyName": "Kamal Kukreja",
+          "reraNumber": "A51700013551",
+          "mobileNumber": "9890223253",
+          "address": "ULLASNAGAR",
+          "email": "kamalkkukreja@gmail.com"
+        },
+        {
+          "name": "Dharmesh",
+          "salesManager": "Arjun Sharma",
+          "companyName": "Leaf Realty",
+          "reraNumber": "A51700024209",
+          "mobileNumber": "7711000169",
+          "address": "Vakola Santacruz",
+          "email": "leafcorealty@gmail.com"
+        },
+        {
+          "name": "Manish",
+          "salesManager": "Arjun Sharma",
+          "companyName": "Manish",
+          "reraNumber": "A99000028186",
+          "mobileNumber": "8104049597",
+          "address": "Santacruz",
+          "email": "ms20info20@gmail.com"
+        },
+        {
+          "name": "Raj dhiryani",
+          "salesManager": "Arjun Sharma",
+          "companyName": "Gentry Estate",
+          "reraNumber": "A51900011756",
+          "mobileNumber": "9820066025",
+          "address": "Gentry ESTATE Colaba",
+          "email": "gentryrealestates@hotmail.com"
+        },
+        {
+          "name": "Biren shah",
+          "salesManager": "Arjun Sharma",
+          "companyName": "Shah estate",
+          "reraNumber": "A51900005001",
+          "mobileNumber": "9820119078",
+          "address": "Prabadevi",
+          "email": ""
+        },
+        {
+          "name": "Mitesh Advirkar",
+          "salesManager": "Sarita Jain",
+          "companyName": "Skyscraper Realtors",
+          "reraNumber": "A51900000633",
+          "mobileNumber": "9821447122",
+          "address": "B-302 Kohinoor Towers, Bal Govindas Road, Dadar West,Mumbai-28.",
+          "email": "skyscraperrealtors10@gmail.com"
+        },
+        {
+          "name": "Nelson Dsouza",
+          "salesManager": "Sarita Jain",
+          "companyName": "Winning Paths",
+          "reraNumber": "A5900013990",
+          "mobileNumber": "9833574450",
+          "address": "2, Victoria, L.J.Road, Ogal Lane, Mahim West, Mumbai-16.",
+          "email": "winningpaths@gmail.com"
+        },
+        {
+          "name": "Manoj Prithiani",
+          "salesManager": "Sarita Jain",
+          "companyName": "DHM Estates",
+          "reraNumber": "A51900000980",
+          "mobileNumber": "9820120110",
+          "address": "A/3, Unity Tower, P.B.Marg, Next to Lodha Park, Worli, Mumbai.",
+          "email": "dhmestates@yahoo.co.in"
+        },
+        {
+          "name": "Shyam Bacchan Gupta",
+          "salesManager": "Sarita Jain",
+          "companyName": "Neelam Consultants",
+          "reraNumber": "A51700015782",
+          "mobileNumber": "8793641273",
+          "address": "Yogidham Sop no.3, Ajmera Height, Shiv Amrut Dham, Kalyan West, Mumbai",
+          "email": "sbachhangupta@gmail.com"
+        },
+        {
+          "name": "Amit Gala",
+          "salesManager": "Sarita Jain",
+          "companyName": "Value Properties",
+          "reraNumber": "A51900000588",
+          "mobileNumber": "9819162911",
+          "address": "A-Wing, 801, Bhavya Supreme, G D Ambedkar Marg, Parel, Mumbai - 12",
+          "email": "bestdeals9@gmail.com"
+        },
+        {
+          "name": "Chirag Dholakiya",
+          "salesManager": "Sarita Jain",
+          "companyName": "Nynex Realty",
+          "reraNumber": "A51800027277",
+          "mobileNumber": "9920990279",
+          "address": "Office n o.235, IJMIMA Complex, off link road, behind infiniti 2 mall, Mindspace, Malad West, Mumbai",
+          "email": "ninexrealty@gmail.com"
+        },
+        {
+          "name": "Deepak Gala",
+          "salesManager": "Sarita Jain",
+          "companyName": "Neil Consultancy",
+          "reraNumber": "A51900000206",
+          "mobileNumber": "9699027555",
+          "address": "102,11th Floor, B Wing, Peninsula Business Park, S.B.Rd, Lower Parel, Mumbai-13",
+          "email": "deepak.gala@neilconsultancy.com"
+        },
+        {
+          "name": "Omkar Tompe",
+          "salesManager": "Mahesh Tambe",
+          "companyName": "Realty Track",
+          "reraNumber": "A51800000713",
+          "mobileNumber": "9892037570",
+          "address": "207, 2nd floor, Omkar Prarthana, Sahar Road, Andheri East",
+          "email": "realtytrackpropertyadvisory@gmail.com"
+        },
+        {
+          "name": "Meera Shah",
+          "salesManager": "Mahesh Tambe",
+          "companyName": "Midas Square Realty",
+          "reraNumber": "A51800001375",
+          "mobileNumber": "8850380553",
+          "address": "1st floor, 4/B, Laxmi Niwas, Thatta Nagar Chs, Chembur",
+          "email": ""
+        },
+        {
+          "name": "Ratan Seth",
+          "salesManager": "Mahesh Tambe",
+          "companyName": "R.S. Realty",
+          "reraNumber": "A51800018049",
+          "mobileNumber": "7021575685",
+          "address": "Shop No.12, Vasant Niwas, Tilak Road, Ghatkopar East",
+          "email": ""
+        },
+        {
+          "name": "Sagar Gupta",
+          "salesManager": "Mahesh Tambe",
+          "companyName": "Great Om Realtors",
+          "reraNumber": "A51900016481",
+          "mobileNumber": "8850646353",
+          "address": "Sarvoday Nagar, Vikash Mandal, Wadala",
+          "email": ""
+        },
+        {
+          "name": "Rajesh Gupta",
+          "salesManager": "Anil Rathod",
+          "companyName": "Dream Homes Realty",
+          "reraNumber": "A51700000406",
+          "mobileNumber": "9867244441",
+          "address": "Dadar East",
+          "email": "rajesh.kumar@dhrgroup.co.in"
+        },
+        {
+          "name": "Pramod Gaikar",
+          "salesManager": "Anil Rathod",
+          "companyName": "Delta Yards",
+          "reraNumber": "A51700008031",
+          "mobileNumber": "7738999948",
+          "address": "Mira Road Mumbai",
+          "email": "Pramod.gaikar@deltayards.com"
+        },
+        {
+          "name": "Ketan Vora",
+          "salesManager": "Anil Rathod",
+          "companyName": "Innovest Realty LLP",
+          "reraNumber": "A51900005736",
+          "mobileNumber": "9819795588",
+          "address": "Dadar West",
+          "email": "ketan@innovestconsulting.com"
+        },
+        {
+          "name": "Ramakant Gaikwad",
+          "salesManager": "Anil Rathod",
+          "companyName": "Bhagyashree Real Estate Consultancy",
+          "reraNumber": "A51800024458",
+          "mobileNumber": "9969186787",
+          "address": "Goregaon East",
+          "email": "bhagyashreeconsultancy1026@gmail.com"
+        },
+        {
+          "name": "Durgesh Gupta",
+          "salesManager": "Anil Rathod",
+          "companyName": "Durgesh Gupta",
+          "reraNumber": "A51900026512",
+          "mobileNumber": "9819900031",
+          "address": "Dadar West",
+          "email": "durgeshgupta1967@gmail.com"
+        },
+        {
+          "name": "Vishal Madhukar Sane",
+          "salesManager": "Archana Mam",
+          "companyName": "Individual",
+          "reraNumber": "A51900018327",
+          "mobileNumber": "8369081282",
+          "address": "3, Pitru Chhya Vajreshwari Wadi Veer Savarkar Marg, Dadar West Mumbai 400028",
+          "email": "sane.vishal@gmail.com"
+        },
+        {
+          "name": "Shrikesh Vilas Pednekar",
+          "salesManager": "Archana Mam",
+          "companyName": "Individual",
+          "reraNumber": "A51900027648",
+          "mobileNumber": "7977856881",
+          "address": "301/B, Kalika Darshan, Baburao Parulekar Marg, Bhavani Shankar Rd, Dadar West Mumbai 400028",
+          "email": "sharvinpednekar@gmail.com"
+        },
+        {
+          "name": "Bharat Dedhia",
+          "salesManager": "Archana Mam",
+          "companyName": "Individual",
+          "reraNumber": "A51900001313",
+          "mobileNumber": "9322235969",
+          "address": "2/3 Old Popatlal Building, Ranade Road, Dadar West Mumbai 400028",
+          "email": "dedhiaestates@yahoo.co.in"
+        }
+    ],
+    "buttons": [
+        {
+            "label":  "Add Broker"
+        }
+    ]
+}
