@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import { Route, BrowserRouter, Switch, RouteComponentProps, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import '../styles/Home.module.scss';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
-import Dashboard from './Dashboard';
-import Leads from './Leads';
 import { withTranslation } from "react-i18next";
-import AppRoutes from '../AppRoutes';
+import { HomeRoutes } from '../Routes';
 
 import '../App.scss';
 import "../utils/i18n";
@@ -34,7 +32,7 @@ class Home extends Component {
                     { navbarComponent }
                     <div className="main-panel">
                         <div className="content-wrapper">
-                            <AppRoutes/>
+                            <HomeRoutes/>
                         </div>
                     { footerComponent }
                     </div>
