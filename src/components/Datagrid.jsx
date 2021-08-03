@@ -47,7 +47,7 @@ class Datagrid extends Component {
                                                             </span> 
                                                         </th>
                                                         <th key="delete">
-                                                            <span className={styles['grid-icon']} onClick = {this.props.onDelete}> 
+                                                            <span className={styles['grid-icon']} onClick = {() => this.props.onDelete(lead)}> 
                                                                 <i className="mdi mdi-delete"></i> 
                                                             </span>         
                                                         </th>

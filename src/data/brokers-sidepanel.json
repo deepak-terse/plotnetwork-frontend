@@ -3,7 +3,7 @@
     "subtitle": "Fill the below form to add/update Broker",
     "fields": [
         {
-            "id": "name",
+            "id": "fullName",
             "label": "Full Name",
             "type": "text",
             "value": "",
@@ -12,7 +12,7 @@
             "disabled": false
         },
         {
-            "id": "salesManager",
+            "id": "salesManagerId",
             "label": "Sales Manager",
             "type": "text",
             "value": "",
@@ -57,7 +57,7 @@
             "disabled": false
         },
         {
-            "id": "email",
+            "id": "emailId",
             "label": "Email ID",
             "type": "text",
             "value": "",
