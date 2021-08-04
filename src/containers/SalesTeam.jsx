@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import '../styles/Home.module.scss';
 import SidePanel from '../components/SidePanel';
 import Datagrid from '../components/Datagrid';
@@ -21,26 +21,31 @@ class SalesTeam extends Component {
             datagridProps: datagridData,
             SidePanelProps: sidePanelData
         }
+        console.log("again");
         this.getSalesManager();
     }
 
     onAddHandler = () => {
-        sidePanelData.fields[0].value = "";
-        sidePanelData.fields[1].value = "";
-        sidePanelData.fields[2].value = "";
+        sidePanelData.fields.forEach((key, index) => {
+            sidePanelData.fields[index].value = "";
+        });
+        sidePanelData.action = "CREATE";
         this.setState({
             SidePanelProps: sidePanelData,
             drawerOpen: true
         })
+        console.log("this.state ", this.state)
     }
 
     onUpdateHandler = (data) => {
-        let SPProps = sidePanelData;
-        SPProps.fields[0].value = data.name;
-        SPProps.fields[1].value = data.mobileNumber;
-        SPProps.fields[2].value = data.email;
+        sidePanelData.fields.forEach((key, index) => {
+            sidePanelData.fields[index].value = data[key.id];
+        });
+        sidePanelData.action = "UPDATE";
+        sidePanelData.id = data.id;
+        console.log("sidePanelData ", sidePanelData);
         this.setState({
-            SidePanelProps: SPProps,
+            SidePanelProps: sidePanelData,
             drawerOpen: true
         })
     }
@@ -48,11 +53,16 @@ class SalesTeam extends Component {
     onDeleteHandler = (data) => {
         console.log(data);
         this.deleteSalesManager(data.id)
-
     }
 
-    onSaveHandler = () => {
-
+    onSaveHandler = (data) => {
+        console.log(data);
+        if(this.state.SidePanelProps.action === "CREATE") {
+            this.createSalesManager(data);
+        } else {
+            this.updateSalesManager(data);
+        }
+        this.backdropClickHandler();
     }
 
     onCancelHandler = () => {
@@ -72,6 +82,8 @@ class SalesTeam extends Component {
         if(this.state.drawerOpen){
             backdrop = <Backdrop close={this.backdropClickHandler}/>;
         }
+
+        console.log(this.state.SidePanelProps);
 
         return (
             <React.Fragment>
@@ -101,7 +113,6 @@ class SalesTeam extends Component {
             url: getAPIs().salesmanager,
             data: {}
         }).then((response) => {
-            console.log(response);
             if (response.status == 200){
                 console.log('User fetched');
 
@@ -122,25 +133,28 @@ class SalesTeam extends Component {
         });
     }
 
-    createSalesManager = () => {
+    createSalesManager = (data) => {
+        console.log(data);
+        let temp = JSON.parse(localStorage.getItem('loggedInUser'));
+
         axios({
             method: 'post',
             url: getAPIs().salesmanager,
             data: {
                 "user": {
-                    "userType": "admin"
+                    userType:temp.userType
                 },
                 "data": {
-                    "fullName": "Suprabhat",
-                    "mobileNumber": "9819223230",
-                    "emailId": "archanaa@gmail.com"
+                    "fullName": data.fullName,
+                    "mobileNumber": data.mobileNumber,
+                    "emailId": data.emailId
                 }
             }
         }).then((response) => {
             console.log(response);
             if (response.status == 200){
                 console.log('User created');
-                
+                this.getSalesManager();
             } else if (response.status == 401) {
                 console.log("Invalid input");
             } else {
@@ -151,27 +165,29 @@ class SalesTeam extends Component {
         });
     }
     
-    updateSalesManager = () => {
+    updateSalesManager = (data) => {
+        console.log(data);
+        let temp = JSON.parse(localStorage.getItem('loggedInUser'));
+
         axios({
             method: 'put',
             url: getAPIs().salesmanager,
             data: {
                 "user": {
-                    "userType": "admin",
-                    "id": "6106b3342aa6044da093bb7f"
+                    userType:temp.userType
                 },
                 "data": {
-                    "id": "6106b3342aa6044da093bb7e",
-                    "fullName": "Test2",
-                    "mobileNumber": "9819223239",
-                    "emailId": "archanatest@gmail.com"
+                    "id": data.id,
+                    "fullName": data.fullName,
+                    "mobileNumber": data.mobileNumber,
+                    "emailId": data.emailId
                 }
             }
         }).then((response) => {
             console.log(response);
             if (response.status == 200){
                 console.log('User updated');
-                
+                this.getSalesManager();
             } else if (response.status == 401) {
                 console.log("User did not exist");
             } else {
@@ -183,26 +199,23 @@ class SalesTeam extends Component {
     }
 
     deleteSalesManager = (dataId) => {
-        let temp = localStorage.getItem('loggedInUser');
-        console.log(temp);
+        let temp = JSON.parse(localStorage.getItem('loggedInUser'));
 
         axios({
             method: 'delete',
             url: getAPIs().salesmanager,
             data: {
                 "user": {
-                    userId:temp,
-                    
+                    userType:temp.userType
                 },
                 "data": {
                     id:dataId
                 }
             }
         }).then((response) => {
-            console.log(response);
             if (response.status == 200){
                 console.log('User deleted');
-                
+                this.getSalesManager();
             } else if (response.status == 401) {
                 console.log("User did not exist");
             } else {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import '../styles/Login.module.scss';
 import axios from 'axios';
 import { getAPIs } from '../utils/constants';
@@ -84,8 +84,9 @@ class Login extends Component {
         }).then((response) => {
             console.log(response);
             if (response.status == 200){
-                console.log('loggedInUser');
-                localStorage.setItem('loggedInUser', response.data.data);
+                localStorage.setItem('loggedInUser', JSON.stringify(response.data.data));
+                window.location.href = "/"
+                // this.props.history.push("/");
             } else if (response.status == 401) {
                 console.log("The entered credentials did not matched");
             } else {

@@ -12,10 +12,11 @@
             "disabled": false
         },
         {
-            "id": "salesManagerId",
+            "id": "salesManagerName",
             "label": "Sales Manager",
-            "type": "text",
+            "type": "select",
             "value": "",
+            "options": [],
             "placeholder": "Abhijit Singh",
             "hidden": false,
             "disabled": false

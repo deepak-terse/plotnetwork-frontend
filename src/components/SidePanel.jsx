@@ -7,28 +7,17 @@ import { Form } from 'react-bootstrap';
 class SidePanel extends Component {
     constructor(props) {
         super(props);
-        console.log("$$$$$$$$$$$$$$$$$$$$$$$ constructor");
         const formState = {};
         this.props.data.fields.map((field, index) => {
             formState[field.id] = field.value;
         });
 
+        formState.id = props.data.action === "UPDATE" ? props.data.id : "";
+
         this.state = formState;
     }
 
-    componentDidUpdate() {
-        // const formState = {};
-        // this.props.data.fields.map((field, index) => {
-        //     formState[field.id] = field.value;
-        // });
-
-        // this.state = formState;
-    }
-
     onChangeHandler = (event) => {
-        console.log(event);
-        console.log(event.target.name);
-
         const inputData = {}
         inputData[event.target.name] = event.target.value;
 
@@ -55,19 +44,35 @@ class SidePanel extends Component {
                                     <Form.Group className="row" key={index}>
                                         <label htmlFor={index} className="col-sm-3 col-form-label">{field.label}</label>
                                         <div className="col-sm-9">
-                                        <Form.Control 
-                                            name={field.id}
-                                            type={field.type} 
-                                            value={this.state[field.id]} 
-                                            onChange={this.onChangeHandler} 
-                                            className="form-control" 
-                                            id={index} 
-                                            placeholder={field.placeholder} />
+                                        {
+                                            field.type !== "select" ?
+                                            (
+                                                <Form.Control 
+                                                    name={field.id}
+                                                    type={field.type} 
+                                                    value={this.state[field.id]} 
+                                                    onChange={this.onChangeHandler} 
+                                                    className="form-control" 
+                                                    id={index} 
+                                                    placeholder={field.placeholder} />
+                                            ) : 
+                                            (
+                                                <select className="form-control" id="exampleSelectGender" value={this.state[field.id]} onChange={this.onChangeHandler}>
+                                                    {
+                                                        field.options.map((option, index) => 
+                                                            <option key={index} value={option.fullName}>{option.fullName}</option>
+                                                        )
+                                                        
+                                                    }
+                                                </select>
+                                            )
+                                        }
+
                                         </div>
                                     </Form.Group>
                                 )
                             )}
-                            <button className="btn btn-primary mr-2" onClick={onSave}>SAVE</button>
+                            <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); onSave(this.state);}}>SAVE</button>
                             <button className="btn btn-dark" onClick={onCancel}>CANCEL</button>
                             </form>                    
                         </div>

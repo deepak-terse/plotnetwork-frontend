@@ -1,5 +1,5 @@
-import React, { Component,Suspense, lazy } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import React, { Suspense, lazy } from 'react';
+import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 
 import Spinner from './components/Spinner';
 
@@ -14,51 +14,32 @@ const Home = lazy(() => import('./containers/Home'));
 const Error404 = lazy(() => import('./components/Error404'));
 const Error500 = lazy(() => import('./components/Error500'));
 
-let authed = true;
-
-export const AppRoutes = () => {
-	checkAuthentication();
+export const AppRoutes = (props) => {
 	return (
-		<Switch>
-			<Route exact path="/login" component={Login} />
-			<Route path="/" component={Home} />
-			<Route path="/404" component={ Error404 } />
-			<Route path="/500" component={ Error500 } />
-			<Redirect to="/login" />
-		</Switch>
+		<BrowserRouter>
+			<Suspense fallback={<Spinner/>}>
+				<Switch>
+					<Route path="/login" component={Login} />
+					<Route path="/404" component={ Error404 } />
+					<Route path="/500" component={ Error500 } />
+					<Route path="/">
+						{props.isUserAuthenticated ? <Home/> : <Redirect to="/login" />}
+					</Route>
+				</Switch>
+			</Suspense>
+		</BrowserRouter>
+		
 	);
 }
 
 export const HomeRoutes = () => {
-	checkAuthentication();
 	return (
-		<Suspense fallback={<Spinner/>}>
-			<Switch>
-				<PrivateRoute authed={authed} exact path="/dashboard" component={ Dashboard } />
-				<PrivateRoute authed={authed} exact path="/leads" component={ Leads } />
-				<PrivateRoute authed={authed} exact path="/brokers" component={ Brokers } />
-				<PrivateRoute authed={authed} exact path="/salesteam" component={ SalesTeam } />
-				<PrivateRoute authed={authed} to="/dashboard" />
-			</Switch>
-		</Suspense>
+		<Switch>
+			<Route path="/dashboard" component={ Dashboard } />
+			<Route path="/leads" component={ Leads } />
+			<Route path="/brokers" component={ Brokers } />
+			<Route path="/salesteam" component={ SalesTeam } />
+			<Redirect to="/dashboard" />
+		</Switch>
 	);
-}
-
-function PrivateRoute ({component: Component, authed, ...rest}) {
-	console.log("authed",authed);
-	return (
-	  <Route
-		{...rest}
-		render={(props) => authed === true
-		  ? <Component {...props} />
-		  : <Redirect to={{pathname: '/login'}} />}
-	  />
-	)
-}
-
-const checkAuthentication = () => {
-	console.log("localStorage.getItem('loggedInUser')", localStorage.getItem('loggedInUser'))
-	setTimeout(function() {
-		authed = localStorage.getItem('loggedInUser') ? true : false;
-	}, 1000);
 }

@@ -9,7 +9,6 @@ class Leads extends Component {
         this.state = {
             leads: getAllLeads()
         }
-        console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$ ", getAllLeads());
     }
 
     render() {
@@ -44,19 +43,21 @@ class Leads extends Component {
                                         </thead>
                                         <tbody>
                                             {(
-                                                leads.reverse().map((lead, index) => 
-                                                    <tr key={index}>
-                                                        <td> {lead["date"]} </td>
-                                                        <td> {lead["Broker_Name"]} </td>
-                                                        <td> {lead["Lead-Name"]} </td>
-                                                        <th> {lead["Lead-Phone-Number"]} </th>
-                                                        <th> {lead["Lead-Email-Address"]} </th>
-                                                        <td> {lead["Sales_Manager"]} </td>
-                                                        <th> {lead["Message"]} </th>
-                                                        <th> {lead["Virtual-Meet-Date-Time"]} </th>
-                                                        <td><label className={statusClass[lead["Status"]]}>{lead["Status"]}</label></td>
-                                                    </tr>
-                                                )
+                                                leads ?
+                                                    leads.reverse().map((lead, index) => 
+                                                        <tr key={index}>
+                                                            <td> {lead["date"]} </td>
+                                                            <td> {lead["Broker_Name"]} </td>
+                                                            <td> {lead["Lead-Name"]} </td>
+                                                            <th> {lead["Lead-Phone-Number"]} </th>
+                                                            <th> {lead["Lead-Email-Address"]} </th>
+                                                            <td> {lead["Sales_Manager"]} </td>
+                                                            <th> {lead["Message"]} </th>
+                                                            <th> {lead["Virtual-Meet-Date-Time"]} </th>
+                                                            <td><label className={statusClass[lead["Status"]]}>{lead["Status"]}</label></td>
+                                                        </tr>
+                                                    ) :
+                                                ""
                                             )}
                                         </tbody>
                                     </table>

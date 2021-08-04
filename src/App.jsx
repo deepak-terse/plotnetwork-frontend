@@ -1,19 +1,13 @@
-import { Route, BrowserRouter, Switch } from 'react-router-dom';
+import React, { useState } from 'react';
 import './App.scss';
-
-//Components
-import Home from './containers/Home';
-import Login from './containers/Login';
-
 import { AppRoutes } from './Routes';
 import "./utils/i18n";
 
 function App() {
+	const isUserAuthenticated = localStorage.getItem("loggedInUser") ? true : false;
+
 	return (
-		// Configuring all routes with its respective Components
-		<BrowserRouter>
-			<AppRoutes/>
-		</BrowserRouter>
+		<AppRoutes isUserAuthenticated = {isUserAuthenticated}/>
 	);
 }
 

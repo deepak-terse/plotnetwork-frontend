@@ -1,5 +1,5 @@
 export function getAPIs(){
-    const baseURL = "http://localhost";
+    const baseURL = "http://52.66.148.164";
     const portNo = 1337;
 
     return {

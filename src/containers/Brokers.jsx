@@ -36,18 +36,17 @@ class Brokers extends Component {
     }
 
     onUpdateHandler = (data) => {
-        let SPProps = sidePanelData;
         sidePanelData.fields.forEach((key, index) => {
             sidePanelData.fields[index].value = data[key.id];
         });
         this.setState({
-            SidePanelProps: SPProps,
+            SidePanelProps: sidePanelData,
             drawerOpen: true
         })
     }
 
-    onDeleteHandler = (drawerOpen, ) => {
-
+    onDeleteHandler = (data) => {
+        this.deleteBroker(data.id);
     }
 
 
@@ -94,6 +93,36 @@ class Brokers extends Component {
             </React.Fragment>
         )
     }
+
+    getSalesManager = () => {
+        axios({
+            method: 'get',
+            url: getAPIs().salesmanager,
+            data: {}
+        }).then((response) => {
+            if (response.status == 200){
+                console.log('User fetched');
+
+                let temp = this.state.SidePanelProps;
+                temp.fields.forEach((key, index) => {
+                    if(temp.fields[index].id === "salesManagerName") {
+                        temp.fields[index].options = response.data.data;
+                    }
+                });
+                console.log(temp);
+                this.setState({
+                    SidePanelProps: temp
+                })
+                
+            } else if (response.status == 401) {
+                console.log("Invalid user");
+            } else {
+                console.log('Error found : ', response.data.message);
+            }
+        }).catch((error)=>{
+            console.log('Error found : ', error);
+        });
+    }
     
     getBroker = () => {
         axios({
@@ -101,14 +130,20 @@ class Brokers extends Component {
             url: getAPIs().broker,
             data: {}
         }).then((response) => {
-            console.log(response);
             if (response.status == 200){
                 console.log('User fetched');
                 let temp = this.state.datagridProps;
                 temp.tableData = response.data.data;
+                temp.tableData.map( (e) => {
+                    e.salesManagerName = e.salesManagerId.fullName;
+                    e.salesManagerId = e.salesManagerId.id
+
+                    return e;
+                })
                 this.setState({
                     datagridProps: temp
                 })
+                this.getSalesManager();
                 
             } else if (response.status == 401) {
                 console.log("User not exist");
@@ -121,12 +156,14 @@ class Brokers extends Component {
     }
 
     createBroker = () => {
+        let temp = JSON.parse(localStorage.getItem('loggedInUser'));
+
         axios({
             method: 'post',
             url: getAPIs().broker,
             data: {
                 "user": {
-                    "userType": "admin"
+                    userType:temp.userType
                 },
                 "data": {
                     "fullName": "Test",
@@ -135,14 +172,13 @@ class Brokers extends Component {
                     "reraNumber": "ASU373938204",
                     "address": "tEST aDDRESS",
                     "companyName": "Test",
-                    "salesManagerId": "6106ad6241b9381c60eb6f22"
+                    "salesManagerId": "Archana Mam"
                 }
             }
         }).then((response) => {
-            console.log(response);
             if (response.status == 200){
                 console.log('User created');
-                
+                this.getBroker();
             } else if (response.status == 401) {
                 console.log("Invalid input");
             } else {
@@ -154,12 +190,14 @@ class Brokers extends Component {
     }
     
     updateBroker = () => {
+        let temp = JSON.parse(localStorage.getItem('loggedInUser'));
+
         axios({
             method: 'put',
             url: getAPIs().broker,
             data: {
                     "user": {
-                        "userType": "admin"
+                        userType:temp.userType
                     },
                     "data": {
                         "id": "6106e372060e18459cee54dd",
@@ -167,13 +205,11 @@ class Brokers extends Component {
                         "mobileNumber": "9819223239",
                         "emailId": "archanatest@gmail.com"
                     }
-                
             }
         }).then((response) => {
-            console.log(response);
             if (response.status == 200){
                 console.log('User updated');
-                
+                this.getBroker();
             } else if (response.status == 401) {
                 console.log("User not exist");
             } else {
@@ -184,23 +220,24 @@ class Brokers extends Component {
         });
     }
 
-    deleteBroker = () => {
+    deleteBroker = (dataId) => {
+        let temp = JSON.parse(localStorage.getItem('loggedInUser'));
+
         axios({
             method: 'delete',
             url: getAPIs().broker,
             data: {
                 "user": {
-                    "userType": "admin"
+                    userType:temp.userType
                 },
                 "data": {
-                    "id": "6106e372060e18459cee54dd"
+                    id:dataId
                 }
             }
         }).then((response) => {
-            console.log(response);
             if (response.status == 200){
                 console.log('User deleted');
-                
+                this.getBroker();
             } else if (response.status == 401) {
                 console.log("User not exist");
             } else {

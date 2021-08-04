@@ -5,8 +5,7 @@ import styles from '../styles/Home.module.scss';
 class Datagrid extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-        }
+        this.state = {}
     }
 
     render() {

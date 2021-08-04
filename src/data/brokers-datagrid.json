@@ -2,7 +2,7 @@
     "title": "Brokers List",
     "tableHeaders": [
         { "key":"fullName", "label":"Name" },
-        { "key":"salesManagerId", "label":"Sales Manager" },
+        { "key":"salesManagerName", "label":"Sales Manager" },
         { "key":"companyName", "label":"Company Name" },
         { "key":"reraNumber", "label":"RERA Number" },
         { "key":"mobileNumber", "label":"Mobile Number"},
