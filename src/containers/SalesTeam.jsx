@@ -34,7 +34,6 @@ class SalesTeam extends Component {
             SidePanelProps: sidePanelData,
             drawerOpen: true
         })
-        console.log("this.state ", this.state)
     }
 
     onUpdateHandler = (data) => {
@@ -43,7 +42,6 @@ class SalesTeam extends Component {
         });
         sidePanelData.action = "UPDATE";
         sidePanelData.id = data.id;
-        console.log("sidePanelData ", sidePanelData);
         this.setState({
             SidePanelProps: sidePanelData,
             drawerOpen: true
@@ -56,7 +54,6 @@ class SalesTeam extends Component {
     }
 
     onSaveHandler = (data) => {
-        console.log(data);
         if(this.state.SidePanelProps.action === "CREATE") {
             this.createSalesManager(data);
         } else {
@@ -134,7 +131,6 @@ class SalesTeam extends Component {
     }
 
     createSalesManager = (data) => {
-        console.log(data);
         let temp = JSON.parse(localStorage.getItem('loggedInUser'));
 
         axios({

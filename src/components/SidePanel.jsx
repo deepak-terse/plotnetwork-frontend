@@ -18,6 +18,7 @@ class SidePanel extends Component {
     }
 
     onChangeHandler = (event) => {
+        console.log("grllo", event.target)
         const inputData = {}
         inputData[event.target.name] = event.target.value;
 
@@ -30,6 +31,7 @@ class SidePanel extends Component {
             drawerClasses = styles.sideDrawerOpen
         }
         const { data, onSave, onCancel } = this.props;
+        console.log(data.fields);
 
         return(
             <div className={drawerClasses}>
@@ -57,12 +59,11 @@ class SidePanel extends Component {
                                                     placeholder={field.placeholder} />
                                             ) : 
                                             (
-                                                <select className="form-control" id="exampleSelectGender" value={this.state[field.id]} onChange={this.onChangeHandler}>
+                                                <select name={field.id} id={index} className="form-control" value={this.state[field.id]} onChange={this.onChangeHandler}>
                                                     {
                                                         field.options.map((option, index) => 
                                                             <option key={index} value={option.fullName}>{option.fullName}</option>
                                                         )
-                                                        
                                                     }
                                                 </select>
                                             )

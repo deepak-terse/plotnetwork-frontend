@@ -20,15 +20,13 @@ class Brokers extends Component {
         }
 
         this.getBroker();
-        // this.createBroker();
-        // this.updateBroker();
-        // this.deleteBroker();
     }
 
     onAddHandler = () => {
         sidePanelData.fields.forEach((key, index) => {
             sidePanelData.fields[index].value = "";
         });
+        sidePanelData.action = "CREATE";
         this.setState({
             SidePanelProps: sidePanelData,
             drawerOpen: true
@@ -39,6 +37,8 @@ class Brokers extends Component {
         sidePanelData.fields.forEach((key, index) => {
             sidePanelData.fields[index].value = data[key.id];
         });
+        sidePanelData.action = "UPDATE";
+        sidePanelData.id = data.id;
         this.setState({
             SidePanelProps: sidePanelData,
             drawerOpen: true
@@ -50,8 +50,16 @@ class Brokers extends Component {
     }
 
 
-    onSaveHandler = () => {
-
+    onSaveHandler = (data) => {
+        if(this.state.SidePanelProps.action === "CREATE") {
+            this.createBroker(data);
+        } else {
+            data.salesManagerId = this.state.SidePanelProps.fields[1].options.filter((e) => {
+                return e.fullName === data.salesManagerName;
+            })[0].id;
+            this.updateBroker(data);
+        }
+        this.backdropClickHandler();
     }
 
     onCancelHandler = () => {
@@ -155,7 +163,7 @@ class Brokers extends Component {
         });
     }
 
-    createBroker = () => {
+    createBroker = (data) => {
         let temp = JSON.parse(localStorage.getItem('loggedInUser'));
 
         axios({
@@ -166,13 +174,13 @@ class Brokers extends Component {
                     userType:temp.userType
                 },
                 "data": {
-                    "fullName": "Test",
-                    "mobileNumber": "8888888888",
-                    "emailId": "test@gmail.com",
-                    "reraNumber": "ASU373938204",
-                    "address": "tEST aDDRESS",
-                    "companyName": "Test",
-                    "salesManagerId": "Archana Mam"
+                    "fullName": data.fullName,
+                    "mobileNumber": data.mobileNumber,
+                    "emailId": data.emailId,
+                    "reraNumber": data.reraNumber,
+                    "address": data.address,
+                    "companyName": data.companyName,
+                    "salesManagerId": data.salesManagerId
                 }
             }
         }).then((response) => {
@@ -189,7 +197,7 @@ class Brokers extends Component {
         });
     }
     
-    updateBroker = () => {
+    updateBroker = (data) => {
         let temp = JSON.parse(localStorage.getItem('loggedInUser'));
 
         axios({
@@ -200,10 +208,14 @@ class Brokers extends Component {
                         userType:temp.userType
                     },
                     "data": {
-                        "id": "6106e372060e18459cee54dd",
-                        "fullName": "Test2",
-                        "mobileNumber": "9819223239",
-                        "emailId": "archanatest@gmail.com"
+                        "id": data.id,
+                        "fullName": data.fullName,
+                        "mobileNumber": data.mobileNumber,
+                        "emailId": data.emailId,
+                        "reraNumber": data.reraNumber,
+                        "address": data.address,
+                        "companyName": data.companyName,
+                        "salesManagerId": data.salesManagerId
                     }
             }
         }).then((response) => {
