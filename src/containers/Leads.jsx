@@ -7,8 +7,9 @@ class Leads extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            leads: getAllLeads()
+            leads: []
         }
+        this.getLeads();
     }
 
     render() {
@@ -33,7 +34,7 @@ class Leads extends Component {
                                                 <th> Date </th>
                                                 <th> Broker Name </th>
                                                 <th> Lead Name </th>
-                                                <th> Lead Phone Number </th>
+                                                <th> Lead Mobile Number </th>
                                                 <th> Lead Email Address </th>
                                                 <th> Sales Manager </th>
                                                 <th> Message </th>
@@ -49,7 +50,7 @@ class Leads extends Component {
                                                             <td> {lead["date"]} </td>
                                                             <td> {lead["Broker_Name"]} </td>
                                                             <td> {lead["Lead-Name"]} </td>
-                                                            <th> {lead["Lead-Phone-Number"]} </th>
+                                                            <th> {lead["mo_phone"]} </th>
                                                             <th> {lead["Lead-Email-Address"]} </th>
                                                             <td> {lead["Sales_Manager"]} </td>
                                                             <th> {lead["Message"]} </th>
@@ -69,6 +70,18 @@ class Leads extends Component {
                 </div>
             </React.Fragment>
         )
+    }
+
+    getLeads = () => {
+        getAllLeads().then((data) => {
+            console.log("Success", data);
+            this.setState({
+                leads: data
+            });
+            console.log(this.state.leads)
+        }).catch(() => {
+            console.log("Error");
+        })
     }
 }
 
