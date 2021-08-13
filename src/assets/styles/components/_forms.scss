@@ -30,6 +30,10 @@
     background-color: $input-bg;
     color: #ffffff;
   }
+  &:disabled {
+    background-color: $input-bg;
+    cursor: not-allowed;
+  }
   &.form-control-lg {
     padding: 0.94rem .75rem;
     height: calc(2.875rem + 2px);

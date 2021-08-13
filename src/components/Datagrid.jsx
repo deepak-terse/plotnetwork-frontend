@@ -27,8 +27,9 @@ class Datagrid extends Component {
                                                         <th key={index}> {colHeader.label} </th>
                                                     )
                                                 )}
-                                                <th key="edit"> Edit </th>
-                                                <th key="delete"> Delete </th>
+                                                { data.actions.isEdit ? <th key="edit"> Edit </th> : ""}
+                                                { data.actions.isDelete ? <th key="delete"> Delete </th> : ""}                                                
+                                                
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -40,16 +41,22 @@ class Datagrid extends Component {
                                                                 <th key={index2}> {lead[colHeader.key]} </th>
                                                             )
                                                         )}
-                                                        <th key="edit"> 
-                                                            <span className={styles['grid-icon']} onClick = {() => this.props.onEdit(lead)}>
-                                                                <i className="mdi mdi-grease-pencil"></i>
-                                                            </span> 
-                                                        </th>
-                                                        <th key="delete">
-                                                            <span className={styles['grid-icon']} onClick = {() => this.props.onDelete(lead)}> 
-                                                                <i className="mdi mdi-delete"></i> 
-                                                            </span>         
-                                                        </th>
+                                                        {
+                                                            data.actions.isEdit ?
+                                                            <th key="edit"> 
+                                                                <span className={styles['grid-icon']} onClick = {() => this.props.onEdit(lead)}>
+                                                                    <i className="mdi mdi-grease-pencil"></i>
+                                                                </span> 
+                                                            </th> : ""
+                                                        }
+                                                        {
+                                                            data.actions.isDelete ?
+                                                            <th key="delete">
+                                                                <span className={styles['grid-icon']} onClick = {() => this.props.onDelete(lead)}> 
+                                                                    <i className="mdi mdi-delete"></i> 
+                                                                </span>         
+                                                            </th> : ""
+                                                        }
                                                     </tr>
                                                 )
                                             )}

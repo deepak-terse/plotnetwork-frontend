@@ -6,6 +6,10 @@
         { "key":"emailId", "label":"Email ID"}
     ],
     "tableData": [],
+    "actions": {
+        "isEdit": true,
+        "isDelete":true
+    },
     "buttons": [
         {
             "label":  "Add Sales Manager"

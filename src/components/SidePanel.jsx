@@ -18,7 +18,6 @@ class SidePanel extends Component {
     }
 
     onChangeHandler = (event) => {
-        console.log("grllo", event.target)
         const inputData = {}
         inputData[event.target.name] = event.target.value;
 
@@ -36,7 +35,7 @@ class SidePanel extends Component {
         return(
             <div className={drawerClasses}>
                  <div className="grid-margin stretch-card">
-                    <div className="card">
+                    <div id={styles.spcard} className="card">
                     <div className="card-body">
                         <h4 className="card-title"> {data.title} </h4>
                         <p className="card-description"> {data.subtitle} </p>
@@ -56,10 +55,15 @@ class SidePanel extends Component {
                                                     onChange={this.onChangeHandler} 
                                                     className="form-control" 
                                                     id={index} 
+                                                    disabled={field.disabled}
                                                     placeholder={field.placeholder} />
                                             ) : 
                                             (
-                                                <select name={field.id} id={index} className="form-control" value={this.state[field.id]} onChange={this.onChangeHandler}>
+                                                <select name={field.id} id={index} 
+                                                    className="form-control" 
+                                                    value={this.state[field.id]} 
+                                                    disabled={field.disabled}
+                                                    onChange={this.onChangeHandler}>
                                                     {
                                                         field.options.map((option, index) => 
                                                             <option key={index} value={option.fullName}>{option.fullName}</option>
@@ -75,6 +79,8 @@ class SidePanel extends Component {
                             )}
                             <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); onSave(this.state);}}>SAVE</button>
                             <button className="btn btn-dark" onClick={onCancel}>CANCEL</button>
+                            <br/>
+                <br/>
                             </form>                    
                         </div>
                     </div>

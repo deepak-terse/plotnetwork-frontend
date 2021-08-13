@@ -1,88 +1,217 @@
 import React, { Component } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import '../styles/Home.module.scss';
-import { getAllLeads } from '../utils/gsheet_utils';
+import SidePanel from '../components/SidePanel';
+import Datagrid from '../components/Datagrid';
+import Backdrop from '../components/Backdrop';
+
+import sidePanelData from '../data/leads-sidepanel.json';
+import datagridData from '../data/leads-datagrid.json';
+import axios from 'axios';
+import { getAPIs } from '../utils/constants';
+import moment from 'moment'
 
 class Leads extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            leads: []
+            drawerOpen: false,
+            datagridProps: datagridData,
+            SidePanelProps: sidePanelData
         }
-        this.getLeads();
+
+        this.getLead();
+    }
+
+    // onAddHandler = () => {
+    //     sidePanelData.fields.forEach((key, index) => {
+    //         sidePanelData.fields[index].value = "";
+    //     });
+    //     sidePanelData.action = "CREATE";
+    //     this.setState({
+    //         SidePanelProps: sidePanelData,
+    //         drawerOpen: true
+    //     })
+    // }
+
+    onUpdateHandler = (data) => {
+        sidePanelData.fields.forEach((key, index) => {
+            sidePanelData.fields[index].value = data[key.id];
+        });
+        sidePanelData.action = "UPDATE";
+        sidePanelData.id = data.id;
+        console.log(sidePanelData);
+        this.setState({
+            SidePanelProps: sidePanelData,
+            drawerOpen: true
+        })
+    }
+
+    // onDeleteHandler = (data) => {
+    //     this.deleteLead(data.id);
+    // }
+
+
+    onSaveHandler = (data) => {
+        if(this.state.SidePanelProps.action === "CREATE") {
+            this.createLead(data);
+        } else {
+            this.updateLead(data);
+        }
+        this.backdropClickHandler();
+    }
+
+    onCancelHandler = () => {
+        this.backdropClickHandler();
+    }
+
+    backdropClickHandler = () => {
+        this.setState({
+          drawerOpen: false
+        })
     }
 
     render() {
-        const { leads } = this.state; 
-        const statusClass = {
-            "OPEN": "badge badge-success",
-            "CLOSE": "badge badge-danger",
-            "ON HOLD": "badge badge-info"
+        const { drawerOpen, datagridProps, SidePanelProps} = this.state;
+
+        let backdrop;
+        if(this.state.drawerOpen){
+            backdrop = <Backdrop close={this.backdropClickHandler}/>;
         }
+
         return (
             <React.Fragment>
-                <div className="row">
-                    <div className="col-lg-12 grid-margin stretch-card">
-                        <div className="card">
-                            <div className="card-body">
-                                <h4 className="card-title">All Leads</h4>
-                                {/* <p className="card-description"> Add className <code>.table-striped</code></p> */}
-                                <div className="table-responsive">
-                                    <table className="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th> Date </th>
-                                                <th> Broker Name </th>
-                                                <th> Lead Name </th>
-                                                <th> Lead Mobile Number </th>
-                                                <th> Lead Email Address </th>
-                                                <th> Sales Manager </th>
-                                                <th> Message </th>
-                                                <th> Virtual Meet Time </th>
-                                                <th> Status </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {(
-                                                leads ?
-                                                    leads.reverse().map((lead, index) => 
-                                                        <tr key={index}>
-                                                            <td> {lead["date"]} </td>
-                                                            <td> {lead["Broker_Name"]} </td>
-                                                            <td> {lead["Lead-Name"]} </td>
-                                                            <th> {lead["mo_phone"]} </th>
-                                                            <th> {lead["Lead-Email-Address"]} </th>
-                                                            <td> {lead["Sales_Manager"]} </td>
-                                                            <th> {lead["Message"]} </th>
-                                                            <th> {lead["Virtual-Meet-Date-Time"]} </th>
-                                                            <td><label className={statusClass[lead["Status"]]}>{lead["Status"]}</label></td>
-                                                        </tr>
-                                                    ) :
-                                                ""
-                                            )}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
+                { drawerOpen ? 
+                    <SidePanel 
+                        data={SidePanelProps} 
+                        show={drawerOpen}
+                        onSave={this.onSaveHandler}
+                        onCancel={this.onCancelHandler}
+                    /> 
+                  : ""
+                }
+                {backdrop}   
+                <Datagrid 
+                    data={datagridProps} 
+                    onAdd={this.onAddHandler}
+                    onEdit={this.onUpdateHandler}
+                    onDelete={this.onDeleteHandler}
+                />   
             </React.Fragment>
         )
     }
 
-    getLeads = () => {
-        getAllLeads().then((data) => {
-            console.log("Success", data);
-            this.setState({
-                leads: data
-            });
-            console.log(this.state.leads)
-        }).catch(() => {
-            console.log("Error");
-        })
+    getSalesManager = () => {
+        axios({
+            method: 'get',
+            url: getAPIs().salesmanager,
+            data: {}
+        }).then((response) => {
+            if (response.status == 200){
+                let temp = this.state.SidePanelProps;
+                temp.fields.forEach((key, index) => {
+                    if(temp.fields[index].id === "salesManagerName") {
+                        temp.fields[index].options = response.data.data;
+                    }
+                });
+                this.setState({
+                    SidePanelProps: temp
+                })
+                
+            } else if (response.status == 401) {
+                console.log("Invalid user");
+            } else {
+                console.log('Error found : ', response.data.message);
+            }
+        }).catch((error)=>{
+            console.log('Error found : ', error);
+        });
+    }
+    
+    getLead = () => {
+        let params = {};
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        console.log("user.userType" ,user.userType);
+        if(user.userType === "admin") {
+            params = {}
+        } else {
+            params = {
+                salesManagerId: JSON.parse(localStorage.getItem('loggedInUser')).user.id
+            }
+        }
+
+        axios({
+            method: 'get',
+            url: getAPIs().lead,
+            params: params
+        }).then((response) => {
+            if (response.status == 200){
+                console.log('User fetched', response.data); 
+                let temp = this.state.datagridProps;
+                temp.tableData = response.data.data;
+                temp.tableData.map( (e) => {
+                    e.salesManagerName = e.salesManagerId.fullName;
+                    e.salesManagerId = e.salesManagerId.id
+
+                    e.brokerName = e.brokerId.fullName;
+                    e.brokerId = e.brokerId.id;
+
+                    // e.date = new Date(e.createdAt).toUTCString();
+                    e.date = moment(e.createdAt).format('DD-MM-YYYY')
+                    e.virtualMeetTime = moment(e.virtualMeetTime).format('DD-MM-YYYY')
+
+                    return e;
+                })
+
+                console.log(temp);
+                this.setState({
+                    datagridProps: temp
+                })
+                // this.getSalesManager();
+                
+            } else if (response.status == 401) {
+                console.log("User not exist");
+            } else {
+                console.log('Error found : ', response.data.message);
+            }
+        }).catch((error)=>{
+            console.log('Error found : ', error);
+        });
+    }
+
+    updateLead = (data) => {
+        let temp = JSON.parse(localStorage.getItem('loggedInUser'));
+
+        console.log(data);
+        axios({
+            method: 'put',
+            url: getAPIs().lead,
+            data: {
+                    "user": {
+                        userType:temp.userType
+                    },
+                    "data": {
+                        "id": data.id,
+                        "fullName": data.fullName,
+                        "mobileNumber": data.mobileNumber,
+                        "emailId": data.emailId,
+                        "message": data.message,
+                        "status": data.status
+                    }
+            }
+        }).then((response) => {
+            if (response.status == 200){
+                console.log('User updated');
+                this.getLead();
+            } else if (response.status == 401) {
+                console.log("User not exist");
+            } else {
+                console.log('Error found : ', response.data.message);
+            }
+        }).catch((error)=>{
+            console.log('Error found : ', error);
+        });
     }
 }
 
-export default withRouter(Leads)
+export default withRouter(Leads);

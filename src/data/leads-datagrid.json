@@ -1,0 +1,20 @@
+{
+    "title": "Leads List",
+    "tableHeaders": [
+        { "key":"date", "label":"Date" },
+        { "key":"fullName", "label":"Name" },
+        { "key":"mobileNumber", "label":"Mobile Number"},
+        { "key":"emailId", "label":"Email ID"},
+        { "key":"brokerName", "label":"Broker" },
+        { "key":"salesManagerName", "label":"Sales Manager" },
+        { "key":"message", "label":"Message" },
+        { "key":"virtualMeetTime", "label":"Virtual Meet Time" },
+        { "key":"status", "label":"Status" }
+    ],
+    "actions": {
+        "isEdit": true,
+        "isDelete":false
+    },
+    "tableData": [],
+    "buttons": []
+}

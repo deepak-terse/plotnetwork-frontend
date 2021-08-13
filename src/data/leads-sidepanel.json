@@ -1,0 +1,94 @@
+{
+    "title": "Leads Form",
+    "subtitle": "Fill the below form to update leads",
+    "fields": [
+        {
+            "id": "date",
+            "label": "Date",
+            "type": "text",
+            "value": "",
+            "placeholder": "",
+            "hidden": false,
+            "disabled": true
+        },
+        {
+            "id": "fullName",
+            "label": "Full Name",
+            "type": "text",
+            "value": "",
+            "placeholder": "Sachin Nalawade",
+            "hidden": false,
+            "disabled": false
+        },
+        {
+            "id": "mobileNumber",
+            "label": "Mobile Number",
+            "type": "text",
+            "value": "",
+            "placeholder": "8888888888",
+            "hidden": false,
+            "disabled": false
+        },
+        {
+            "id": "emailId",
+            "label": "Email ID",
+            "type": "text",
+            "value": "",
+            "placeholder": "",
+            "hidden": false,
+            "disabled": false
+        },
+        {
+            "id": "brokerName",
+            "label": "Broker",
+            "type": "text",
+            "value": "",
+            "placeholder": "",
+            "hidden": false,
+            "disabled": true
+        },
+        {
+            "id": "salesManagerName",
+            "label": "Sales Manager",
+            "type": "text",
+            "value": "",
+            "placeholder": "",
+            "hidden": false,
+            "disabled": true
+        },
+        {
+            "id": "message",
+            "label": "Message",
+            "type": "text",
+            "value": "",
+            "placeholder": "",
+            "hidden": false,
+            "disabled": false
+        },
+        {
+            "id": "virtualMeetTime",
+            "label": "Virtual Meet Time",
+            "type": "text",
+            "value": "",
+            "placeholder": "",
+            "hidden": false,
+            "disabled": true
+        },
+        {
+            "id": "status",
+            "label": "Status",
+            "type": "select",
+            "options": [
+                {"fullName": "OPEN"},
+                {"fullName": "ASSIGNED"},
+                {"fullName": "HOLD"},
+                {"fullName": "CUSTOMER"},
+                {"fullName": "JUNK LEAD"}
+            ],
+            "value": "",
+            "placeholder": "",
+            "hidden": false,
+            "disabled": false
+        }
+    ]
+}

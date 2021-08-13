@@ -1,11 +1,10 @@
 export function getAPIs(){
-    const baseURL = "http://52.66.148.164";
-    const portNo = 1337;
+    const baseURL = "https://backend.plotnetwork.in/";
 
     return {
-        'login': baseURL + ':' + portNo + '/login',
-        'broker': baseURL + ':' + portNo + '/broker',
-        'salesmanager': baseURL + ':' + portNo + '/salesmanager',
-        'lead': baseURL + ':' + portNo + '/lead'
+        'login': baseURL + 'login',
+        'broker': baseURL + 'broker',
+        'salesmanager': baseURL + 'salesmanager',
+        'lead': baseURL + 'lead'
     }
 }

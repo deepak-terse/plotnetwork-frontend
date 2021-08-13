@@ -131,12 +131,12 @@ class Brokers extends Component {
     
     getBroker = () => {
         let params = {};
-        const user = localStorage.getItem('loggedInUser');
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
         if(user.userType === "admin") {
             params = {}
         } else {
             params = {
-                salesManagerId: JSON.parse(localStorage.getItem('loggedInUser')).user.id
+                salesManagerId: user.user.id
             }
         }
         axios({
