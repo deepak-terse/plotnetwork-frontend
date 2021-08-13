@@ -25,6 +25,9 @@ class Sidebar extends Component {
     }
 
   render () {
+    const partner = localStorage.getItem('partner');
+    const userType = JSON.parse(localStorage.getItem('loggedInUser')).userType;
+
     return (
       <nav className="sidebar sidebar-offcanvas" id="sidebar">
         <div className="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
@@ -35,14 +38,18 @@ class Sidebar extends Component {
           <li className="nav-item nav-category">
             <span className="nav-link"><Trans>Quick Access</Trans></span>
           </li>
-          <li className={ this.isPathActive('/dashboard') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
-            <Link className="nav-link" to="/dashboard">
-              <span className="menu-icon"><i className="mdi mdi-speedometer"></i></span>
-              <span className="menu-title"><Trans>Dashboard</Trans></span>
-            </Link>
-          </li>
-          <li className={ this.isPathActive('/leads') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
-            <Link className="nav-link" to="/leads">
+          {
+            userType === "admin"? 
+            <li className={ this.isPathActive('/' + partner + '/dashboard') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
+              <Link className="nav-link" to={"/" + partner + "/dashboard"}>
+                <span className="menu-icon"><i className="mdi mdi-speedometer"></i></span>
+                <span className="menu-title"><Trans>Dashboard</Trans></span>
+              </Link>
+            </li> :
+            ""
+          }
+          <li className={ this.isPathActive('/' + partner + '/leads') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
+            <Link className="nav-link" to={"/" + partner + "/leads"}>
               <span className="menu-icon"><i className="mdi mdi-account-multiple"></i></span>
               <span className="menu-title"><Trans>Leads</Trans></span>
             </Link>
@@ -50,18 +57,22 @@ class Sidebar extends Component {
           <li className="nav-item nav-category">
             <span className="nav-link"><Trans>Setup</Trans></span>
           </li>
-          <li className={ this.isPathActive('/brokers') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
-            <Link className="nav-link" to="/brokers">
+          <li className={ this.isPathActive('/' + partner + '/brokers') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
+            <Link className="nav-link" to={"/" + partner + "/brokers"}>
               <span className="menu-icon"><i className="mdi mdi-account-multiple"></i></span>
               <span className="menu-title"><Trans>Brokers</Trans></span>
             </Link>
           </li>
-          <li className={ this.isPathActive('/salesteam') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
-            <Link className="nav-link" to="/salesteam">
-              <span className="menu-icon"><i className="mdi mdi-account-multiple"></i></span>
-              <span className="menu-title"><Trans>Sales Team</Trans></span>
-            </Link>
-          </li>
+          {
+            userType === "admin"? 
+            <li className={ this.isPathActive('/' + partner + '/salesteam') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
+              <Link className="nav-link" to={"/" + partner + "/salesteam"}>
+                <span className="menu-icon"><i className="mdi mdi-account-multiple"></i></span>
+                <span className="menu-title"><Trans>Sales Team</Trans></span>
+              </Link>
+            </li> :
+            ""
+          }
         </ul>
       </nav>
     );

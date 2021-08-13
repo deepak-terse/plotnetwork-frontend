@@ -17,11 +17,11 @@ class Navbar extends Component {
   }
   logout() {
     localStorage.removeItem("loggedInUser");
+    localStorage.removeItem('partner');
     this.props.history.replace("/");
   }
   render () {
-    // const fullName = JSON.parse(localStorage.getItem('loggedInUser')).fullName;
-    const fullName ="Admin";
+    const fullName = JSON.parse(localStorage.getItem('loggedInUser')).fullName;
     return (
       <nav className="navbar p-0 fixed-top d-flex flex-row">
         <div className="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
@@ -45,51 +45,7 @@ class Navbar extends Component {
                 <span className="count bg-danger"></span>
               </Dropdown.Toggle>
               <Dropdown.Menu className="dropdown-menu navbar-dropdown preview-list">
-                <h6 className="p-3 mb-0"><Trans>Notifications</Trans></h6>
-                <Dropdown.Divider />
-                <Dropdown.Item className="dropdown-item preview-item" onClick={evt =>evt.preventDefault()}>
-                  <div className="preview-thumbnail">
-                    <div className="preview-icon bg-dark rounded-circle">
-                      <i className="mdi mdi-calendar text-success"></i>
-                    </div>
-                  </div>
-                  <div className="preview-item-content">
-                    <p className="preview-subject mb-1"><Trans>Event today</Trans></p>
-                    <p className="text-muted ellipsis mb-0">
-                    <Trans>Just a reminder that you have an event today</Trans>
-                    </p>
-                  </div>
-                </Dropdown.Item>
-                <Dropdown.Divider />
-                <Dropdown.Item className="dropdown-item preview-item" onClick={evt =>evt.preventDefault()}>
-                  <div className="preview-thumbnail">
-                    <div className="preview-icon bg-dark rounded-circle">
-                      <i className="mdi mdi-settings text-danger"></i>
-                    </div>
-                  </div>
-                  <div className="preview-item-content">
-                    <h6 className="preview-subject mb-1"><Trans>Settings</Trans></h6>
-                    <p className="text-muted ellipsis mb-0">
-                    <Trans>Update dashboard</Trans>
-                    </p>
-                  </div>
-                </Dropdown.Item>
-                <Dropdown.Divider />
-                <Dropdown.Item className="dropdown-item preview-item" onClick={evt =>evt.preventDefault()}>
-                  <div className="preview-thumbnail">
-                    <div className="preview-icon bg-dark rounded-circle">
-                      <i className="mdi mdi-link-variant text-warning"></i>
-                    </div>
-                  </div>
-                  <div className="preview-item-content">
-                    <h6 className="preview-subject mb-1"><Trans>Launch Admin</Trans></h6>
-                    <p className="text-muted ellipsis mb-0">
-                    <Trans>New admin wow</Trans>!
-                    </p>
-                  </div>
-                </Dropdown.Item>
-                <Dropdown.Divider />
-                <p className="p-3 mb-0 text-center"><Trans>See all notifications</Trans></p>
+                <p className="p-3 mb-0 text-center"><Trans>No new notifications</Trans></p>
               </Dropdown.Menu>
             </Dropdown>
             <Dropdown alignRight as="li" className="nav-item">
@@ -104,17 +60,6 @@ class Navbar extends Component {
               <Dropdown.Menu className="navbar-dropdown preview-list navbar-profile-dropdown-menu">
                 <h6 className="p-3 mb-0"><Trans>Profile</Trans></h6>
                 <Dropdown.Divider />
-                <Dropdown.Item href="!#" onClick={evt =>evt.preventDefault()} className="preview-item">
-                  <div className="preview-thumbnail">
-                    <div className="preview-icon bg-dark rounded-circle">
-                      <i className="mdi mdi-settings text-success"></i>
-                    </div>
-                  </div>
-                  <div className="preview-item-content">
-                    <p className="preview-subject mb-1"><Trans>Settings</Trans></p>
-                  </div>
-                </Dropdown.Item>
-                <Dropdown.Divider />
                 <Dropdown.Item href="!#" onClick={this.logout}  className="preview-item">
                   <div className="preview-thumbnail">
                     <div className="preview-icon bg-dark rounded-circle">
@@ -125,8 +70,6 @@ class Navbar extends Component {
                     <p className="preview-subject mb-1"><Trans>Log Out</Trans></p>
                   </div>
                 </Dropdown.Item>
-                <Dropdown.Divider />
-                <p className="p-3 mb-0 text-center"><Trans>Advanced settings</Trans></p>
               </Dropdown.Menu>
             </Dropdown>
           </ul>

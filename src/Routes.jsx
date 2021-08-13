@@ -32,14 +32,30 @@ export const AppRoutes = (props) => {
 	);
 }
 
-export const HomeRoutes = () => {
+export const HomeRoutes = (props) => {
+	const partner = localStorage.getItem('partner');
+	const userType = JSON.parse(localStorage.getItem('loggedInUser')).userType;
+
 	return (
 		<Switch>
-			<Route path="/dashboard" component={ Dashboard } />
-			<Route path="/leads" component={ Leads } />
-			<Route path="/brokers" component={ Brokers } />
-			<Route path="/salesteam" component={ SalesTeam } />
-			<Redirect to="/dashboard" />
+			{
+				userType === "admin" ?
+				<>
+					<Route path={"/" + partner + "/dashboard"} component={ Dashboard } />
+					<Route path={"/" + partner + "/salesteam"} component={ SalesTeam } />
+					<Route path={"/" + partner + "/leads"} component={ Leads } />
+					<Route path={"/" + partner + "/brokers"} component={ Brokers } />
+					<Redirect to={"/" + partner + "/dashboard"} />
+				</> : 
+				<>
+					<Route path={"/" + partner + "/leads"} component={ Leads } />
+					<Route path={"/" + partner + "/brokers"} component={ Brokers } />
+					<Redirect to={"/" + partner + "/leads"} />
+				</>
+			}
+			
+
+			
 		</Switch>
 	);
 }

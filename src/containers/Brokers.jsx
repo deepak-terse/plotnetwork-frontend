@@ -109,15 +109,12 @@ class Brokers extends Component {
             data: {}
         }).then((response) => {
             if (response.status == 200){
-                console.log('User fetched');
-
                 let temp = this.state.SidePanelProps;
                 temp.fields.forEach((key, index) => {
                     if(temp.fields[index].id === "salesManagerName") {
                         temp.fields[index].options = response.data.data;
                     }
                 });
-                console.log(temp);
                 this.setState({
                     SidePanelProps: temp
                 })
@@ -133,13 +130,21 @@ class Brokers extends Component {
     }
     
     getBroker = () => {
+        let params = {};
+        const user = localStorage.getItem('loggedInUser');
+        if(user.userType === "admin") {
+            params = {}
+        } else {
+            params = {
+                salesManagerId: JSON.parse(localStorage.getItem('loggedInUser')).user.id
+            }
+        }
         axios({
             method: 'get',
             url: getAPIs().broker,
-            data: {}
+            params: params
         }).then((response) => {
             if (response.status == 200){
-                console.log('User fetched');
                 let temp = this.state.datagridProps;
                 temp.tableData = response.data.data;
                 temp.tableData.map( (e) => {
@@ -259,8 +264,6 @@ class Brokers extends Component {
             console.log('Error found : ', error);
         });
     }
-
-
 }
 
 

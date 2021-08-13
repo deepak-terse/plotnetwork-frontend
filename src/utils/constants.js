@@ -5,6 +5,7 @@ export function getAPIs(){
     return {
         'login': baseURL + ':' + portNo + '/login',
         'broker': baseURL + ':' + portNo + '/broker',
-        'salesmanager': baseURL + ':' + portNo + '/salesmanager'
+        'salesmanager': baseURL + ':' + portNo + '/salesmanager',
+        'lead': baseURL + ':' + portNo + '/lead'
     }
 }
