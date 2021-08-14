@@ -20,7 +20,7 @@ class Leads extends Component {
             SidePanelProps: sidePanelData
         }
 
-        this.getLead();
+        this.getLead(0);
     }
 
     // onAddHandler = () => {
@@ -96,6 +96,7 @@ class Leads extends Component {
                     onAdd={this.onAddHandler}
                     onEdit={this.onUpdateHandler}
                     onDelete={this.onDeleteHandler}
+                    loadData={this.getLead}
                 />   
             </React.Fragment>
         )
@@ -128,16 +129,15 @@ class Leads extends Component {
         });
     }
     
-    getLead = () => {
-        let params = {};
+    getLead = (skip) => {
+        let params = {
+            skip: skip,
+            limit: 10,
+            filter: {}
+        };
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
-        console.log("user.userType" ,user.userType);
-        if(user.userType === "admin") {
-            params = {}
-        } else {
-            params = {
-                salesManagerId: JSON.parse(localStorage.getItem('loggedInUser')).user.id
-            }
+        if(user.userType !== "admin") {
+            params.salesManagerId = user.user.id;
         }
 
         axios({
@@ -162,6 +162,7 @@ class Leads extends Component {
 
                     return e;
                 })
+                temp.totalCount  = response.data.count;
 
                 console.log(temp);
                 this.setState({
@@ -202,7 +203,7 @@ class Leads extends Component {
         }).then((response) => {
             if (response.status == 200){
                 console.log('User updated');
-                this.getLead();
+                this.getLead(0);
             } else if (response.status == 401) {
                 console.log("User not exist");
             } else {

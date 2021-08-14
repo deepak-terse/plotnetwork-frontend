@@ -1,13 +1,13 @@
 {
     "title": "Brokers List",
     "tableHeaders": [
-        { "key":"fullName", "label":"Name" },
-        { "key":"salesManagerName", "label":"Sales Manager" },
-        { "key":"companyName", "label":"Company Name" },
-        { "key":"reraNumber", "label":"RERA Number" },
-        { "key":"mobileNumber", "label":"Mobile Number"},
-        { "key":"address", "label":"Address" },
-        { "key":"emailId", "label":"Email ID"}
+        { "key":"fullName", "label":"Name", "isHidden": false },
+        { "key":"salesManagerName", "label":"Sales Manager", "isHidden": false },
+        { "key":"companyName", "label":"Company Name", "isHidden": false },
+        { "key":"reraNumber", "label":"RERA Number", "isHidden": false },
+        { "key":"mobileNumber", "label":"Mobile Number", "isHidden": false },
+        { "key":"address", "label":"Address", "isHidden": true },
+        { "key":"emailId", "label":"Email ID", "isHidden": false }
     ],
     "tableData": [],
     "actions": {

@@ -19,7 +19,7 @@ class Brokers extends Component {
             SidePanelProps: sidePanelData
         }
 
-        this.getBroker();
+        this.getBroker(0);
     }
 
     onAddHandler = () => {
@@ -97,6 +97,7 @@ class Brokers extends Component {
                     onAdd={this.onAddHandler}
                     onEdit={this.onUpdateHandler}
                     onDelete={this.onDeleteHandler}
+                    loadData={this.getBroker}
                 />   
             </React.Fragment>
         )
@@ -129,16 +130,17 @@ class Brokers extends Component {
         });
     }
     
-    getBroker = () => {
-        let params = {};
+    getBroker = (skip) => {
+        let params = {
+            skip: skip,
+            limit: 10,
+            filter: {}
+        };
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
-        if(user.userType === "admin") {
-            params = {}
-        } else {
-            params = {
-                salesManagerId: user.user.id
-            }
+        if(user.userType !== "admin") {
+            params.salesManagerId = user.user.id;
         }
+
         axios({
             method: 'get',
             url: getAPIs().broker,
@@ -153,6 +155,8 @@ class Brokers extends Component {
 
                     return e;
                 })
+                temp.totalCount  = response.data.count;
+
                 this.setState({
                     datagridProps: temp
                 })
@@ -191,7 +195,7 @@ class Brokers extends Component {
         }).then((response) => {
             if (response.status == 200){
                 console.log('User created');
-                this.getBroker();
+                this.getBroker(0);
             } else if (response.status == 401) {
                 console.log("Invalid input");
             } else {
@@ -226,7 +230,7 @@ class Brokers extends Component {
         }).then((response) => {
             if (response.status == 200){
                 console.log('User updated');
-                this.getBroker();
+                this.getBroker(0);
             } else if (response.status == 401) {
                 console.log("User not exist");
             } else {
@@ -254,7 +258,7 @@ class Brokers extends Component {
         }).then((response) => {
             if (response.status == 200){
                 console.log('User deleted');
-                this.getBroker();
+                this.getBroker(0);
             } else if (response.status == 401) {
                 console.log("User not exist");
             } else {

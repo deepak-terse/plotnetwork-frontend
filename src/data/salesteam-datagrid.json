@@ -1,9 +1,9 @@
 {
     "title": "Sales Manager List",
     "tableHeaders": [
-        { "key":"fullName", "label":"Name" },
-        { "key":"mobileNumber", "label":"Mobile Number"},
-        { "key":"emailId", "label":"Email ID"}
+        { "key":"fullName", "label":"Name", "isHidden": false },
+        { "key":"mobileNumber", "label":"Mobile Number", "isHidden": false},
+        { "key":"emailId", "label":"Email ID", "isHidden": false}
     ],
     "tableData": [],
     "actions": {

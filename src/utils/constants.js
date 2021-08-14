@@ -1,5 +1,7 @@
 export function getAPIs(){
-    const baseURL = "https://backend.plotnetwork.in/";
+    // const baseURL = "https://backend.plotnetwork.in/";
+    const baseURL = "http://localhost:1337/";
+
 
     return {
         'login': baseURL + 'login',

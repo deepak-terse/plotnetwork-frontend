@@ -12,17 +12,14 @@ import { getAPIs } from '../utils/constants';
 
 class SalesTeam extends Component {
     constructor(props) {
-        
         super(props);
-        
-
         this.state = {
             drawerOpen: false,
             datagridProps: datagridData,
             SidePanelProps: sidePanelData
         }
-        console.log("again");
-        this.getSalesManager();
+
+        this.getSalesManager(0);
     }
 
     onAddHandler = () => {
@@ -99,26 +96,33 @@ class SalesTeam extends Component {
                     onAdd={this.onAddHandler}
                     onEdit={this.onUpdateHandler}
                     onDelete={this.onDeleteHandler}
+                    loadData={this.getSalesManager}
                 />   
             </React.Fragment>
         )
     }
 
-    getSalesManager = () => {
+    getSalesManager = (skip) => {
+        let params = {
+            skip: skip,
+            limit: 10,
+            filter: {}
+        };
         axios({
             method: 'get',
             url: getAPIs().salesmanager,
-            data: {}
+            params: params
         }).then((response) => {
             if (response.status == 200){
                 console.log('User fetched');
 
                 let temp = this.state.datagridProps;
                 temp.tableData = response.data.data;
+                temp.totalCount  = response.data.count;
+
                 this.setState({
                     datagridProps: temp
                 })
-                console.log(this.state.datagridProps)
                 
             } else if (response.status == 401) {
                 console.log("Invalid user");
@@ -150,7 +154,7 @@ class SalesTeam extends Component {
             console.log(response);
             if (response.status == 200){
                 console.log('User created');
-                this.getSalesManager();
+                this.getSalesManager(0);
             } else if (response.status == 401) {
                 console.log("Invalid input");
             } else {
@@ -183,7 +187,7 @@ class SalesTeam extends Component {
             console.log(response);
             if (response.status == 200){
                 console.log('User updated');
-                this.getSalesManager();
+                this.getSalesManager(0);
             } else if (response.status == 401) {
                 console.log("User did not exist");
             } else {
@@ -211,7 +215,7 @@ class SalesTeam extends Component {
         }).then((response) => {
             if (response.status == 200){
                 console.log('User deleted');
-                this.getSalesManager();
+                this.getSalesManager(0);
             } else if (response.status == 401) {
                 console.log("User did not exist");
             } else {
