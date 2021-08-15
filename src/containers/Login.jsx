@@ -76,7 +76,7 @@ class Login extends Component {
             console.log(response);
             if (response.status == 200){
                 localStorage.setItem('loggedInUser', JSON.stringify(response.data.data));
-                localStorage.setItem('partner', "kohinoor");
+                localStorage.setItem('partner', response.data.data.partnerName);
                 window.location.href = "/"
                 // this.props.history.push("/");
             } else if (response.status == 401) {

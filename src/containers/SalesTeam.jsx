@@ -147,7 +147,8 @@ class SalesTeam extends Component {
                 "data": {
                     "fullName": data.fullName,
                     "mobileNumber": data.mobileNumber,
-                    "emailId": data.emailId
+                    "emailId": data.emailId,
+                    "partnerName": localStorage.getItem('partner')
                 }
             }
         }).then((response) => {

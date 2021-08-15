@@ -189,7 +189,8 @@ class Brokers extends Component {
                     "reraNumber": data.reraNumber,
                     "address": data.address,
                     "companyName": data.companyName,
-                    "salesManagerId": data.salesManagerId
+                    "salesManagerId": data.salesManagerId,
+                    "partnerName": localStorage.getItem('partner')
                 }
             }
         }).then((response) => {

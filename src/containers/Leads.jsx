@@ -158,7 +158,7 @@ class Leads extends Component {
 
                     // e.date = new Date(e.createdAt).toUTCString();
                     e.date = moment(e.createdAt).format('DD-MM-YYYY')
-                    e.virtualMeetTime = moment(e.virtualMeetTime).format('DD-MM-YYYY')
+                    e.virtualMeetTime = moment(e.virtualMeetTime).format('DD-MM-YYYY, HH:MM A')
 
                     return e;
                 })
