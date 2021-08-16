@@ -6,8 +6,6 @@ import styles from '../styles/Login.module.scss';
 import axios from 'axios';
 import { getAPIs } from '../utils/constants';
 
-import logo from '../assets/images/logo2.png';
-
 class Login extends Component {
     constructor(props) {
         super(props);
@@ -39,7 +37,6 @@ class Login extends Component {
                                             <div className="card text-left py-5 px-4 px-sm-5">
                                                 <div className="brand-logo">
                                                     <h1>Login</h1>
-                                                    {/* <img src={logo} alt="logo" /> */}
                                                 </div>
                                                 <Form className="pt-3">
                                                     <Form.Group className="d-flex search-field">
