@@ -80,7 +80,7 @@ class Datagrid extends Component {
 
                 {(
                     data.buttons.map((button, index) =>
-                        <button key={index} type="button" className="btn btn-primary mr-2" onClick = {this.props.onAdd}>
+                        <button key={index} type="button" className="btn btn-primary mr-2" onClick = {this.props[button.onClick]}>
                             {button.label}
                         </button>
                     )

@@ -34,6 +34,10 @@ class Leads extends Component {
     //     })
     // }
 
+    onExportHandler = () => {
+        this.getLeadsExport();
+    }
+
     onUpdateHandler = (data) => {
         sidePanelData.fields.forEach((key, index) => {
             sidePanelData.fields[index].value = data[key.id];
@@ -93,9 +97,8 @@ class Leads extends Component {
                 {backdrop}   
                 <Datagrid 
                     data={datagridProps} 
-                    onAdd={this.onAddHandler}
+                    onExport={this.onExportHandler}
                     onEdit={this.onUpdateHandler}
-                    onDelete={this.onDeleteHandler}
                     loadData={this.getLead}
                 />   
             </React.Fragment>
@@ -119,6 +122,24 @@ class Leads extends Component {
                     SidePanelProps: temp
                 })
                 
+            } else if (response.status == 401) {
+                console.log("Invalid user");
+            } else {
+                console.log('Error found : ', response.data.message);
+            }
+        }).catch((error)=>{
+            console.log('Error found : ', error);
+        });
+    }
+
+    getLeadsExport = () => {
+        axios({
+            method: 'get',
+            url: getAPIs().leadexport,
+            data: {}
+        }).then((response) => {
+            if (response.status == 200){
+                window.open(getAPIs().baseURL + "data.xlsx");
             } else if (response.status == 401) {
                 console.log("Invalid user");
             } else {

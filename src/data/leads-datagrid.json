@@ -24,5 +24,10 @@
         "isDelete":false
     },
     "tableData": [],
-    "buttons": []
+    "buttons": [
+        {
+            "label":  "Export to Excel",
+            "onClick": "onExport"
+        }
+    ]
 }

@@ -7,6 +7,8 @@ export function getAPIs(){
         'login': baseURL + 'login',
         'broker': baseURL + 'broker',
         'salesmanager': baseURL + 'salesmanager',
-        'lead': baseURL + 'lead'
+        'lead': baseURL + 'lead',
+        'leadexport': baseURL + 'leadexport',
+        'baseURL': baseURL
     }
 }

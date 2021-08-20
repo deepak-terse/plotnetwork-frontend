@@ -12,7 +12,8 @@
     },
     "buttons": [
         {
-            "label":  "Add Sales Manager"
+            "label":  "Add Sales Manager",
+            "onClick": "onAdd"
         }
     ]
 }

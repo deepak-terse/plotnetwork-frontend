@@ -16,7 +16,8 @@
     },
     "buttons": [
         {
-            "label":  "Add Broker"
+            "label":  "Add Broker",
+            "onClick": "onAdd"
         }
     ]
 }
