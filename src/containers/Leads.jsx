@@ -133,10 +133,15 @@ class Leads extends Component {
     }
 
     getLeadsExport = () => {
+        let params = {};
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        if(user.userType !== "admin") {
+            params.salesManagerId = user.user.id;
+        }
         axios({
             method: 'get',
             url: getAPIs().leadexport,
-            data: {}
+            params: params
         }).then((response) => {
             if (response.status == 200){
                 window.open(getAPIs().baseURL + "data.xlsx");
