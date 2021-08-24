@@ -106,7 +106,9 @@ class SalesTeam extends Component {
         let params = {
             skip: skip,
             limit: 10,
-            filter: {}
+            filter: {
+                "partnerName": localStorage.getItem('partner')
+            }        
         };
         axios({
             method: 'get',

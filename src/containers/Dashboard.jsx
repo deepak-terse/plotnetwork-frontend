@@ -11,10 +11,12 @@ class Dashboard extends Component {
     }
 
     render() {
+        const {reportDesktop, reportMobile} = JSON.parse(localStorage.getItem('loggedInUser')).partnerDetails;
+
         console.log(isMobile);
         const url = isMobile() ? 
-            "https://datastudio.google.com/embed/reporting/f16fd757-bd4e-4ddf-81eb-97b29e568d90/page/a2BAC" :
-            "https://datastudio.google.com/embed/reporting/48e4bf8a-1b96-4a1f-9911-085f909c9e56/page/a2BAC"
+            reportMobile :
+            reportDesktop
         return (
             <React.Fragment>
                 {

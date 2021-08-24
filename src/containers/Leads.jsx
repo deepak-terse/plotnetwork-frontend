@@ -17,10 +17,20 @@ class Leads extends Component {
         this.state = {
             drawerOpen: false,
             datagridProps: datagridData,
-            SidePanelProps: sidePanelData
+            SidePanelProps: sidePanelData,
+            filter: {
+                "partnerName": localStorage.getItem('partner')
+            }
         }
 
         this.getLead(0);
+        this.getBroker();
+
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        if(user.userType === "admin") {
+            this.getSalesManager();
+        }
+
     }
 
     // onAddHandler = () => {
@@ -56,6 +66,7 @@ class Leads extends Component {
     // }
 
 
+
     onSaveHandler = (data) => {
         if(this.state.SidePanelProps.action === "CREATE") {
             this.createLead(data);
@@ -67,6 +78,27 @@ class Leads extends Component {
 
     onCancelHandler = () => {
         this.backdropClickHandler();
+    }
+
+    onFilter = (data) => {
+        console.log("DDDDDDDDDDDDDDDDDdata", data)
+        data.salesManagerId = this.state.datagridProps.filters[1].options.filter((e) => {
+            return e.fullName === data.salesManagerName;
+        })[0]?.id;
+        data.brokerId = this.state.datagridProps.filters[0].options.filter((e) => {
+            return e.fullName === data.brokerName;
+        })[0]?.id;
+        
+        delete data.salesManagerName;
+        delete data.brokerName;
+        data.partnerName = localStorage.getItem('partner');
+        this.setState({
+            filter: data
+        }, function() {
+            console.log(this.state.filter)
+            this.getLead(0);
+        })
+
     }
 
     backdropClickHandler = () => {
@@ -100,16 +132,22 @@ class Leads extends Component {
                     onExport={this.onExportHandler}
                     onEdit={this.onUpdateHandler}
                     loadData={this.getLead}
+                    onFilter={this.onFilter}
                 />   
             </React.Fragment>
         )
     }
 
     getSalesManager = () => {
+        console.log("##########################################################")
         axios({
             method: 'get',
             url: getAPIs().salesmanager,
-            data: {}
+            params: {
+                filter: {
+                    "partnerName": localStorage.getItem('partner')
+                }
+            }
         }).then((response) => {
             if (response.status == 200){
                 let temp = this.state.SidePanelProps;
@@ -118,8 +156,65 @@ class Leads extends Component {
                         temp.fields[index].options = response.data.data;
                     }
                 });
+
+                let temp2 = this.state.datagridProps;
+                temp2.filters.forEach((key, index) => {
+                    if(temp2.filters[index].id === "salesManagerName") {
+                        // temp2.filters[index].isHidden = false;
+                        temp2.filters[index].options = response.data.data;
+                    }
+                });
+
                 this.setState({
-                    SidePanelProps: temp
+                    SidePanelProps: temp,
+                    datagridProps: temp2
+                })
+                console.log(this.state);
+                
+            } else if (response.status == 401) {
+                console.log("Invalid user");
+            } else {
+                console.log('Error found : ', response.data.message);
+            }
+        }).catch((error)=>{
+            console.log('Error found : ', error);
+        });
+    }
+
+    getBroker = () => {
+        let params = {
+            filter: {
+                "partnerName": localStorage.getItem('partner')
+            }
+        };
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        if(user.userType !== "admin") {
+            params.salesManagerId = user.user.id;
+        }
+
+        axios({
+            method: 'get',
+            url: getAPIs().broker,
+            params: params
+        }).then((response) => {
+            if (response.status == 200){
+                let temp = this.state.SidePanelProps;
+                temp.fields.forEach((key, index) => {
+                    if(temp.fields[index].id === "brokerName") {
+                        temp.fields[index].options = response.data.data;
+                    }
+                });
+
+                let temp2 = this.state.datagridProps;
+                temp2.filters.forEach((key, index) => {
+                    if(temp2.filters[index].id === "brokerName") {
+                        temp2.filters[index].options = response.data.data;
+                    }
+                });
+
+                this.setState({
+                    SidePanelProps: temp,
+                    datagridProps: temp2
                 })
                 
             } else if (response.status == 401) {
@@ -133,7 +228,9 @@ class Leads extends Component {
     }
 
     getLeadsExport = () => {
-        let params = {};
+        let params = {
+            "filter": this.state.filter
+        };
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
         if(user.userType !== "admin") {
             params.salesManagerId = user.user.id;
@@ -144,7 +241,7 @@ class Leads extends Component {
             params: params
         }).then((response) => {
             if (response.status == 200){
-                window.open(getAPIs().baseURL + "data.xlsx");
+                window.open(getAPIs().baseURL + response.data.data);
             } else if (response.status == 401) {
                 console.log("Invalid user");
             } else {
@@ -156,10 +253,11 @@ class Leads extends Component {
     }
     
     getLead = (skip) => {
+        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ", this.state.filter);
         let params = {
             skip: skip,
             limit: 10,
-            filter: {}
+            filter: this.state.filter
         };
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
         if(user.userType !== "admin") {
@@ -188,6 +286,17 @@ class Leads extends Component {
 
                     return e;
                 })
+
+                if(user.userType == "admin") {
+                    temp.filters.map( (e) => {
+                        if(e.id === "salesManagerName"){
+                            e.isHidden = false;
+                        }
+                        console.log(e);
+                        return e;
+                    })
+                }
+
                 temp.totalCount  = response.data.count;
 
                 console.log(temp);

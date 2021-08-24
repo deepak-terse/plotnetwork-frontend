@@ -26,12 +26,13 @@ class Sidebar extends Component {
   render () {
     const partner = localStorage.getItem('partner');
     const userType = JSON.parse(localStorage.getItem('loggedInUser')).userType;
+    const { logoLong, logoShort } = JSON.parse(localStorage.getItem('loggedInUser')).partnerDetails;
 
     return (
       <nav className="sidebar sidebar-offcanvas" id="sidebar">
-        <div className="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-          <a className="sidebar-brand brand-logo" href="index.html"><img src={logo} alt="logo" /></a>
-          <a className="sidebar-brand brand-logo-mini" href="index.html"><img src={logomini} alt="logo" /></a>
+        <div style={{"text-align":"center"}} className="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+          <a className="sidebar-brand brand-logo" href="index.html"><img src={logoLong} alt="logo" /></a>
+          <a className="sidebar-brand brand-logo-mini" href="index.html"><img src={logoShort} alt="logo" /></a>
         </div>
         <ul className="nav">
           <li className="nav-item nav-category">

@@ -1,5 +1,25 @@
 {
     "title": "Leads List",
+    "filters": [
+        {
+            "id": "brokerName",
+            "label": "Broker",
+            "type": "select",
+            "options": [],
+            "value": "",
+            "placeholder": "",
+            "isHidden": false
+        },
+        {
+            "id": "salesManagerName",
+            "label": "Sales Manager",
+            "type": "select",
+            "options": [],
+            "value": "",
+            "placeholder": "",
+            "isHidden": true
+        }
+    ],
     "tableHeaders": [
         { "key":"date", "label":"Date", "isHidden": false },
         { "key":"fullName", "label":"Name", "isHidden": false },

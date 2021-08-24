@@ -107,7 +107,11 @@ class Brokers extends Component {
         axios({
             method: 'get',
             url: getAPIs().salesmanager,
-            data: {}
+            params: {
+                filter: {
+                    "partnerName": localStorage.getItem('partner')
+                }
+            }
         }).then((response) => {
             if (response.status == 200){
                 let temp = this.state.SidePanelProps;
@@ -134,12 +138,15 @@ class Brokers extends Component {
         let params = {
             skip: skip,
             limit: 10,
-            filter: {}
+            filter: {
+                "partnerName": localStorage.getItem('partner')
+            }
         };
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
         if(user.userType !== "admin") {
             params.salesManagerId = user.user.id;
         }
+        
 
         axios({
             method: 'get',
@@ -155,6 +162,15 @@ class Brokers extends Component {
 
                     return e;
                 })
+
+                if(user.userType !== "admin") {
+                    temp.tableHeaders.map( (e) => {
+                        if(e.key === "salesManagerName"){
+                            e.isHidden = true;
+                        }
+                        return e;
+                    })
+                }
                 temp.totalCount  = response.data.count;
 
                 this.setState({

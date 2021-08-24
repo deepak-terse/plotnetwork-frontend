@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 // import Button from './form-input/Button';
 import styles from '../styles/Home.module.scss';
+import { Form } from 'react-bootstrap';
 
 class Datagrid extends Component {
     skip;
@@ -8,15 +9,79 @@ class Datagrid extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {}
+        const formState = {};
+        this.props.data.filters.map((field, index) => {
+            formState[field.id] = field.value;
+        });
+        this.state = formState;
         this.skip = 0;
         this.limit = 10;
+        console.log(props.data);
+    }
+
+    onChangeHandler = (event) => {
+        const inputData = {}
+        inputData[event.target.name] = event.target.value;
+
+        this.setState(inputData);
     }
 
     render() {
-        const { data } = this.props;
+        const { data, onFilter } = this.props;
         return (
             <div>
+                <div className="row" style={data.filters.length == 0 ? {display:'none'} : {}} >
+                    <div className="col-lg-12 grid-margin stretch-card">
+                        <div className="card">
+                            <div className="card-body">
+                                <h4 className="card-title">Filters</h4>
+                                <div className="table-responsive">
+                                <form className="forms-sample form-inline">
+                                    {(
+                                        data.filters.map((field, index) =>
+                                            <Form.Group key={index} style={field.isHidden ? {display:'none'} : {}}>
+                                                <label htmlFor={index} className="col-sm-2 col-form-label">{field.label}</label>
+                                                <div className="col-sm-3">
+                                                {
+                                                    field.type !== "select" ?
+                                                    (
+                                                        <Form.Control 
+                                                            name={field.id}
+                                                            type={field.type} 
+                                                            value={this.state[field.id]} 
+                                                            onChange={this.onChangeHandler} 
+                                                            className="form-control" 
+                                                            id={index} 
+                                                            placeholder={field.placeholder} />
+                                                    ) : 
+                                                    (
+                                                        <select name={field.id} id={index} 
+                                                            className="form-control" 
+                                                            value={this.state[field.id]}
+                                                            onChange={this.onChangeHandler}>
+                                                            {
+                                                                field.options.map((option, index) => 
+                                                                    <option key={index} value={option.fullName}>{option.fullName}</option>
+                                                                )
+                                                            }
+                                                        </select>
+                                                    )
+                                                }
+                                                </div>
+                                            </Form.Group>
+                                        )
+                                    )}
+                                    <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); onFilter(this.state);}}>FILTER</button>
+                                    <button className="btn btn-dark" onClick={this.onReset}>RESET</button>
+                                    <br/>
+                                    <br/>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+
                 <div className="row">
                     <div className="col-lg-12 grid-margin stretch-card">
                         <div className="card">
@@ -91,6 +156,10 @@ class Datagrid extends Component {
                 <span style={{color:'#d0d0d0'}}> Showing {this.skip}-{this.skip + data.tableData.length} 0f {data.totalCount} records</span>
             </div>
         )
+    }
+
+    onReset = () => {
+
     }
      
     onPrev = () => {

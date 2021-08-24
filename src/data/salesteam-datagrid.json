@@ -1,5 +1,6 @@
 {
     "title": "Sales Manager List",
+    "filters": [],
     "tableHeaders": [
         { "key":"fullName", "label":"Name", "isHidden": false },
         { "key":"mobileNumber", "label":"Mobile Number", "isHidden": false},
