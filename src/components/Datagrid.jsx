@@ -16,14 +16,22 @@ class Datagrid extends Component {
         this.state = formState;
         this.skip = 0;
         this.limit = 10;
-        console.log(props.data);
     }
 
     onChangeHandler = (event) => {
         const inputData = {}
         inputData[event.target.name] = event.target.value;
-
         this.setState(inputData);
+    }
+
+    onReset = (e) => {
+        e.preventDefault();
+        const filterState = {};
+        this.props.data.filters.map((field, index) => {
+            filterState[field.id] = "";
+        });
+        this.setState(filterState);
+        this.props.onFilter(this.state);
     }
 
     render() {
@@ -158,9 +166,7 @@ class Datagrid extends Component {
         )
     }
 
-    onReset = () => {
-
-    }
+    
      
     onPrev = () => {
         const newSkip = this.skip - this.limit
