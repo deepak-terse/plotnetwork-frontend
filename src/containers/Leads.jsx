@@ -120,6 +120,11 @@ class Leads extends Component {
 
     }
 
+    onExpirySet = (data) => {
+        console.log("expiry data ",data)
+        this.updatePartner(data);
+    }
+
     backdropClickHandler = () => {
         this.setState({
           drawerOpen: false
@@ -153,6 +158,7 @@ class Leads extends Component {
                     onEdit={this.onUpdateHandler}
                     loadData={this.getLead}
                     onFilter={this.onFilter}
+                    onExpirySet={this.onExpirySet}
                 />   
             </React.Fragment>
         )
@@ -396,6 +402,37 @@ class Leads extends Component {
             if (response.status == 200){
                 console.log('User updated');
                 this.getLead(0);
+            } else if (response.status == 401) {
+                console.log("User not exist");
+            } else {
+                console.log('Error found : ', response.data.message);
+            }
+        }).catch((error)=>{
+            console.log('Error found : ', error);
+        });
+    }
+
+    updatePartner = (data) => {
+        let user = JSON.parse(localStorage.getItem('loggedInUser'));
+
+        axios({
+            method: 'put',
+            url: getAPIs().partner,
+            data: {
+                    "user": {
+                        userType:user.userType
+                    },
+                    "data": {
+                        "id": user.partnerDetails.id,
+                        "leadClosingTime": data.leadClosingTime
+                    }
+            }
+        }).then((response) => {
+            console.log("update partner response ",response)
+            if (response.status == 200){
+                console.log('User updated');
+                // user.partnerDetails.leadClosingTime = data.leadClosingTime;
+                // localStorage.setItem('loggedInUser',JSON.stringify(user));
             } else if (response.status == 401) {
                 console.log("User not exist");
             } else {

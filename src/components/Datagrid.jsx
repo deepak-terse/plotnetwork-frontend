@@ -13,6 +13,9 @@ class Datagrid extends Component {
         this.props.data.filters.map((field, index) => {
             formState[field.id] = field.value;
         });
+        this.props.data.otherActions.map((field, index) => {
+            formState[field.id] = field.value;
+        });
         this.state = formState;
         this.skip = 0;
         this.limit = 10;
@@ -27,7 +30,7 @@ class Datagrid extends Component {
     }
 
     render() {
-        const { data, onFilter } = this.props;
+        const { data, onFilter, onExpirySet } = this.props;
         return (
             <div>
                 <div className="row" style={data.filters.length == 0 ? {display:'none'} : {}} >
@@ -69,12 +72,51 @@ class Datagrid extends Component {
                                                 }
                                                 </div>
                                             </Form.Group>
-                                        )
+                                        )  
                                     )}
                                     <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); onFilter(this.state);}}>FILTER</button>
-                                    <button className="btn btn-dark" onClick={this.onReset}>RESET</button>
+                                    <button className="btn btn-dark" onClick={this.onReset}>RESET</button>&nbsp;&nbsp;
+                                    
                                     <br/>
                                     <br/>
+                                    
+                                    
+                                    {(
+                                        data.title === "Leads List" ? 
+                                        (
+                                            <div className="row" style={data.otherActions.length == 0 ? {display:'none'} : {display:'block'}} >
+                                                {(
+                                                    data.otherActions.map((field, index) =>
+                                                        <Form.Group key={index} style={field.isHidden ? {display:'none'} : {}}>
+                                                            <label htmlFor={index} className="col-sm-auto col-form-label" >{field.label}</label>
+                                                            <div className="col-sm-1">
+                                                            {
+                                                            
+                                                                <Form.Control 
+                                                                    name={field.id}
+                                                                    type={field.type} 
+                                                                    value={this.state[field.id]} 
+                                                                    onChange={this.onChangeHandler} 
+                                                                    className="form-control"
+                                                                    id={index} 
+                                                                    placeholder={field.placeholder} />
+                                                                
+                                                            }
+                                                            </div>
+                                                        </Form.Group>
+                                                    )
+                                                    
+                                                )}
+
+                                                <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); onExpirySet(this.state);}}>SET</button>
+
+                                            </div>
+                                        ) : ""
+                                    )} 
+                                    
+                                    <br/>
+                                    <br/>
+                                    
                                 </form>
                                 </div>
                             </div>

@@ -53,5 +53,15 @@
             "label":  "Add Lead",
             "onClick": "onAdd"
         }
+    ],
+    "otherActions" : [
+        {
+            "id": "leadClosingTime",
+            "label": "Close Lead In",
+            "type": "text",
+            "value": "",
+            "placeholder": "Months",
+            "isHidden": false
+        } 
     ]
 }

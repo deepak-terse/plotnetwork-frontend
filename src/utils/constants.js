@@ -1,6 +1,6 @@
 export function getAPIs(){
-    const baseURL = "https://backend.plotnetwork.in/";
-    // const baseURL = "http://localhost:1337/";
+    // const baseURL = "https://backend.plotnetwork.in/";
+    const baseURL = "http://localhost:1337/";
 
 
     return {
@@ -9,6 +9,7 @@ export function getAPIs(){
         'salesmanager': baseURL + 'salesmanager',
         'lead': baseURL + 'lead',
         'leadexport': baseURL + 'leadexport',
+        'partner': baseURL + 'partner',
         'baseURL': baseURL
     }
 }
