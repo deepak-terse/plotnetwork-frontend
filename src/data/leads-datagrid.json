@@ -48,6 +48,10 @@
         {
             "label":  "Export to Excel",
             "onClick": "onExport"
+        },
+        {
+            "label":  "Add Lead",
+            "onClick": "onAdd"
         }
     ]
 }

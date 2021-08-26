@@ -54,9 +54,6 @@ class Brokers extends Component {
         if(this.state.SidePanelProps.action === "CREATE") {
             this.createBroker(data);
         } else {
-            data.salesManagerId = this.state.SidePanelProps.fields[1].options.filter((e) => {
-                return e.fullName === data.salesManagerName;
-            })[0].id;
             this.updateBroker(data);
         }
         this.backdropClickHandler();
@@ -190,7 +187,6 @@ class Brokers extends Component {
 
     createBroker = (data) => {
         let temp = JSON.parse(localStorage.getItem('loggedInUser'));
-
         axios({
             method: 'post',
             url: getAPIs().broker,
@@ -205,7 +201,7 @@ class Brokers extends Component {
                     "reraNumber": data.reraNumber,
                     "address": data.address,
                     "companyName": data.companyName,
-                    "salesManagerId": data.salesManagerId,
+                    "salesManagerId": data.salesManagerName,
                     "partnerName": localStorage.getItem('partner')
                 }
             }
@@ -225,7 +221,6 @@ class Brokers extends Component {
     
     updateBroker = (data) => {
         let temp = JSON.parse(localStorage.getItem('loggedInUser'));
-
         axios({
             method: 'put',
             url: getAPIs().broker,
@@ -241,7 +236,7 @@ class Brokers extends Component {
                         "reraNumber": data.reraNumber,
                         "address": data.address,
                         "companyName": data.companyName,
-                        "salesManagerId": data.salesManagerId
+                        "salesManagerId": data.salesManagerName
                     }
             }
         }).then((response) => {

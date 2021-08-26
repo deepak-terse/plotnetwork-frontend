@@ -41,20 +41,22 @@
         {
             "id": "brokerName",
             "label": "Broker",
-            "type": "text",
+            "type": "select",
+            "options": [],
             "value": "",
             "placeholder": "",
             "hidden": false,
-            "disabled": true
+            "disabled": false
         },
         {
             "id": "salesManagerName",
             "label": "Sales Manager",
-            "type": "text",
+            "type": "select",
+            "options": [],
             "value": "",
             "placeholder": "",
             "hidden": false,
-            "disabled": true
+            "disabled": false
         },
         {
             "id": "message",
@@ -68,27 +70,28 @@
         {
             "id": "virtualMeetTime",
             "label": "Virtual Meet Time",
-            "type": "text",
+            "type": "datetime-local",
             "value": "",
             "placeholder": "",
             "hidden": false,
-            "disabled": true
+            "disabled": false
         },
         {
             "id": "status",
             "label": "Status",
             "type": "select",
             "options": [
-                {"fullName": "OPEN"},
-                {"fullName": "ASSIGNED"},
-                {"fullName": "HOLD"},
-                {"fullName": "CUSTOMER"},
-                {"fullName": "JUNK LEAD"}
+                {"fullName": "OPEN", "id": "OPEN"},
+                {"fullName": "ASSIGNED", "id": "ASSIGNED"},
+                {"fullName": "HOLD", "id": "HOLD"},
+                {"fullName": "CUSTOMER", "id": "CUSTOMER"},
+                {"fullName": "JUNK LEAD", "id": "JUNK LEAD"}
             ],
             "value": "",
             "placeholder": "",
             "hidden": false,
             "disabled": false
         }
-    ]
+    ],
+    "disabledFieldsOnEdit": ["salesManagerName", "brokerName", "virtualMeetTime"]
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styles from '../styles/Home.module.scss';
 // import Form from '../containers/Form';
 import { Form } from 'react-bootstrap';
-
+import moment from 'moment';
 
 class SidePanel extends Component {
     constructor(props) {
@@ -15,12 +15,18 @@ class SidePanel extends Component {
         formState.id = props.data.action === "UPDATE" ? props.data.id : "";
 
         this.state = formState;
+        console.log("this.props.data ",this.props.data);
     }
 
     onChangeHandler = (event) => {
         const inputData = {}
         inputData[event.target.name] = event.target.value;
-
+        // console.log("event.target.value ",event.target.value);
+        // var virtualMeetTimeDate = moment(event.target.value).format('DD-MM-YYYY, hh:mm a');
+        // console.log("virtualMeetTimeDate ",virtualMeetTimeDate);
+        // console.log("new date ",moment(virtualMeetTimeDate, ['DD-MM-YYYY, hh:mm a']).format('YYYY-MM-DDTHH:MM:SSZ'));
+        // console.log("new date ",moment(event.target.value).format('YYYY-MM-DDTHH:MM:SSZ'));
+        // YYYY-MM-DDTHH:MM:SSZ
         this.setState(inputData);
     }
 
@@ -61,12 +67,12 @@ class SidePanel extends Component {
                                             (
                                                 <select name={field.id} id={index} 
                                                     className="form-control" 
-                                                    value={this.state[field.id]} 
+                                                    value={this.state[field.id] == "" ? field.options[0].id : this.state[field.id]} 
                                                     disabled={field.disabled}
                                                     onChange={this.onChangeHandler}>
                                                     {
                                                         field.options.map((option, index) => 
-                                                            <option key={index} value={option.fullName}>{option.fullName}</option>
+                                                            <option key={index} value={option.id}>{option.fullName}</option>
                                                         )
                                                     }
                                                 </select>
