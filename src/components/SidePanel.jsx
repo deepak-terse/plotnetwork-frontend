@@ -15,18 +15,11 @@ class SidePanel extends Component {
         formState.id = props.data.action === "UPDATE" ? props.data.id : "";
 
         this.state = formState;
-        console.log("this.props.data ",this.props.data);
     }
 
     onChangeHandler = (event) => {
         const inputData = {}
         inputData[event.target.name] = event.target.value;
-        // console.log("event.target.value ",event.target.value);
-        // var virtualMeetTimeDate = moment(event.target.value).format('DD-MM-YYYY, hh:mm a');
-        // console.log("virtualMeetTimeDate ",virtualMeetTimeDate);
-        // console.log("new date ",moment(virtualMeetTimeDate, ['DD-MM-YYYY, hh:mm a']).format('YYYY-MM-DDTHH:MM:SSZ'));
-        // console.log("new date ",moment(event.target.value).format('YYYY-MM-DDTHH:MM:SSZ'));
-        // YYYY-MM-DDTHH:MM:SSZ
         this.setState(inputData);
     }
 
@@ -36,7 +29,6 @@ class SidePanel extends Component {
             drawerClasses = styles.sideDrawerOpen
         }
         const { data, onSave, onCancel } = this.props;
-        console.log(data.fields);
 
         return(
             <div className={drawerClasses}>

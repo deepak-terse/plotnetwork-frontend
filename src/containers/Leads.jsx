@@ -30,6 +30,7 @@ class Leads extends Component {
         if(user.userType === "admin") {
             this.getSalesManager();
         } else {
+            // add logged in SM record in salesManagerName dropdown of Side Panel
             let temp = this.state.SidePanelProps;
             temp.fields.forEach((key, index) => {
                 if(temp.fields[index].id === "salesManagerName") {
@@ -101,7 +102,6 @@ class Leads extends Component {
     }
 
     onFilter = (data) => {
-        console.log("DDDDDDDDDDDDDDDDDdata", data)
         data.salesManagerId = this.state.datagridProps.filters[1].options.filter((e) => {
             return e.fullName === data.salesManagerName;
         })[0]?.id;
@@ -115,7 +115,6 @@ class Leads extends Component {
         this.setState({
             filter: data
         }, function() {
-            console.log(this.state.filter)
             this.getLead(0);
         })
 
@@ -160,7 +159,6 @@ class Leads extends Component {
     }
 
     getSalesManager = () => {
-        console.log("##########################################################")
         axios({
             method: 'get',
             url: getAPIs().salesmanager,
@@ -171,6 +169,7 @@ class Leads extends Component {
             }
         }).then((response) => {
             if (response.status == 200){
+                // add logged in SM records in salesManagerName dropdown of Side Panel
                 let temp = this.state.SidePanelProps;
                 temp.fields.forEach((key, index) => {
                     if(temp.fields[index].id === "salesManagerName") {
@@ -274,7 +273,6 @@ class Leads extends Component {
     }
     
     getLead = (skip) => {
-        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ", this.state.filter);
         let params = {
             skip: skip,
             limit: 10,
@@ -313,14 +311,12 @@ class Leads extends Component {
                         if(e.id === "salesManagerName"){
                             e.isHidden = false;
                         }
-                        console.log(e);
                         return e;
                     })
                 }
 
                 temp.totalCount  = response.data.count;
 
-                console.log(temp);
                 this.setState({
                     datagridProps: temp
                 })
@@ -342,13 +338,7 @@ class Leads extends Component {
             data.salesManagerName = user.user.id;
         }
 
-        // var virtualMeetTimeDate = moment(data.virtualMeetTime).format('DD-MM-YYYY, hh:mm a');
-        // moment(data.virtualMeetTime).format('YYYY-MM-DDTHH:MM')
-        // console.log("new date ",moment(virtualMeetTimeDate, ['DD-MM-YYYY, hh:mm a']).format('YYYY-MM-DDThh:mm:SSZ'));
-
-        // virtualMeetTimeDate = new Date(virtualMeetTimeDate);
-        // console.log(virtualMeetTimeDate);
-        // debugger;
+        moment(data.virtualMeetTime).format('YYYY-MM-DDTHH:MM:SSZ') // working partially
         axios({
             method: 'post',
             url: getAPIs().lead,
@@ -361,7 +351,7 @@ class Leads extends Component {
                         "mobileNumber": data.mobileNumber,
                         "emailId": data.emailId,
                         "message": data.message,
-                        "virtualMeetTime": moment(data.virtualMeetTime).format('YYYY-MM-DDTHH:MM:SSZ'),
+                        "virtualMeetTime": new Date(data.virtualMeetTime).getTime(),
                         "salesManagerId": data.salesManagerName,
                         "brokerId": data.brokerName,
                         "partnerName": localStorage.getItem('partner')
