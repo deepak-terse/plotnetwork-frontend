@@ -35,7 +35,8 @@
                 "ASSIGNED": "badge badge-primary",
                 "HOLD": "badge badge-warning",
                 "CUSTOMER": "badge badge-success",
-                "JUNK LEAD": "badge badge-info"   
+                "JUNK LEAD": "badge badge-info",
+                "EXPIRED": "badge badge-info"   
             }
         }
     ],
