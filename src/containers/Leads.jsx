@@ -68,7 +68,12 @@ class Leads extends Component {
 
     onUpdateHandler = (data) => {
         sidePanelData.fields.forEach((key, index) => {
-            sidePanelData.fields[index].value = data[key.id];
+            if(sidePanelData.fields[index].id == "virtualMeetTime"){
+                var vmTimeDate = new Date(moment(data[key.id],['DD-MM-YYYY, hh:mm A']).format());
+                sidePanelData.fields[index].value =  new Date(vmTimeDate.getTime() + new Date().getTimezoneOffset() * -60 * 1000).toISOString().slice(0, 19);
+            }else {
+                sidePanelData.fields[index].value = data[key.id];
+            }
             if(sidePanelData.disabledFieldsOnEdit.includes(sidePanelData.fields[index].id)){
                 sidePanelData.fields[index].disabled = true;
             }
@@ -301,7 +306,7 @@ class Leads extends Component {
 
                     // e.date = new Date(e.createdAt).toUTCString();
                     e.date = moment(e.createdAt).format('DD-MM-YYYY')
-                    e.virtualMeetTime = moment(e.virtualMeetTime).format('DD-MM-YYYY, HH:MM A')
+                    e.virtualMeetTime = moment(e.virtualMeetTime).format('DD-MM-YYYY, hh:mm A')
 
                     return e;
                 })
