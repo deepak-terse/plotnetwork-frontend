@@ -20,5 +20,6 @@
             "label":  "Add Broker",
             "onClick": "onAdd"
         }
-    ]
+    ],
+    "otherActions" : []
 }

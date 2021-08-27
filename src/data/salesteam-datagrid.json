@@ -16,5 +16,6 @@
             "label":  "Add Sales Manager",
             "onClick": "onAdd"
         }
-    ]
+    ],
+    "otherActions" : []
 }

@@ -85,7 +85,8 @@
                 {"fullName": "ASSIGNED", "id": "ASSIGNED"},
                 {"fullName": "HOLD", "id": "HOLD"},
                 {"fullName": "CUSTOMER", "id": "CUSTOMER"},
-                {"fullName": "JUNK LEAD", "id": "JUNK LEAD"}
+                {"fullName": "JUNK LEAD", "id": "JUNK LEAD"},
+                {"fullName": "EXPIRED", "id": "EXPIRED"}
             ],
             "value": "",
             "placeholder": "",

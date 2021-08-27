@@ -57,7 +57,7 @@
     "otherActions" : [
         {
             "id": "leadClosingTime",
-            "label": "Close Lead In",
+            "label": "Close Lead In (Months)",
             "type": "text",
             "value": "",
             "placeholder": "Months",

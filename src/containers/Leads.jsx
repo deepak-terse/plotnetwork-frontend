@@ -25,25 +25,37 @@ class Leads extends Component {
 
         this.getLead(0);
         this.getBroker();
+        this.setData();
+    }
 
+    setData = () => {
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        let tempDatagridProps = this.state.datagridProps;
+        let temp = this.state.SidePanelProps;
+
         if(user.userType === "admin") {
+            // Set lead closing time value in UI
+            tempDatagridProps.otherActions.forEach((field, index) => {
+                if(field.id === "leadClosingTime") {
+                    field.value = user.partnerDetails.leadClosingTime;
+                }
+            });
+
             this.getSalesManager();
         } else {
             // add logged in SM record in salesManagerName dropdown of Side Panel
-            let temp = this.state.SidePanelProps;
             temp.fields.forEach((key, index) => {
                 if(temp.fields[index].id === "salesManagerName") {
                     temp.fields[index].options = [];
                     temp.fields[index].options.push(user);
                 }
             });
-
-            this.setState({
-                SidePanelProps: temp
-            })
         }
 
+        this.setState({
+            SidePanelProps: temp,
+            datagridProps: tempDatagridProps
+        })
     }
 
     onAddHandler = () => {
@@ -431,8 +443,8 @@ class Leads extends Component {
             console.log("update partner response ",response)
             if (response.status == 200){
                 console.log('User updated');
-                // user.partnerDetails.leadClosingTime = data.leadClosingTime;
-                // localStorage.setItem('loggedInUser',JSON.stringify(user));
+                user.partnerDetails.leadClosingTime = data.leadClosingTime;
+                localStorage.setItem('loggedInUser',JSON.stringify(user));
             } else if (response.status == 401) {
                 console.log("User not exist");
             } else {

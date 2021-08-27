@@ -31,6 +31,8 @@ class Datagrid extends Component {
 
     render() {
         const { data, onFilter, onExpirySet } = this.props;
+        const { userType } = JSON.parse(localStorage.getItem('loggedInUser'));
+
         return (
             <div>
                 <div className="row" style={data.filters.length == 0 ? {display:'none'} : {}} >
@@ -82,14 +84,14 @@ class Datagrid extends Component {
                                     
                                     
                                     {(
-                                        data.title === "Leads List" ? 
+                                        (data.title === "Leads List" && userType === 'admin') ? 
                                         (
-                                            <div className="row" style={data.otherActions.length == 0 ? {display:'none'} : {display:'block'}} >
+                                            <div className={styles['otherActionContainer']} style={data.otherActions.length == 0 ? {display:'none'} : {display: '-webkit-inline-box'} } >
                                                 {(
                                                     data.otherActions.map((field, index) =>
-                                                        <Form.Group key={index} style={field.isHidden ? {display:'none'} : {}}>
-                                                            <label htmlFor={index} className="col-sm-auto col-form-label" >{field.label}</label>
-                                                            <div className="col-sm-1">
+                                                        <Form.Group key={index} style={field.isHidden ? {display:'none'} : {display: 'contents'}}>
+                                                            <label htmlFor={index} className="col-sm-3 col-form-label">{field.label}</label>
+                                                            <div className="col-sm-3">
                                                             {
                                                             
                                                                 <Form.Control 
@@ -99,16 +101,16 @@ class Datagrid extends Component {
                                                                     onChange={this.onChangeHandler} 
                                                                     className="form-control"
                                                                     id={index} 
-                                                                    placeholder={field.placeholder} />
+                                                                    placeholder={field.placeholder} 
+                                                                    style={{width: 'inherit'}} />
                                                                 
                                                             }
                                                             </div>
                                                         </Form.Group>
                                                     )
-                                                    
                                                 )}
 
-                                                <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); onExpirySet(this.state);}}>SET</button>
+                                                <button className="btn btn-primary" onClick={(e) =>  {e.preventDefault(); onExpirySet(this.state);}}>SET</button>
 
                                             </div>
                                         ) : ""
