@@ -42,21 +42,27 @@
             "id": "brokerName",
             "label": "Broker",
             "type": "select",
-            "options": [],
+            "options": [
+                { "id": "", "fullName": "Select" }
+            ],
             "value": "",
             "placeholder": "",
             "hidden": false,
-            "disabled": false
+            "disabled": false,
+            "required" : true
         },
         {
             "id": "salesManagerName",
             "label": "Sales Manager",
             "type": "select",
-            "options": [],
+            "options": [
+                { "id": "", "fullName": "Select" }
+            ],
             "value": "",
             "placeholder": "",
             "hidden": false,
-            "disabled": false
+            "disabled": false,
+            "required" : true
         },
         {
             "id": "message",

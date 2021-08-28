@@ -32,10 +32,10 @@ class Leads extends Component {
         } else {
             // add logged in SM record in salesManagerName dropdown of Side Panel
             let temp = this.state.SidePanelProps;
-            temp.fields.forEach((key, index) => {
-                if(temp.fields[index].id === "salesManagerName") {
-                    temp.fields[index].options = [];
-                    temp.fields[index].options.push(user);
+            temp.fields.forEach((field, index) => {
+                if(field.id === "salesManagerName") {
+                    field.options.splice(1);
+                    field.options = field.options.concat(user);
                 }
             });
 
@@ -67,19 +67,29 @@ class Leads extends Component {
     }
 
     onUpdateHandler = (data) => {
-        sidePanelData.fields.forEach((key, index) => {
-            if(sidePanelData.fields[index].id == "virtualMeetTime"){
-                var vmTimeDate = new Date(moment(data[key.id],['DD-MM-YYYY, hh:mm A']).format());
-                sidePanelData.fields[index].value =  new Date(vmTimeDate.getTime() + new Date().getTimezoneOffset() * -60 * 1000).toISOString().slice(0, 19);
+        sidePanelData.fields.forEach((field, index) => {
+            if(field.id == "virtualMeetTime"){
+                var vmTimeDate = new Date(moment(data[field.id],['DD-MM-YYYY, hh:mm A']).format());
+                field.value =  new Date(vmTimeDate.getTime() + new Date().getTimezoneOffset() * -60 * 1000).toISOString().slice(0, 19);
             }else {
-                sidePanelData.fields[index].value = data[key.id];
+                console.log("on update to set ",data[field.id]);
+                field.value = data[field.id];
+                if(field.type == "select"){
+                    field.options.forEach((option, index) => {
+                        if(option.fullName == field.value){
+                            option.selected = "selected";
+                        }
+                    });
+                }
             }
-            if(sidePanelData.disabledFieldsOnEdit.includes(sidePanelData.fields[index].id)){
-                sidePanelData.fields[index].disabled = true;
+
+            if(sidePanelData.disabledFieldsOnEdit.includes(field.id)){
+                field.disabled = true;
             }
 
         });
         sidePanelData.action = "UPDATE";
+        console.log("sidePanelData for update ",sidePanelData);
         sidePanelData.id = data.id;
         this.setState({
             SidePanelProps: sidePanelData,
@@ -94,6 +104,7 @@ class Leads extends Component {
 
 
     onSaveHandler = (data) => {
+        console.log("savee ", data)
         if(this.state.SidePanelProps.action === "CREATE") {
             this.createLead(data);
         } else {
@@ -176,9 +187,12 @@ class Leads extends Component {
             if (response.status == 200){
                 // add logged in SM records in salesManagerName dropdown of Side Panel
                 let temp = this.state.SidePanelProps;
-                temp.fields.forEach((key, index) => {
-                    if(temp.fields[index].id === "salesManagerName") {
-                        temp.fields[index].options = response.data.data;
+                temp.fields.forEach((field, index) => {
+                    if(field.id === "salesManagerName") {
+                        console.log("SM length ",response.data.data.length);
+                        console.log("SM field.options length ",field.options.length);
+                        field.options.splice(1);
+                        field.options = field.options.concat(response.data.data);
                     }
                 });
 
@@ -224,11 +238,13 @@ class Leads extends Component {
         }).then((response) => {
             if (response.status == 200){
                 let temp = this.state.SidePanelProps;
-                temp.fields.forEach((key, index) => {
-                    if(temp.fields[index].id === "brokerName") {
-                        temp.fields[index].options = response.data.data;
+                temp.fields.forEach((field, index) => {
+                    if(field.id === "brokerName") {
+                        field.options.splice(1);
+                        field.options = field.options.concat(response.data.data);
                     }
                 });
+                console.log("temp after adding broker response ",temp);
 
                 let temp2 = this.state.datagridProps;
                 temp2.filters.forEach((key, index) => {
