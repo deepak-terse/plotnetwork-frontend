@@ -25,7 +25,11 @@ class Leads extends Component {
 
         this.getLead(0);
         this.getBroker();
+        this.setData();
+        
+    }
 
+    setData = () => {
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
         if(user.userType === "admin") {
             this.getSalesManager();
@@ -35,7 +39,7 @@ class Leads extends Component {
             temp.fields.forEach((field, index) => {
                 if(field.id === "salesManagerName") {
                     field.options.splice(1);
-                    field.options = field.options.concat(user);
+                    field.options = field.options.concat(user.user);
                 }
             });
 
@@ -43,7 +47,6 @@ class Leads extends Component {
                 SidePanelProps: temp
             })
         }
-
     }
 
     onAddHandler = () => {
@@ -68,19 +71,23 @@ class Leads extends Component {
 
     onUpdateHandler = (data) => {
         sidePanelData.fields.forEach((field, index) => {
-            if(field.id == "virtualMeetTime"){
-                var vmTimeDate = new Date(moment(data[field.id],['DD-MM-YYYY, hh:mm A']).format());
-                field.value =  new Date(vmTimeDate.getTime() + new Date().getTimezoneOffset() * -60 * 1000).toISOString().slice(0, 19);
-            }else {
-                console.log("on update to set ",data[field.id]);
-                field.value = data[field.id];
-                if(field.type == "select"){
-                    field.options.forEach((option, index) => {
-                        if(option.fullName == field.value){
-                            option.selected = "selected";
-                        }
-                    });
-                }
+            switch (field.id) {
+                case 'virtualMeetTime':
+                    var vmTimeDate = new Date(moment(data[field.id],['DD-MM-YYYY, hh:mm A']).format());
+                    field.value =  new Date(vmTimeDate.getTime() + new Date().getTimezoneOffset() * -60 * 1000).toISOString().slice(0, 19);
+                    break;
+
+                case 'salesManagerName':
+                    field.value =  data["salesManagerId"];
+                    break;
+
+                case 'brokerName':
+                    field.value =  data["brokerId"];
+                    break;
+            
+                default:
+                    field.value = data[field.id];
+                    break;
             }
 
             if(sidePanelData.disabledFieldsOnEdit.includes(field.id)){
@@ -89,7 +96,6 @@ class Leads extends Component {
 
         });
         sidePanelData.action = "UPDATE";
-        console.log("sidePanelData for update ",sidePanelData);
         sidePanelData.id = data.id;
         this.setState({
             SidePanelProps: sidePanelData,
@@ -189,8 +195,6 @@ class Leads extends Component {
                 let temp = this.state.SidePanelProps;
                 temp.fields.forEach((field, index) => {
                     if(field.id === "salesManagerName") {
-                        console.log("SM length ",response.data.data.length);
-                        console.log("SM field.options length ",field.options.length);
                         field.options.splice(1);
                         field.options = field.options.concat(response.data.data);
                     }
@@ -244,7 +248,6 @@ class Leads extends Component {
                         field.options = field.options.concat(response.data.data);
                     }
                 });
-                console.log("temp after adding broker response ",temp);
 
                 let temp2 = this.state.datagridProps;
                 temp2.filters.forEach((key, index) => {
@@ -375,6 +378,7 @@ class Leads extends Component {
                         "virtualMeetTime": new Date(data.virtualMeetTime).getTime(),
                         "salesManagerId": data.salesManagerName,
                         "brokerId": data.brokerName,
+                        "status": data.status,
                         "partnerName": localStorage.getItem('partner')
                     }
             }

@@ -15,8 +15,6 @@ class SidePanel extends Component {
         formState.id = props.data.action === "UPDATE" ? props.data.id : "";
 
         this.state = formState;
-        console.log("sidepanel state ",this.state);
-        console.log("props state ",this.props.data);
     }
 
     onChangeHandler = (event) => {
@@ -75,7 +73,7 @@ class SidePanel extends Component {
                                                     onChange={this.onChangeHandler}>
                                                     {
                                                         field.options.map((option, index) => 
-                                                            <option key={index} value={option.id} selected={option.selected}>{option.fullName}</option>
+                                                            <option key={index} value={option.id}>{option.fullName}</option>
                                                         )
                                                     }
                                                 </select>

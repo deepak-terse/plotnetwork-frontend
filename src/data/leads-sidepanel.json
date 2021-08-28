@@ -87,6 +87,7 @@
             "label": "Status",
             "type": "select",
             "options": [
+                {"fullName": "Select", "id": ""},
                 {"fullName": "OPEN", "id": "OPEN"},
                 {"fullName": "ASSIGNED", "id": "ASSIGNED"},
                 {"fullName": "HOLD", "id": "HOLD"},
