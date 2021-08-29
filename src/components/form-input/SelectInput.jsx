@@ -8,7 +8,11 @@ export default function SelectInput(props) {
         name = {props.name}
         value = {props.value}
         className = {props.className}
-        onChange = {props.onChange}>
+        value = {props.value}
+        onChange = {props.onChange}
+        disabled={props.disabled}
+        required={props.required}
+        >
             <option value="">{props.placeholder}</option>
             {props.options.map((option) =>
                 <option key={option.id} value={option.id}>{option.fullName}</option>

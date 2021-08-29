@@ -7,7 +7,7 @@
             "type": "select",
             "options": [],
             "value": "",
-            "placeholder": "",
+            "placeholder": "Select",
             "isHidden": false
         },
         {
@@ -16,7 +16,7 @@
             "type": "select",
             "options": [],
             "value": "",
-            "placeholder": "",
+            "placeholder": "Select",
             "isHidden": true
         }
     ],

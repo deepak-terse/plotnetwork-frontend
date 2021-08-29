@@ -11,6 +11,7 @@ export default function TextInput(props) {
         value = {props.value}
         className = {props.className}
         onChange = {props.onChange}
+        disabled = {props.disabled}
         />
 }
 
