@@ -80,12 +80,13 @@ class Leads extends Component {
     }
 
     onFilter = (data) => {
-        data.salesManagerId = this.state.datagridProps.filters[1].options.filter((e) => {
-            return e.fullName === data.salesManagerName;
-        })[0]?.id;
-        data.brokerId = this.state.datagridProps.filters[0].options.filter((e) => {
-            return e.fullName === data.brokerName;
-        })[0]?.id;
+       if(data.salesManagerName !== ""){
+            data.salesManagerId = data.salesManagerName;
+        }
+
+        if(data.brokerName !== ""){
+            data.brokerId = data.brokerName;
+        }
         
         delete data.salesManagerName;
         delete data.brokerName;
