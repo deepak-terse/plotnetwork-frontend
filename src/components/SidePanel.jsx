@@ -57,6 +57,7 @@ class SidePanel extends Component {
                                                 disabled={field.disabled}
                                                 options={field.options}
                                                 placeholder={field.placeholder}
+                                                required={field.required}
                                             />
                                             
                                             // field.type !== "select" ?
