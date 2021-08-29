@@ -19,7 +19,9 @@ class Brokers extends Component {
             SidePanelProps: sidePanelData
         }
 
+        
         this.getBroker(0);
+        
     }
 
     onAddHandler = () => {
@@ -58,9 +60,6 @@ class Brokers extends Component {
         if(this.state.SidePanelProps.action === "CREATE") {
             this.createBroker(data);
         } else {
-            data.salesManagerId = this.state.SidePanelProps.fields[1].options.filter((e) => {
-                return e.fullName === data.salesManagerName;
-            })[0].id;
             this.updateBroker(data);
         }
         this.backdropClickHandler();
@@ -167,6 +166,8 @@ class Brokers extends Component {
                     return e;
                 })
 
+                temp.totalCount  = response.data.count;
+
                 if(user.userType !== "admin") {
                     temp.tableHeaders.map( (e) => {
                         if(e.key === "salesManagerName"){
@@ -174,13 +175,28 @@ class Brokers extends Component {
                         }
                         return e;
                     })
-                }
-                temp.totalCount  = response.data.count;
 
-                this.setState({
-                    datagridProps: temp
-                })
-                this.getSalesManager();
+                    // assign SM record fetch from logged in for SM user
+                    let sidePaneltemp = this.state.SidePanelProps;
+                    sidePaneltemp.fields.forEach((key, index) => {
+                        if(key.id === "salesManagerName") {
+                            key.options = [user.user];
+                        }
+                    });
+                    this.setState({
+                        datagridProps: temp,
+                        SidePanelProps: sidePaneltemp
+                    })
+                } else {
+                    this.setState({
+                        datagridProps: temp
+                    })
+                    this.getSalesManager();
+                }
+
+                
+
+                
                 
             } else if (response.status == 401) {
                 console.log("User not exist");
@@ -194,7 +210,6 @@ class Brokers extends Component {
 
     createBroker = (data) => {
         let temp = JSON.parse(localStorage.getItem('loggedInUser'));
-
         axios({
             method: 'post',
             url: getAPIs().broker,
@@ -209,7 +224,7 @@ class Brokers extends Component {
                     "reraNumber": data.reraNumber,
                     "address": data.address,
                     "companyName": data.companyName,
-                    "salesManagerId": data.salesManagerId,
+                    "salesManagerId": data.salesManagerName,
                     "partnerName": localStorage.getItem('partner')
                 }
             }
@@ -229,7 +244,6 @@ class Brokers extends Component {
     
     updateBroker = (data) => {
         let temp = JSON.parse(localStorage.getItem('loggedInUser'));
-
         axios({
             method: 'put',
             url: getAPIs().broker,
@@ -245,7 +259,7 @@ class Brokers extends Component {
                         "reraNumber": data.reraNumber,
                         "address": data.address,
                         "companyName": data.companyName,
-                        "salesManagerId": data.salesManagerId
+                        "salesManagerId": data.salesManagerName
                     }
             }
         }).then((response) => {

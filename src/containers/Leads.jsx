@@ -25,35 +25,78 @@ class Leads extends Component {
 
         this.getLead(0);
         this.getBroker();
+        this.setData();
+        
+    }
 
+    setData = () => {
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
         if(user.userType === "admin") {
             this.getSalesManager();
+        } else {
+            // add logged in SM record in salesManagerName dropdown of Side Panel
+            let temp = this.state.SidePanelProps;
+            temp.fields.forEach((field, index) => {
+                if(field.id === "salesManagerName") {
+                    field.options = [user.user]
+                    // field.options = field.options.concat(user.user);
+                }
+            });
+
+            this.setState({
+                SidePanelProps: temp
+            })
         }
     }
 
-    // onAddHandler = () => {
-    //     sidePanelData.fields.forEach((key, index) => {
-    //         sidePanelData.fields[index].value = "";
-    //     });
-    //     sidePanelData.action = "CREATE";
-    //     this.setState({
-    //         SidePanelProps: sidePanelData,
-    //         drawerOpen: true
-    //     })
-    // }
+    onAddHandler = () => {
+        sidePanelData.fields.forEach((key, index) => {
+            if(sidePanelData.fields[index].id == "date"){
+                sidePanelData.fields[index].value = moment().format('DD-MM-YYYY');
+            } else {
+                sidePanelData.fields[index].value = "";
+                sidePanelData.fields[index].disabled = false;
+            }
+        });
+        sidePanelData.action = "CREATE";
+        this.setState({
+            SidePanelProps: sidePanelData,
+            drawerOpen: true
+        })
+    }
 
     onExportHandler = () => {
         this.getLeadsExport();
     }
 
     onUpdateHandler = (data) => {
-        sidePanelData.fields.forEach((key, index) => {
-            sidePanelData.fields[index].value = data[key.id];
+        sidePanelData.fields.forEach((field, index) => {
+            switch (field.id) {
+                case 'virtualMeetTime':
+                    var vmTimeDate = new Date(moment(data[field.id],['DD-MM-YYYY, hh:mm A']).format());
+                    field.value =  new Date(vmTimeDate.getTime() + new Date().getTimezoneOffset() * -60 * 1000).toISOString().slice(0, 19);
+                    break;
+
+                case 'salesManagerName':
+                    field.value =  data["salesManagerId"];
+                    break;
+
+                case 'brokerName':
+                    field.value =  data["brokerId"];
+                    break;
+            
+                default:
+                    field.value = data[field.id];
+                    break;
+            }
+
+            if(sidePanelData.disabledFieldsOnEdit.includes(field.id)){
+                field.disabled = true;
+            }
+
         });
         sidePanelData.action = "UPDATE";
         sidePanelData.id = data.id;
-        console.log(sidePanelData);
         this.setState({
             SidePanelProps: sidePanelData,
             drawerOpen: true
@@ -67,6 +110,7 @@ class Leads extends Component {
 
 
     onSaveHandler = (data) => {
+        console.log("savee ", data)
         if(this.state.SidePanelProps.action === "CREATE") {
             this.createLead(data);
         } else {
@@ -127,6 +171,7 @@ class Leads extends Component {
                 {backdrop}   
                 <Datagrid 
                     data={datagridProps} 
+                    onAdd={this.onAddHandler}
                     onExport={this.onExportHandler}
                     onEdit={this.onUpdateHandler}
                     loadData={this.getLead}
@@ -137,7 +182,6 @@ class Leads extends Component {
     }
 
     getSalesManager = () => {
-        console.log("##########################################################")
         axios({
             method: 'get',
             url: getAPIs().salesmanager,
@@ -148,10 +192,12 @@ class Leads extends Component {
             }
         }).then((response) => {
             if (response.status == 200){
+                // add logged in SM records in salesManagerName dropdown of Side Panel
                 let temp = this.state.SidePanelProps;
-                temp.fields.forEach((key, index) => {
-                    if(temp.fields[index].id === "salesManagerName") {
-                        temp.fields[index].options = response.data.data;
+                temp.fields.forEach((field, index) => {
+                    if(field.id === "salesManagerName") {
+                        field.options = response.data.data
+                        // field.options = field.options.concat(response.data.data);
                     }
                 });
 
@@ -197,9 +243,10 @@ class Leads extends Component {
         }).then((response) => {
             if (response.status == 200){
                 let temp = this.state.SidePanelProps;
-                temp.fields.forEach((key, index) => {
-                    if(temp.fields[index].id === "brokerName") {
-                        temp.fields[index].options = response.data.data;
+                temp.fields.forEach((field, index) => {
+                    if(field.id === "brokerName") {
+                        field.options = response.data.data;
+                        // field.options = field.options.concat(response.data.data);
                     }
                 });
 
@@ -279,7 +326,7 @@ class Leads extends Component {
 
                     // e.date = new Date(e.createdAt).toUTCString();
                     e.date = moment(e.createdAt).format('DD-MM-YYYY')
-                    e.virtualMeetTime = moment(e.virtualMeetTime).format('DD-MM-YYYY, HH:MM A')
+                    e.virtualMeetTime = moment(e.virtualMeetTime).format('DD-MM-YYYY, hh:mm A')
 
                     return e;
                 })
@@ -289,14 +336,12 @@ class Leads extends Component {
                         if(e.id === "salesManagerName"){
                             e.isHidden = false;
                         }
-                        console.log(e);
                         return e;
                     })
                 }
 
                 temp.totalCount  = response.data.count;
 
-                console.log(temp);
                 this.setState({
                     datagridProps: temp
                 })
@@ -311,11 +356,52 @@ class Leads extends Component {
             console.log('Error found : ', error);
         });
     }
+    
+    createLead = (data) => {
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        if(user.userType !== "admin") {
+            data.salesManagerName = user.user.id;
+        }
+
+        moment(data.virtualMeetTime).format('YYYY-MM-DDTHH:MM:SSZ') // working partially
+        axios({
+            method: 'post',
+            url: getAPIs().lead,
+            data: {
+                    "user": {
+                        userType:user.userType
+                    },
+                    "data": {
+                        "fullName": data.fullName,
+                        "mobileNumber": data.mobileNumber,
+                        "emailId": data.emailId,
+                        "message": data.message,
+                        "virtualMeetTime": new Date(data.virtualMeetTime).getTime(),
+                        "salesManagerId": data.salesManagerName,
+                        "brokerId": data.brokerName,
+                        "status": data.status,
+                        "partnerName": localStorage.getItem('partner')
+                    }
+            }
+        }).then((response) => {
+            if (response.status == 200){
+                console.log('Lead added');
+                this.getLead(0);
+            } else if (response.status == 500) {
+                console.log("Add Lead failed ", response.message);
+            }else if (response.status == 401) {
+                console.log("User not exist");
+            } else {
+                console.log('Error found : ', response.data.message);
+            }
+        }).catch((error)=>{
+            console.log('Error found : ', error);
+        });
+    }
 
     updateLead = (data) => {
         let temp = JSON.parse(localStorage.getItem('loggedInUser'));
 
-        console.log(data);
         axios({
             method: 'put',
             url: getAPIs().lead,
