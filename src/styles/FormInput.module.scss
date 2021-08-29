@@ -1,0 +1,34 @@
+.input {
+    width: 250px;
+    padding: 9px 15px;
+    margin: 8px 8px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.colorInput {
+    width: 250px;
+    padding: 9px 15px;
+    margin: 8px 8px;
+    text-align: left;
+    vertical-align: center;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.colorInput input {
+    margin-right:12px !important;
+}
+
+.button {
+    width: 150px;
+    padding: 9px 15px;
+    margin: 8px 8px;
+    display: inline-block;
+    border-radius: 4px;
+    box-sizing: border-box;
+}

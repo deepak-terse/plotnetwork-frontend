@@ -44,7 +44,7 @@
     height: calc(1.8125rem + 2px);
   }
   &::placeholder {
-    color: $text-muted;
+    color: $input-placeholder-color;
     font-size: $input-placeholder-font-size;
   }
 }
@@ -63,7 +63,7 @@ select {
     padding: .4375rem .75rem;
     border: 0;
     outline: 1px solid #322f2f;
-    color: $input-placeholder-color;
+    color: #ffffff;
     &:focus {
       outline: 1px solid $border-color;
     }
