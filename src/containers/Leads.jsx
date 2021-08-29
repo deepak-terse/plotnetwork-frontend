@@ -30,7 +30,6 @@ class Leads extends Component {
         if(user.userType === "admin") {
             this.getSalesManager();
         }
-
     }
 
     // onAddHandler = () => {
@@ -81,7 +80,6 @@ class Leads extends Component {
     }
 
     onFilter = (data) => {
-        console.log("DDDDDDDDDDDDDDDDDdata", data)
         data.salesManagerId = this.state.datagridProps.filters[1].options.filter((e) => {
             return e.fullName === data.salesManagerName;
         })[0]?.id;
@@ -95,7 +93,6 @@ class Leads extends Component {
         this.setState({
             filter: data
         }, function() {
-            console.log(this.state.filter)
             this.getLead(0);
         })
 
@@ -233,7 +230,7 @@ class Leads extends Component {
         };
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
         if(user.userType !== "admin") {
-            params.salesManagerId = user.user.id;
+            params.filter.salesManagerId = user.user.id;
         }
         axios({
             method: 'get',
@@ -253,7 +250,6 @@ class Leads extends Component {
     }
     
     getLead = (skip) => {
-        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ", this.state.filter);
         let params = {
             skip: skip,
             limit: 10,
@@ -261,7 +257,7 @@ class Leads extends Component {
         };
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
         if(user.userType !== "admin") {
-            params.salesManagerId = user.user.id;
+            params.filter.salesManagerId = user.user.id;
         }
 
         axios({
