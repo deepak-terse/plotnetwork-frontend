@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 // import Button from './form-input/Button';
 import styles from '../styles/Home.module.scss';
 import { Form } from 'react-bootstrap';
+import FormControl from '../components/form-input/FormControl';
 
 class Datagrid extends Component {
     skip;
@@ -51,29 +52,20 @@ class Datagrid extends Component {
                                                 <label htmlFor={index} className="col-sm-2 col-form-label">{field.label}</label>
                                                 <div className="col-sm-3">
                                                 {
-                                                    field.type !== "select" ?
-                                                    (
-                                                        <Form.Control 
-                                                            name={field.id}
-                                                            type={field.type} 
-                                                            value={this.state[field.id]} 
-                                                            onChange={this.onChangeHandler} 
-                                                            className="form-control" 
-                                                            id={index} 
-                                                            placeholder={field.placeholder} />
-                                                    ) : 
-                                                    (
-                                                        <select name={field.id} id={index} 
-                                                            className="form-control" 
-                                                            value={this.state[field.id]}
-                                                            onChange={this.onChangeHandler}>
-                                                            {
-                                                                field.options.map((option, index) => 
-                                                                    <option key={index} value={option.fullName}>{option.fullName}</option>
-                                                                )
-                                                            }
-                                                        </select>
-                                                    )
+
+                                                    <FormControl
+                                                        name={field.id}
+                                                        type={field.type} 
+                                                        value={this.state[field.id]} 
+                                                        onChange={this.onChangeHandler} 
+                                                        className="form-control" 
+                                                        id={index} 
+                                                        disabled={field.disabled}
+                                                        options={field.options}
+                                                        placeholder={field.placeholder}
+                                                        required={field.required}
+                                                    />
+                                                    
                                                 }
                                                 </div>
                                             </Form.Group>

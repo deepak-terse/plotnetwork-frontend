@@ -19,7 +19,8 @@
             "options": [],
             "placeholder": "Abhijit Singh",
             "hidden": false,
-            "disabled": false
+            "disabled": false,
+            "required": true
         },
         {
             "id": "companyName",

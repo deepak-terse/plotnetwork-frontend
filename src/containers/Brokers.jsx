@@ -35,7 +35,11 @@ class Brokers extends Component {
 
     onUpdateHandler = (data) => {
         sidePanelData.fields.forEach((key, index) => {
-            sidePanelData.fields[index].value = data[key.id];
+            if(key.id == "salesManagerName"){
+                sidePanelData.fields[index].value = data["salesManagerId"];
+            } else {
+                sidePanelData.fields[index].value = data[key.id];
+            }
         });
         sidePanelData.action = "UPDATE";
         sidePanelData.id = data.id;
