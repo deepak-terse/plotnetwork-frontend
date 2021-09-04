@@ -3,6 +3,15 @@
     "subtitle": "Fill the below form to add/update Broker",
     "fields": [
         {
+            "id": "date",
+            "label": "Date",
+            "type": "text",
+            "value": "",
+            "placeholder": "",
+            "hidden": false,
+            "disabled": true
+        },
+        {
             "id": "fullName",
             "label": "Full Name",
             "type": "text",
