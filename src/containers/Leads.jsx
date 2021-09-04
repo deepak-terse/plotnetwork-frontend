@@ -73,8 +73,11 @@ class Leads extends Component {
         sidePanelData.fields.forEach((field, index) => {
             switch (field.id) {
                 case 'virtualMeetTime':
-                    var vmTimeDate = new Date(moment(data[field.id],['DD-MM-YYYY, hh:mm A']).format());
-                    field.value =  new Date(vmTimeDate.getTime() + new Date().getTimezoneOffset() * -60 * 1000).toISOString().slice(0, 19);
+                    if(data[field.id] !== "-"){ // if meetTime exists then only format it
+                        var vmTimeDate = new Date(moment(data[field.id],['DD-MM-YYYY, hh:mm A']).format());
+                        field.value =  new Date(vmTimeDate.getTime() + new Date().getTimezoneOffset() * -60 * 1000).toISOString().slice(0, 19);
+                    }
+                    
                     break;
 
                 case 'salesManagerName':
@@ -326,7 +329,7 @@ class Leads extends Component {
 
                     // e.date = new Date(e.createdAt).toUTCString();
                     e.date = moment(e.createdAt).format('DD-MM-YYYY, hh:mm A')
-                    e.virtualMeetTime = moment(e.virtualMeetTime).format('DD-MM-YYYY, hh:mm A')
+                    e.virtualMeetTime = e.virtualMeetTime !== 0 ? moment(e.virtualMeetTime).format('DD-MM-YYYY, hh:mm A') : "-";
 
                     return e;
                 })
