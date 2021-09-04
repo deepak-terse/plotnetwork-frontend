@@ -12,3 +12,11 @@ export function getAPIs(){
         'baseURL': baseURL
     }
 }
+
+export function getDateFormats(){
+
+    return {
+        'DDMMYYYY12Hrs': 'DD-MM-YYYY, hh:mm A'
+    }
+}
+

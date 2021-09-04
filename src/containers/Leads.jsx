@@ -8,7 +8,7 @@ import Backdrop from '../components/Backdrop';
 import sidePanelData from '../data/leads-sidepanel.json';
 import datagridData from '../data/leads-datagrid.json';
 import axios from 'axios';
-import { getAPIs } from '../utils/constants';
+import { getAPIs, getDateFormats } from '../utils/constants';
 import moment from 'moment'
 
 class Leads extends Component {
@@ -73,7 +73,7 @@ class Leads extends Component {
         sidePanelData.fields.forEach((field, index) => {
             switch (field.id) {
                 case 'virtualMeetTime':
-                    var vmTimeDate = new Date(moment(data[field.id],['DD-MM-YYYY, hh:mm A']).format());
+                    var vmTimeDate = new Date(moment(data[field.id],[getDateFormats().DDMMYYYY12Hrs]).format());
                     field.value =  new Date(vmTimeDate.getTime() + new Date().getTimezoneOffset() * -60 * 1000).toISOString().slice(0, 19);
                     break;
 
@@ -325,8 +325,8 @@ class Leads extends Component {
                     e.brokerId = e.brokerId.id;
 
                     // e.date = new Date(e.createdAt).toUTCString();
-                    e.date = moment(e.createdAt).format('DD-MM-YYYY, hh:mm A')
-                    e.virtualMeetTime = moment(e.virtualMeetTime).format('DD-MM-YYYY, hh:mm A')
+                    e.date = moment(e.createdAt).format(getDateFormats().DDMMYYYY12Hrs)
+                    e.virtualMeetTime = moment(e.virtualMeetTime).format(getDateFormats().DDMMYYYY12Hrs)
 
                     return e;
                 })
