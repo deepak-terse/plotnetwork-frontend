@@ -325,7 +325,7 @@ class Leads extends Component {
                     e.brokerId = e.brokerId.id;
 
                     // e.date = new Date(e.createdAt).toUTCString();
-                    e.date = moment(e.createdAt).format('DD-MM-YYYY')
+                    e.date = moment(e.createdAt).format('DD-MM-YYYY, hh:mm A')
                     e.virtualMeetTime = moment(e.virtualMeetTime).format('DD-MM-YYYY, hh:mm A')
 
                     return e;
