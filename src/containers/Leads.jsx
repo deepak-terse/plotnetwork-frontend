@@ -396,6 +396,7 @@ class Leads extends Component {
                         "salesManagerId": data.salesManagerName,
                         "brokerId": data.brokerName,
                         "configuration": data.configuration,
+                        "purchasePurpose": data.purchasePurpose,
                         "status": data.status,
                         "partnerName": localStorage.getItem('partner')
                     }
@@ -434,6 +435,7 @@ class Leads extends Component {
                         "message": data.message,
                         "budget": numeral(data.budget)._value,
                         "configuration": data.configuration,
+                        "purchasePurpose": data.purchasePurpose,
                         "status": data.status,
                         "dob": new Date(data.dob).getTime()
                     }

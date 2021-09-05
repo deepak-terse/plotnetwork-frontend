@@ -32,6 +32,7 @@
         { "key":"virtualMeetTime", "label":"Virtual Meet Time", "isHidden": false },
         { "key":"budget", "label":"Budget", "isHidden": false },
         { "key":"configuration", "label":"Configuration", "isHidden": false },
+        { "key":"purchasePurpose", "label":"Purpose of Purchase", "isHidden": false },
         { "key":"status", "label":"Status", "isHidden": false, 
             "customStyle": {
                 "OPEN": "badge badge-danger", 

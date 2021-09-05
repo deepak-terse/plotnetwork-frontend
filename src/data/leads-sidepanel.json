@@ -111,6 +111,20 @@
             "disabled": false
         },
         {
+            "id": "purchasePurpose",
+            "label": "Purpose of Purchase",
+            "type": "select",
+            "options": [
+                {"fullName": "SELF", "id": "SELF"},
+                {"fullName": "INVESTMENT", "id": "INVESTMENT"},
+                {"fullName": "CORPORATE /ORGANIZATIONAL USE", "id": "CORPORATE /ORGANIZATIONAL USE"}
+            ],
+            "value": "",
+            "placeholder": "Select",
+            "hidden": false,
+            "disabled": false
+        },
+        {
             "id": "status",
             "label": "Status",
             "type": "select",
