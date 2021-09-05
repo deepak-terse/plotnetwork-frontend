@@ -228,6 +228,7 @@ class Brokers extends Component {
                 "data": {
                     "fullName": data.fullName,
                     "mobileNumber": data.mobileNumber,
+                    "alternateMobileNo": data.alternateMobileNo,
                     "emailId": data.emailId,
                     "alternateEmailId": data.alternateEmailId,
                     "reraNumber": data.reraNumber,
@@ -264,6 +265,7 @@ class Brokers extends Component {
                         "id": data.id,
                         "fullName": data.fullName,
                         "mobileNumber": data.mobileNumber,
+                        "alternateMobileNo": data.alternateMobileNo,
                         "emailId": data.emailId,
                         "alternateEmailId": data.alternateEmailId,
                         "reraNumber": data.reraNumber,

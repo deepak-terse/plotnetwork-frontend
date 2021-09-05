@@ -59,6 +59,15 @@
             "disabled": false
         },
         {
+            "id": "alternateMobileNo",
+            "label": "Alternate Mobile Number",
+            "type": "text",
+            "value": "",
+            "placeholder": "8888888888",
+            "hidden": false,
+            "disabled": false
+        },
+        {
             "id": "address",
             "label": "Address",
             "type": "text",
