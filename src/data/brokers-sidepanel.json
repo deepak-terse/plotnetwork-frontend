@@ -75,6 +75,15 @@
             "placeholder": "deepak@gmail.com",
             "hidden": false,
             "disabled": false
+        },
+        {
+            "id": "alternateEmailId",
+            "label": "Alternate Email ID",
+            "type": "text",
+            "value": "",
+            "placeholder": "deepak@gmail.com",
+            "hidden": false,
+            "disabled": false
         }
     ]
 }

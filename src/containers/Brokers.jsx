@@ -168,8 +168,10 @@ class Brokers extends Component {
                 temp.tableData.map( (e) => {
                     e.salesManagerName = e.salesManagerId.fullName;
                     e.salesManagerId = e.salesManagerId.id
+
                     e.date = moment(e.createdAt).format('DD-MM-YYYY, hh:mm A'); // format date in required format
-                    return e;
+
+             return e;
                 })
 
                 temp.totalCount  = response.data.count;
@@ -227,6 +229,7 @@ class Brokers extends Component {
                     "fullName": data.fullName,
                     "mobileNumber": data.mobileNumber,
                     "emailId": data.emailId,
+                    "alternateEmailId": data.alternateEmailId,
                     "reraNumber": data.reraNumber,
                     "address": data.address,
                     "companyName": data.companyName,
@@ -262,6 +265,7 @@ class Brokers extends Component {
                         "fullName": data.fullName,
                         "mobileNumber": data.mobileNumber,
                         "emailId": data.emailId,
+                        "alternateEmailId": data.alternateEmailId,
                         "reraNumber": data.reraNumber,
                         "address": data.address,
                         "companyName": data.companyName,

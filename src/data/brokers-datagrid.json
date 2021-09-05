@@ -9,7 +9,8 @@
         { "key":"reraNumber", "label":"RERA Number", "isHidden": false },
         { "key":"mobileNumber", "label":"Mobile Number", "isHidden": false },
         { "key":"address", "label":"Address", "isHidden": true },
-        { "key":"emailId", "label":"Email ID", "isHidden": false }
+        { "key":"emailId", "label":"Email ID", "isHidden": false },
+        { "key":"alternateEmailId", "label":"Alternate Email ID", "isHidden": false }
     ],
     "tableData": [],
     "actions": {
