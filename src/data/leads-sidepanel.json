@@ -21,6 +21,15 @@
             "disabled": false
         },
         {
+            "id": "dob",
+            "label": "Date of Birth",
+            "type": "date",
+            "value": "",
+            "placeholder": "",
+            "hidden": false,
+            "disabled": false
+        },
+        {
             "id": "mobileNumber",
             "label": "Mobile Number",
             "type": "text",

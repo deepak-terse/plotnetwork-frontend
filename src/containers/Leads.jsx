@@ -72,6 +72,10 @@ class Leads extends Component {
     onUpdateHandler = (data) => {
         sidePanelData.fields.forEach((field, index) => {
             switch (field.id) {
+                case 'dob':
+                    field.value = moment(data[field.id],['DD-MM-YYYY']).format('YYYY-MM-DD');
+                    break;
+
                 case 'virtualMeetTime':
                     var vmTimeDate = new Date(moment(data[field.id],['DD-MM-YYYY, hh:mm A']).format());
                     field.value =  new Date(vmTimeDate.getTime() + new Date().getTimezoneOffset() * -60 * 1000).toISOString().slice(0, 19);
@@ -326,6 +330,7 @@ class Leads extends Component {
 
                     // e.date = new Date(e.createdAt).toUTCString();
                     e.date = moment(e.createdAt).format('DD-MM-YYYY')
+                    e.dob = e.dob ? moment(e.dob).format('DD-MM-YYYY') : "";
                     e.virtualMeetTime = moment(e.virtualMeetTime).format('DD-MM-YYYY, hh:mm A')
 
                     return e;
@@ -374,6 +379,7 @@ class Leads extends Component {
                     "data": {
                         "fullName": data.fullName,
                         "mobileNumber": data.mobileNumber,
+                        "dob": new Date(data.dob).getTime(),
                         "emailId": data.emailId,
                         "message": data.message,
                         "virtualMeetTime": new Date(data.virtualMeetTime).getTime(),
@@ -415,7 +421,8 @@ class Leads extends Component {
                         "mobileNumber": data.mobileNumber,
                         "emailId": data.emailId,
                         "message": data.message,
-                        "status": data.status
+                        "status": data.status,
+                        "dob": new Date(data.dob).getTime()
                     }
             }
         }).then((response) => {
