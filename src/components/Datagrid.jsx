@@ -110,9 +110,9 @@ class Datagrid extends Component {
                                                         {(
                                                             data.tableHeaders.map((colHeader, index2) =>
                                                                 !colHeader.customStyle ?
-                                                                <td key={index2} style={colHeader.isHidden ? {display:'none'} : {}}> {lead[colHeader.key]} </td> :
+                                                                <td key={index2} style={colHeader.isHidden ? {display:'none'} : {}}> {lead[colHeader.key] ? lead[colHeader.key] : "-"} </td> :
                                                                 <td key={index2} style={colHeader.isHidden ? {display:'none'} : {}}> 
-                                                                    <label className={colHeader.customStyle[lead[colHeader.key]]}>{lead[colHeader.key]}</label>
+                                                                    <label className={colHeader.customStyle[lead[colHeader.key]]}>{lead[colHeader.key] ? lead[colHeader.key] : "-"}</label>
                                                                 </td>
                                                             )
                                                         )}

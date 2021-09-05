@@ -9,6 +9,7 @@ import sidePanelData from '../data/brokers-sidepanel.json';
 import datagridData from '../data/brokers-datagrid.json';
 import axios from 'axios';
 import { getAPIs } from '../utils/constants';
+import moment from 'moment';
 
 class Brokers extends Component {
     constructor(props) {
@@ -26,7 +27,12 @@ class Brokers extends Component {
 
     onAddHandler = () => {
         sidePanelData.fields.forEach((key, index) => {
-            sidePanelData.fields[index].value = "";
+            //ToDo: Need to refactor. No field specific code
+            if(sidePanelData.fields[index].id == "date"){
+                sidePanelData.fields[index].value = moment().format('DD-MM-YYYY');
+            } else {
+                sidePanelData.fields[index].value = "";
+            }
         });
         sidePanelData.action = "CREATE";
         this.setState({
@@ -163,7 +169,9 @@ class Brokers extends Component {
                     e.salesManagerName = e.salesManagerId.fullName;
                     e.salesManagerId = e.salesManagerId.id
 
-                    return e;
+                    e.date = moment(e.createdAt).format('DD-MM-YYYY, hh:mm A'); // format date in required format
+
+             return e;
                 })
 
                 temp.totalCount  = response.data.count;
@@ -220,8 +228,9 @@ class Brokers extends Component {
                 "data": {
                     "fullName": data.fullName,
                     "mobileNumber": data.mobileNumber,
-                    "emailId": data.emailId,
                     "alternateMobileNo": data.alternateMobileNo,
+                    "emailId": data.emailId,
+                    "alternateEmailId": data.alternateEmailId,
                     "reraNumber": data.reraNumber,
                     "address": data.address,
                     "companyName": data.companyName,
@@ -256,8 +265,9 @@ class Brokers extends Component {
                         "id": data.id,
                         "fullName": data.fullName,
                         "mobileNumber": data.mobileNumber,
-                        "emailId": data.emailId,
                         "alternateMobileNo": data.alternateMobileNo,
+                        "emailId": data.emailId,
+                        "alternateEmailId": data.alternateEmailId,
                         "reraNumber": data.reraNumber,
                         "address": data.address,
                         "companyName": data.companyName,
