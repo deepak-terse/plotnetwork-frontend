@@ -7,6 +7,7 @@
         { "key":"companyName", "label":"Company Name", "isHidden": false },
         { "key":"reraNumber", "label":"RERA Number", "isHidden": false },
         { "key":"mobileNumber", "label":"Mobile Number", "isHidden": false },
+        { "key":"alternateMobileNo", "label":"Alternate Mobile Number", "isHidden": false },
         { "key":"address", "label":"Address", "isHidden": true },
         { "key":"emailId", "label":"Email ID", "isHidden": false }
     ],
