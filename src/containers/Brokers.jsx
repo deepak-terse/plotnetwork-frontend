@@ -27,6 +27,7 @@ class Brokers extends Component {
 
     onAddHandler = () => {
         sidePanelData.fields.forEach((key, index) => {
+            //ToDo: Need to refactor. No field specific code
             if(sidePanelData.fields[index].id == "date"){
                 sidePanelData.fields[index].value = moment().format('DD-MM-YYYY');
             } else {
