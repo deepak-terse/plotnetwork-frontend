@@ -4,7 +4,7 @@
     "fields": [
         {
             "id": "date",
-            "label": "Date",
+            "label": "Broker Created Date",
             "type": "text",
             "value": "",
             "placeholder": "",
