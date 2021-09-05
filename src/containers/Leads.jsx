@@ -73,6 +73,7 @@ class Leads extends Component {
         sidePanelData.fields.forEach((field, index) => {
             switch (field.id) {
                 case 'virtualMeetTime':
+                    //Need to refactor
                     if(data[field.id] !== "-"){ // if meetTime exists then only format it
                         var vmTimeDate = new Date(moment(data[field.id],['DD-MM-YYYY, hh:mm A']).format());
                         field.value =  new Date(vmTimeDate.getTime() + new Date().getTimezoneOffset() * -60 * 1000).toISOString().slice(0, 19);
