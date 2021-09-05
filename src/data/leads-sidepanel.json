@@ -97,6 +97,20 @@
             "disabled": false
         },
         {
+            "id": "configuration",
+            "label": "Configuration",
+            "type": "select",
+            "options": [
+                {"fullName": "2.5BHK", "id": "2.5BHK"},
+                {"fullName": "3BHK", "id": "3BHK"},
+                {"fullName": "3.5BHK", "id": "3.5BHK"}
+            ],
+            "value": "",
+            "placeholder": "Select",
+            "hidden": false,
+            "disabled": false
+        },
+        {
             "id": "status",
             "label": "Status",
             "type": "select",
