@@ -2,6 +2,7 @@
     "title": "Brokers List",
     "filters": [],
     "tableHeaders": [
+        { "key":"date", "label":"Date", "isHidden": false },
         { "key":"fullName", "label":"Name", "isHidden": false },
         { "key":"salesManagerName", "label":"Sales Manager", "isHidden": false },
         { "key":"companyName", "label":"Company Name", "isHidden": false },
