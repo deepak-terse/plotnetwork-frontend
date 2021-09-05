@@ -30,6 +30,7 @@
         { "key":"salesManagerName", "label":"Sales Manager", "isHidden": false },
         { "key":"message", "label":"Message", "isHidden": true },
         { "key":"virtualMeetTime", "label":"Virtual Meet Time", "isHidden": false },
+        { "key":"budget", "label":"Budget", "isHidden": false },
         { "key":"status", "label":"Status", "isHidden": false, 
             "customStyle": {
                 "OPEN": "badge badge-danger", 

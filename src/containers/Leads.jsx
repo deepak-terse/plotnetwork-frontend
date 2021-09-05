@@ -10,6 +10,7 @@ import datagridData from '../data/leads-datagrid.json';
 import axios from 'axios';
 import { getAPIs } from '../utils/constants';
 import moment from 'moment'
+import numeral from 'numeral';
 
 class Leads extends Component {
     constructor(props) {
@@ -87,6 +88,11 @@ class Leads extends Component {
 
                 case 'brokerName':
                     field.value =  data["brokerId"];
+                    break;
+
+                case 'budget':
+                    var fullNumber = numeral(data[field.id])._value;
+                    field.value = numeral(fullNumber).format('0,0');
                     break;
             
                 default:
@@ -333,6 +339,9 @@ class Leads extends Component {
                     e.dob = e.dob ? moment(e.dob).format('DD-MM-YYYY') : "";
                     e.virtualMeetTime = moment(e.virtualMeetTime).format('DD-MM-YYYY, hh:mm A')
 
+                    // format number
+                    e.budget = numeral(e.budget).format('0 a');
+
                     return e;
                 })
 
@@ -383,6 +392,7 @@ class Leads extends Component {
                         "emailId": data.emailId,
                         "message": data.message,
                         "virtualMeetTime": new Date(data.virtualMeetTime).getTime(),
+                        "budget": numeral(data.budget)._value,
                         "salesManagerId": data.salesManagerName,
                         "brokerId": data.brokerName,
                         "status": data.status,
@@ -421,6 +431,7 @@ class Leads extends Component {
                         "mobileNumber": data.mobileNumber,
                         "emailId": data.emailId,
                         "message": data.message,
+                        "budget": numeral(data.budget)._value,
                         "status": data.status,
                         "dob": new Date(data.dob).getTime()
                     }

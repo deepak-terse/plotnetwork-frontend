@@ -88,6 +88,15 @@
             "disabled": false
         },
         {
+            "id": "budget",
+            "label": "Budget",
+            "type": "text",
+            "value": "",
+            "placeholder": "",
+            "hidden": false,
+            "disabled": false
+        },
+        {
             "id": "status",
             "label": "Status",
             "type": "select",
