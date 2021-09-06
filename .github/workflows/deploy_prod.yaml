@@ -1,0 +1,41 @@
+name: Deploy Prod
+
+on:
+  push:
+    branches: [ prod ]
+
+jobs:
+  deployprod:
+    timeout-minutes: 3
+    env:
+
+    strategy:
+      matrix:
+        node-version: [14]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'    
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: List files
+        run: ls
+
+      - name: Copy to another repo
+        uses: andstor/copycat-action@v3
+        with:
+          personal_token: ${{ secrets.GITHUB_TOKEN }}
+          src_branch: prod
+          src_path: build
+          dst_owner: deepak-terse
+          dst_repo_name: plotnetwork-frontend-build
+          dst_branch: main
+          dst_path: /.
