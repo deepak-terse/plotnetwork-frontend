@@ -111,6 +111,19 @@
             "disabled": false
         },
         {
+            "id": "preference",
+            "label": "Preference",
+            "type": "select",
+            "options": [
+                {"fullName": "Ready to Move", "id": "Ready to Move"},
+                {"fullName": "Under Construction", "id": "Under Construction"}
+            ],
+            "value": "",
+            "placeholder": "Select",
+            "hidden": false,
+            "disabled": false
+        },
+        {
             "id": "purchasePurpose",
             "label": "Purpose of Purchase",
             "type": "select",

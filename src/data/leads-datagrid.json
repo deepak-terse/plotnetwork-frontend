@@ -32,6 +32,7 @@
         { "key":"virtualMeetTime", "label":"Virtual Meet Time", "isHidden": false },
         { "key":"configuration", "label":"Configuration", "isHidden": false },
         { "key":"budget", "label":"Budget", "isHidden": false },
+        { "key":"preference", "label":"Preference", "isHidden": false },
         { "key":"purchasePurpose", "label":"Purpose of Purchase", "isHidden": false },
         { "key":"occupation", "label":"Occupation", "isHidden": false },
         { "key":"leadSource", "label":"Lead Source", "isHidden": false },
