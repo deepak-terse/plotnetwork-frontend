@@ -88,15 +88,6 @@
             "disabled": false
         },
         {
-            "id": "budget",
-            "label": "Budget",
-            "type": "text",
-            "value": "",
-            "placeholder": "",
-            "hidden": false,
-            "disabled": false
-        },
-        {
             "id": "configuration",
             "label": "Configuration",
             "type": "select",
@@ -111,6 +102,15 @@
             "disabled": false
         },
         {
+            "id": "budget",
+            "label": "Budget",
+            "type": "text",
+            "value": "",
+            "placeholder": "",
+            "hidden": false,
+            "disabled": false
+        },
+        {
             "id": "purchasePurpose",
             "label": "Purpose of Purchase",
             "type": "select",
@@ -118,6 +118,48 @@
                 {"fullName": "SELF", "id": "SELF"},
                 {"fullName": "INVESTMENT", "id": "INVESTMENT"},
                 {"fullName": "CORPORATE /ORGANIZATIONAL USE", "id": "CORPORATE /ORGANIZATIONAL USE"}
+            ],
+            "value": "",
+            "placeholder": "Select",
+            "hidden": false,
+            "disabled": false
+        },
+        {
+            "id": "occupation",
+            "label": "Occupation",
+            "type": "select",
+            "options": [
+                {"fullName": "SALARIED", "id": "SALARIED"},
+                {"fullName": "SELF EMPLOYED", "id": "SELF EMPLOYED"},
+                {"fullName": "PROFESSIONAL", "id": "PROFESSIONAL"},
+                {"fullName": "RETIRED", "id": "RETIRED"},
+                {"fullName": "HOUSEWIFE", "id": "HOUSEWIFE"}
+            ],
+            "value": "",
+            "placeholder": "Select",
+            "hidden": false,
+            "disabled": false
+        },
+        {
+            "id": "leadSource",
+            "label": "Lead Source",
+            "type": "select",
+            "options": [
+                {"fullName": "Newspaper", "id": "Newspaper"},
+                {"fullName": "Billboarrd/Hoarding", "id": "Billboarrd/Hoarding"},
+                {"fullName": "Web", "id": "v"},
+                {"fullName": "Kohinoor Square Contact Center", "id": "Kohinoor Square Contact Center"},
+                {"fullName": "Direct mailer/Invitation", "id": "Direct mailer/Invitation"},
+                {"fullName": "Exhibition", "id": "Exhibition"},
+                {"fullName": "Magzine", "id": "Magzine"},
+                {"fullName": "E-mail", "id": "E-mail"},
+                {"fullName": "Radio", "id": "Radio"},
+                {"fullName": "TV", "id": "TV"},
+                {"fullName": "Word of Mouth", "id": "Word of Mouth"},
+                {"fullName": "Corporate Partner", "id": "Corporate Partner"},
+                {"fullName": "Referref by Kohinoor Square booked customer", "id": "Referref by Kohinoor Square booked customer"},
+                {"fullName": "Business Development", "id": "Business Development"},
+                {"fullName": "Channel Partner", "id": "Channel Partner"}
             ],
             "value": "",
             "placeholder": "Select",

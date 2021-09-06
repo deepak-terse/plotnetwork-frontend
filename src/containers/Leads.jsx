@@ -397,6 +397,8 @@ class Leads extends Component {
                         "brokerId": data.brokerName,
                         "configuration": data.configuration,
                         "purchasePurpose": data.purchasePurpose,
+                        "occupation": data.occupation,
+                        "leadSource": data.leadSource,
                         "status": data.status,
                         "partnerName": localStorage.getItem('partner')
                     }
@@ -436,6 +438,8 @@ class Leads extends Component {
                         "budget": numeral(data.budget)._value,
                         "configuration": data.configuration,
                         "purchasePurpose": data.purchasePurpose,
+                        "occupation": data.occupation,
+                        "leadSource": data.leadSource,
                         "status": data.status,
                         "dob": new Date(data.dob).getTime()
                     }
