@@ -160,7 +160,7 @@
             "options": [
                 {"fullName": "Newspaper", "id": "Newspaper"},
                 {"fullName": "Billboarrd/Hoarding", "id": "Billboarrd/Hoarding"},
-                {"fullName": "Web", "id": "v"},
+                {"fullName": "Web", "id": "Web"},
                 {"fullName": "Kohinoor Square Contact Center", "id": "Kohinoor Square Contact Center"},
                 {"fullName": "Direct mailer/Invitation", "id": "Direct mailer/Invitation"},
                 {"fullName": "Exhibition", "id": "Exhibition"},

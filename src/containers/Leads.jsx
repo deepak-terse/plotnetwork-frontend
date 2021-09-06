@@ -345,7 +345,7 @@ class Leads extends Component {
                     e.virtualMeetTime = e.virtualMeetTime !== 0 ? moment(e.virtualMeetTime).format('DD-MM-YYYY, hh:mm A') : "-";
 
                     // format number
-                    e.budget = numeral(e.budget).format('0 a');
+                    e.budget = numeral(e.budget).format('0.0a');
 
                     return e;
                 })
