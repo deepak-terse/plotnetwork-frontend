@@ -11,7 +11,7 @@ export default function CheckboxInput(props) {
                 placeholder = {props.placeholder}
                 value = {props.value}
                 onChange = {props.onChange}
-            />
+            /> &nbsp;
             <span>{props.placeholder}</span>
         </div>
 }

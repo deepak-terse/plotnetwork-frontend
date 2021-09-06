@@ -111,6 +111,19 @@
             "disabled": false
         },
         {
+            "id": "preference",
+            "label": "Preference",
+            "type": "checkbox-group",
+            "options": [
+                {"fullName": "Ready to Move", "id": "ReadyToMove", "onChange" : "handlePreference"},
+                {"fullName": "Under Construction", "id": "UnderConstruction", "onChange" : "handlePreference"}
+            ],
+            "value": "",
+            "placeholder": "Ready to Move",
+            "hidden": false,
+            "disabled": false
+        },
+        {
             "id": "purchasePurpose",
             "label": "Purpose of Purchase",
             "type": "select",

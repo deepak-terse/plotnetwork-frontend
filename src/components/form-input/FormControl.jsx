@@ -7,6 +7,7 @@ import SelectInput from './SelectInput';
 import RadioInput from './RadioInput';
 import CheckboxInput from './CheckboxInput';
 import Button from './Button';
+import CheckboxGroupInput from './CheckboxGroupInput';
 
 export default function FormControl(props) {
     switch(props.type) {
@@ -58,8 +59,33 @@ export default function FormControl(props) {
                 required={props.required}
             />
             break;
+        case 'checkbox-group':
+            return <CheckboxGroupInput
+                type="checkbox"
+                name = {props.name}
+                placeholder = {props.placeholder}
+                options = {props.options}
+                value = {props.value}
+                className = {props.className}
+                onChange = {props.onChange}
+                disabled={props.disabled}
+                required={props.required}
+            />
+            break;
+
         case 'radio':
+            break;
         case 'checkbox':
+            return <CheckboxInput 
+                type = {props.type}
+                name = {props.name}
+                placeholder = {props.placeholder}
+                value = {props.value}
+                className = {props.className}
+                onChange = {props.onChange}
+                disabled={props.disabled}
+            />
+            break;
         case 'color':
         case 'file':
     }

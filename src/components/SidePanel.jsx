@@ -32,6 +32,11 @@ class SidePanel extends Component {
         }
     }
 
+    handlePreference = (event) => {
+        console.log("inside preference ");
+
+    }
+
     render() {
         let drawerClasses = styles.sideDrawer
         if(this.props.show) {
