@@ -25,28 +25,49 @@ class Leads extends Component {
         }
 
         this.getLead(0);
-        this.getBroker();
         this.setData();
         
     }
 
     setData = () => {
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
-        if(user.userType === "admin") {
-            this.getSalesManager();
-        } else {
-            // add logged in SM record in salesManagerName dropdown of Side Panel
-            let temp = this.state.SidePanelProps;
-            temp.fields.forEach((field, index) => {
-                if(field.id === "salesManagerName") {
-                    field.options = [user.user]
-                    // field.options = field.options.concat(user.user);
-                }
-            });
+        switch (user.userType) {
+            case 'admin':
+                this.getSalesManager(); // get all sm of admin
+                this.getBroker(); // get all brokers of admin
+                break;
 
-            this.setState({
-                SidePanelProps: temp
-            })
+            case 'salesManager':
+                // add logged in SM record in salesManagerName dropdown of Side Panel
+                let temp = this.state.SidePanelProps;
+                temp.fields.forEach((field, index) => {
+                    if(field.id === "salesManagerName") {
+                        field.options = [user.user] // assign sm from loggedInUser object 
+                        this.getBroker(user.user.salesManagerId); // get brokers of logged in SM
+                    }
+                });
+
+                this.setState({
+                    SidePanelProps: temp
+                });
+                break;
+            
+            case 'broker':
+                this.getSalesManager(user.user.salesManagerId); // get sm of a logged in broker
+                let temp2 = this.state.SidePanelProps;
+                temp2.fields.forEach((field, index) => {
+                    if(field.id === "brokerName") {
+                        field.options = [user.user]; // assign broker from loggedInUser object 
+                    }
+                });
+
+                this.setState({
+                    SidePanelProps: temp2
+                });
+                break;
+        
+            default:
+                break;
         }
     }
 
@@ -195,15 +216,20 @@ class Leads extends Component {
         )
     }
 
-    getSalesManager = () => {
+    getSalesManager = (salesManagerId) => {
+        let params = {
+            filter: {
+                "partnerName": localStorage.getItem('partner')
+            }
+        };
+
+        if (salesManagerId) {
+            params.filter.id = salesManagerId;
+        }
         axios({
             method: 'get',
             url: getAPIs().salesmanager,
-            params: {
-                filter: {
-                    "partnerName": localStorage.getItem('partner')
-                }
-            }
+            params: params
         }).then((response) => {
             if (response.status == 200){
                 // add logged in SM records in salesManagerName dropdown of Side Panel
@@ -239,12 +265,16 @@ class Leads extends Component {
         });
     }
 
-    getBroker = () => {
+    getBroker = (salesManagerId) => {
         let params = {
             filter: {
                 "partnerName": localStorage.getItem('partner')
             }
         };
+
+        if (salesManagerId) {
+            params.filter.salesManagerId = salesManagerId;
+        }
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
         if(user.userType !== "admin") {
             params.salesManagerId = user.user.id;
@@ -318,8 +348,10 @@ class Leads extends Component {
             filter: this.state.filter
         };
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
-        if(user.userType !== "admin") {
+        if(user.userType === "salesManager") {
             params.filter.salesManagerId = user.user.id;
+        } else if(user.userType === "broker"){
+            params.filter.brokerId = user.user.id;
         }
 
         axios({

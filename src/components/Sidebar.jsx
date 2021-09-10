@@ -57,12 +57,15 @@ class Sidebar extends Component {
           <li className="nav-item nav-category">
             <span className="nav-link"><Trans>Setup</Trans></span>
           </li>
-          <li className={ this.isPathActive('/' + partner + '/brokers') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
-            <Link className="nav-link" to={"/" + partner + "/brokers"}>
-              <span className="menu-icon"><i className="mdi mdi-account-multiple"></i></span>
-              <span className="menu-title"><Trans>Brokers</Trans></span>
-            </Link>
-          </li>
+          {
+            (userType === "admin" || userType === "salesManager" ) ? 
+            <li className={ this.isPathActive('/' + partner + '/brokers') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
+              <Link className="nav-link" to={"/" + partner + "/brokers"}>
+                <span className="menu-icon"><i className="mdi mdi-account-multiple"></i></span>
+                <span className="menu-title"><Trans>Brokers</Trans></span>
+              </Link>
+            </li> : ""
+          }
           {
             userType === "admin"? 
             <li className={ this.isPathActive('/' + partner + '/salesteam') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
