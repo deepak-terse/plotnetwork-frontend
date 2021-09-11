@@ -72,9 +72,14 @@ class Login extends Component {
         }).then((response) => {
             console.log(response);
             if (response.status == 200){
-                localStorage.setItem('loggedInUser', JSON.stringify(response.data.data));
-                localStorage.setItem('partner', response.data.data.partnerName);
-                window.location.href = "/"
+                var user = response.data.data;
+                if(user.userType !== "broker"){
+                    localStorage.setItem('loggedInUser', JSON.stringify(user));
+                    localStorage.setItem('partner', user.partnerName);
+                    window.location.href = "/"
+                } else {
+                    alert("Unathorized User!!")
+                }
                 // this.props.history.push("/");
             } else if (response.status == 401) {
                 console.log("The entered credentials did not matched");
