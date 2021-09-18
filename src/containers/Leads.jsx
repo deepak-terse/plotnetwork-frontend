@@ -10,6 +10,7 @@ import datagridData from '../data/leads-datagrid.json';
 import axios from 'axios';
 import { getAPIs } from '../utils/constants';
 import moment from 'moment'
+import numeral from 'numeral';
 
 class Leads extends Component {
     constructor(props) {
@@ -72,9 +73,17 @@ class Leads extends Component {
     onUpdateHandler = (data) => {
         sidePanelData.fields.forEach((field, index) => {
             switch (field.id) {
+                case 'dob':
+                    field.value = moment(data[field.id],['DD-MM-YYYY']).format('YYYY-MM-DD');
+                    break;
+
                 case 'virtualMeetTime':
-                    var vmTimeDate = new Date(moment(data[field.id],['DD-MM-YYYY, hh:mm A']).format());
-                    field.value =  new Date(vmTimeDate.getTime() + new Date().getTimezoneOffset() * -60 * 1000).toISOString().slice(0, 19);
+                    //Need to refactor
+                    if(data[field.id] !== "-"){ // if meetTime exists then only format it
+                        var vmTimeDate = new Date(moment(data[field.id],['DD-MM-YYYY, hh:mm A']).format());
+                        field.value =  new Date(vmTimeDate.getTime() + new Date().getTimezoneOffset() * -60 * 1000).toISOString().slice(0, 19);
+                    }
+                    
                     break;
 
                 case 'salesManagerName':
@@ -83,6 +92,11 @@ class Leads extends Component {
 
                 case 'brokerName':
                     field.value =  data["brokerId"];
+                    break;
+
+                case 'budget':
+                    var fullNumber = numeral(data[field.id])._value;
+                    field.value = numeral(fullNumber).format('0,0');
                     break;
             
                 default:
@@ -325,8 +339,13 @@ class Leads extends Component {
                     e.brokerId = e.brokerId.id;
 
                     // e.date = new Date(e.createdAt).toUTCString();
-                    e.date = moment(e.createdAt).format('DD-MM-YYYY')
-                    e.virtualMeetTime = moment(e.virtualMeetTime).format('DD-MM-YYYY, hh:mm A')
+
+                    e.date = moment(e.createdAt).format('DD-MM-YYYY, hh:mm A')
+                    e.dob = e.dob ? moment(e.dob).format('DD-MM-YYYY') : "";
+                    e.virtualMeetTime = e.virtualMeetTime !== 0 ? moment(e.virtualMeetTime).format('DD-MM-YYYY, hh:mm A') : "-";
+
+                    // format number
+                    e.budget = numeral(e.budget).format('0.0a');
 
                     return e;
                 })
@@ -374,11 +393,18 @@ class Leads extends Component {
                     "data": {
                         "fullName": data.fullName,
                         "mobileNumber": data.mobileNumber,
+                        "dob": new Date(data.dob).getTime(),
                         "emailId": data.emailId,
                         "message": data.message,
                         "virtualMeetTime": new Date(data.virtualMeetTime).getTime(),
+                        "budget": numeral(data.budget)._value,
+                        "preference": data.preference,
                         "salesManagerId": data.salesManagerName,
                         "brokerId": data.brokerName,
+                        "configuration": data.configuration,
+                        "purchasePurpose": data.purchasePurpose,
+                        "occupation": data.occupation,
+                        "leadSource": data.leadSource,
                         "status": data.status,
                         "partnerName": localStorage.getItem('partner')
                     }
@@ -415,7 +441,14 @@ class Leads extends Component {
                         "mobileNumber": data.mobileNumber,
                         "emailId": data.emailId,
                         "message": data.message,
-                        "status": data.status
+                        "budget": numeral(data.budget)._value,
+                        "preference": data.preference,
+                        "configuration": data.configuration,
+                        "purchasePurpose": data.purchasePurpose,
+                        "occupation": data.occupation,
+                        "leadSource": data.leadSource,
+                        "status": data.status,
+                        "dob": new Date(data.dob).getTime()
                     }
             }
         }).then((response) => {
