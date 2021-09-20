@@ -1,0 +1,15 @@
+{
+    "title": "Projects",
+    "filters": [
+        {
+            "id": "projects",
+            "label": "Project",
+            "type": "select",
+            "options": [],
+            "value": "",
+            "placeholder": "Select",
+            "isHidden": false
+        }
+    ],
+    "tableData": []
+}

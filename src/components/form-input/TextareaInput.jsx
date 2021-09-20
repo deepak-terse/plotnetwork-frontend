@@ -2,27 +2,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from '../../styles/FormInput.module.scss'
 
-export default function FileInput(props) {
-    console.log(styles.input);
-    return <input 
-        type = {props.type}
+export default function TextareaInput(props) {
+    return <textarea 
         name = {props.name}
-        placeholder = {props.placeholder}
         value = {props.value}
-        className = {props.className}
+        id = {props.id}
+        rows = {props.rows}
         onChange = {props.onChange}
-        disabled = {props.disabled}
-        />
+        className = {props.className}
+        placeholder = {props.placeholder}
+        required={props.required}
+        disabled={props.disabled} />
 }
 
-FileInput.defaultProps = {
-    type: "file",
-    className: styles.input
+TextareaInput.defaultProps = {
+    className: styles.input,
+    rows: "4"
 }
 
-FileInput.propTypes = {
+TextareaInput.propTypes = {
     name: PropTypes.string.isRequired,
-    type: PropTypes.oneOf(['file']),
     placeholder: PropTypes.string.isRequired,
     className: PropTypes.string,
     value: PropTypes.any,

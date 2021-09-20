@@ -73,6 +73,16 @@ class Sidebar extends Component {
             </li> :
             ""
           }
+          {
+            userType === "admin"? 
+            <li className={ this.isPathActive('/' + partner + '/projects') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
+              <Link className="nav-link" to={"/" + partner + "/projects"}>
+                <span className="menu-icon"><i className="mdi mdi-account-multiple"></i></span>
+                <span className="menu-title"><Trans>Projects</Trans></span>
+              </Link>
+            </li> :
+            ""
+          }
         </ul>
       </nav>
     );
