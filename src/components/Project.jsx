@@ -5,7 +5,7 @@ import ImagePreviewList from './ImagePreviewList';
 import { uploadFileToS3 } from '../utils/aws/react-s3';
 import FormControl from '../components/form-input/FormControl';
 import axios from 'axios';
-import { getAPIs } from '../utils/constants';
+import { getAPIs, getPresetAmenitiesList} from '../utils/constants';
 import { isImageFile } from '../utils/commonMethods';
 import SectionContainer from '../components/SectionContainer';
 import BrowseFilesContainer from '../components/BrowseFilesContainer';
@@ -18,6 +18,7 @@ class ProjectItem extends Component {
         this.state = {
             user : user,
             project : {}, 
+            presetAmenities : getPresetAmenitiesList(),
             banner : {id : "banner", title : "Home", images : []},
             about : { id: "about", title : "", description : "" },
             amenities : { id: "amenities", title : "Amenities", list : []},
@@ -67,9 +68,10 @@ class ProjectItem extends Component {
     }
 
     render(){
-        const {project, banner, about, amenities, virtualTour, gallery, floorPlans, contactUs, footer} =  this.state;
+        const {project, presetAmenities, banner, about, amenities, virtualTour, gallery, floorPlans, contactUs, footer} =  this.state;
         const sectionContainer = { width: 'inherit' };
         const autoMargin = {margin: 'auto'}
+        const fitContentWidth = {width : 'fit-content', float : 'left'};
 
         return (
             <div className="row">
@@ -134,9 +136,25 @@ class ProjectItem extends Component {
                                                 </form>   
                                             </SectionContainer>
                                             
-                                            {/* <SectionContainer className={sectionContainer} displayTitle="Amenities">
+                                            <SectionContainer className={sectionContainer} displayTitle="Amenities">
+                                                {/* <div style={{display : 'flex'}}> */}
+                                                    {(
+                                                        presetAmenities.map((amenity, index) => {
+                                                            return <FormControl  key={index}
+                                                                        name={'amenities'+index}
+                                                                        type="checkbox" 
+                                                                        value={amenities.list}
+                                                                        id={'amenities'+index}
+                                                                        onChange={(e) => this.onChangeHandler(e, 'amenities')} 
+                                                                        className="form-control" 
+                                                                        placeholder={amenity.title}
+                                                                        style={fitContentWidth}
+                                                                    />
+                                                        })
+                                                    )}      
+                                                {/* </div> */}
+                                            </SectionContainer>
 
-                                            </SectionContainer> */}
                                             <SectionContainer class={sectionContainer} displayTitle="Virtual Tour"> 
                                                 <div>
                                                     <label htmlFor="aboutTitle" className="col-sm-auto col-form-label">Virtual Tour Photo</label>

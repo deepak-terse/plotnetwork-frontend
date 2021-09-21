@@ -17,16 +17,13 @@ class ImagePreviewList extends Component {
     }
 
     onRemoveImageHandler = (data) => {
-        console.log("inside remove");
-        // const filteredImages = this.state.images.filter((image) => image.name !== data.name);
         this.props.onUpdate(data);
-        // this.setState({ images : filteredImages});
     }
 
     render(){
         const { images } = this.state;
-        const imageList = images.map((image) =>
-            <ImagePreview key={image.name} data={image} onRemove={this.onRemoveImageHandler} />
+        const imageList = images.map((image, index) =>
+            <ImagePreview key={index} data={image} onRemove={this.onRemoveImageHandler} />
         )
         return (
             <div >

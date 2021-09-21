@@ -61,6 +61,17 @@ export default function FormControl(props) {
             break;
         case 'radio':
         case 'checkbox':
+            return <CheckboxInput
+                type = {props.type}
+                name = {props.name}
+                placeholder = {props.placeholder}
+                checked = {props.value}
+                onChange = {props.onChange}
+                className = {props.className}
+                disabled = {props.disabled}
+                style = {props.class}
+            />
+            break;
         case 'color':
             break;
         case 'file':

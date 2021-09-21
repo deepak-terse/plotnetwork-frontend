@@ -26,3 +26,44 @@ export function getAWSConfig(bucketName, dirName, region){
         secretAccessKey: secretAccessKey,
     }
 }
+
+export function getPresetAmenitiesList(){
+    return [
+        {
+            id : 0,
+            title : "Fully Equipped Air Conditioned Gym"
+        },
+        {
+            id : 1,
+            title : "Mechanical Gym"
+        },
+        {
+            id : 2,
+            title : "Steam Room"
+        },
+        {
+            id : 3,
+            title : "Spa & Massage Room"
+        },
+        {
+            id : 4,
+            title : "Sky Lounge"
+        },
+        {
+            id : 5,
+            title : "Sitting Deck"
+        },
+        {
+            id : 6,
+            title : "Yoga & Meditation deck"
+        },
+        {
+            id : 7,
+            title : "Jogging Track"
+        },
+        {
+            id : 8,
+            title : "Children Play Area"
+        }
+    ]
+}
