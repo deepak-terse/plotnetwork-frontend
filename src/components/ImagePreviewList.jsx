@@ -30,7 +30,7 @@ class ImagePreviewList extends Component {
         )
         return (
             <div >
-                {imageList}
+                {/* {imageList} */}
             </div>
         )
     }

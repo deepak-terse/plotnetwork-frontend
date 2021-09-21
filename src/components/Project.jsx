@@ -69,6 +69,7 @@ class ProjectItem extends Component {
     render(){
         const {project, banner, about, amenities, virtualTour, gallery, floorPlans, contactUs, footer} =  this.state;
         const sectionContainer = { width: 'inherit' };
+        const autoMargin = {margin: 'auto'}
 
         return (
             <div className="row">
@@ -81,22 +82,21 @@ class ProjectItem extends Component {
                                         <div >
                                             <h4 className="card-title">{project.projectName}</h4>
                                             <SectionContainer class={sectionContainer} displayTitle="Home"> 
-                                                
                                                 <BrowseFilesContainer onDropFiles={this.processFile} />
-                                                <div style={{margin:'auto'}}>{this.state.banner.images.length} Photos Selected</div>
-                                                {/* <ImagePreviewList images={this.state.banner.images} onUpdate={this.onListUpdatehandler}/> */}
+                                                <div style={{margin:'auto'}}>{this.state.banner.images.length} Banners Selected</div>
+                                                <ImagePreviewList images={this.state.banner.images} onUpdate={this.onListUpdatehandler}/>
 
-                                                {(
+                                                <div style={{margin : '15px'}}>
                                                     <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadHomeImages()}}>Upload</button>
-                                                )}
+                                                </div>
                                             </SectionContainer>
                                             
                                             <SectionContainer className={sectionContainer} displayTitle="About Us"> 
                                                 <form className="forms-sample" name="aboutSectionForm" id="aboutSectionForm">
                                                     {(
                                                         <div>
-                                                            <label htmlFor="aboutTitle" className="col-sm-3 col-form-label">Title</label>
-                                                            <div className="col-sm-9">
+                                                            <label htmlFor="aboutTitle" className="col-sm-auto col-form-label">Title</label>
+                                                            <div className="col-sm-9" style={autoMargin}>
                                                                 <FormControl
                                                                     name="title"
                                                                     type="text" 
@@ -109,8 +109,8 @@ class ProjectItem extends Component {
                                                                 />
                                                             </div>
 
-                                                            <label htmlFor="aboutDescription" className="col-sm-3 col-form-label">Description</label>
-                                                            <div className="col-sm-9">
+                                                            <label htmlFor="aboutDescription" className="col-sm-auto col-form-label">Description</label>
+                                                            <div className="col-sm-9" style={autoMargin}>
                                                                 <FormControl
                                                                     name="description"
                                                                     type="textarea" 
@@ -127,18 +127,61 @@ class ProjectItem extends Component {
                                                         
                                                     )}
                                                         
-                                                    <button className="btn btn-primary mr-2" onClick={(e) => this.updateProjectInfo(e, 'about')}>SAVE</button>
-                                                    <button className="btn btn-dark" type="button" >CANCEL</button>
-
+                                                    <div style={{margin : '15px'}}>
+                                                        <button className="btn btn-primary mr-2" onClick={(e) => this.updateProjectInfo(e, 'about')}>SAVE</button>
+                                                        <button className="btn btn-dark" type="button" >CANCEL</button>
+                                                    </div> 
                                                 </form>   
+                                            </SectionContainer>
+                                            
+                                            {/* <SectionContainer className={sectionContainer} displayTitle="Amenities">
+
+                                            </SectionContainer> */}
+                                            <SectionContainer class={sectionContainer} displayTitle="Virtual Tour"> 
+                                                <div>
+                                                    <label htmlFor="aboutTitle" className="col-sm-auto col-form-label">Virtual Tour Photo</label>
+                                                    <BrowseFilesContainer onDropFiles={this.processFile} />
+                                                    <div style={{margin:'auto'}}>{this.state.banner.images.length} Photos Selected</div>
+                                                    <ImagePreviewList images={this.state.banner.images} onUpdate={this.onListUpdatehandler}/>
+                                                </div>
+                                                <div>
+                                                    <label htmlFor="aboutTitle" className="col-sm-auto col-form-label">Virtual Tour Video</label>
+                                                    <BrowseFilesContainer onDropFiles={this.processFile} />
+                                                    <div style={{margin:'auto'}}>{this.state.banner.images.length} Tour Selected</div>
+                                                    <ImagePreviewList images={this.state.banner.images} onUpdate={this.onListUpdatehandler}/>
+                                                </div>
+
+                                                <div style={{margin : '15px'}}>
+                                                    <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadHomeImages()}}>Upload</button>
+                                                </div>
+                                            </SectionContainer>
+
+                                            <SectionContainer class={sectionContainer} displayTitle="Gallery"> 
+                                                <BrowseFilesContainer onDropFiles={this.processFile} />
+                                                <div style={{margin:'auto'}}>{this.state.banner.images.length} Photos Selected</div>
+                                                <ImagePreviewList images={this.state.banner.images} onUpdate={this.onListUpdatehandler}/>
+
+                                                <div style={{margin : '15px'}}>
+                                                    <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadHomeImages()}}>Upload</button>
+                                                </div>
+                                            </SectionContainer>
+                                            
+                                            <SectionContainer class={sectionContainer} displayTitle="Floor Plans"> 
+                                                <BrowseFilesContainer onDropFiles={this.processFile} />
+                                                <div style={{margin:'auto'}}>{this.state.banner.images.length} Floor Plans Selected</div>
+                                                <ImagePreviewList images={this.state.banner.images} onUpdate={this.onListUpdatehandler}/>
+
+                                                <div style={{margin : '15px'}}>
+                                                    <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadHomeImages()}}>Upload</button>
+                                                </div>
                                             </SectionContainer>
 
                                             <SectionContainer className={sectionContainer} displayTitle="Contact Us"> 
                                                 <form className="forms-sample" name="contactSectionForm" id="contactSectionForm">
                                                     {(
                                                         <div>
-                                                            <label htmlFor="contactUs" className="col-sm-3 col-form-label">Add link of location map here</label>
-                                                            <div className="col-sm-9">
+                                                            <label htmlFor="contactUs" className="col-sm-auto col-form-label">Add link of location map here</label>
+                                                            <div className="col-sm-9" style={autoMargin}>
                                                                 <FormControl
                                                                     name="mapLink"
                                                                     type="text" 
@@ -154,8 +197,10 @@ class ProjectItem extends Component {
                                                         </div>
                                                     )}
                                                         
-                                                    <button className="btn btn-primary mr-2" onClick={(e) => this.updateProjectInfo(e, 'contactUs')}>SAVE</button>
-                                                    <button className="btn btn-dark" type="button" >CANCEL</button>
+                                                    <div style={{margin : '15px'}}>
+                                                        <button className="btn btn-primary mr-2" onClick={(e) => this.updateProjectInfo(e, 'contactUs')}>SAVE</button>
+                                                        <button className="btn btn-dark" type="button" >CANCEL</button>
+                                                    </div>
                                                 </form>   
                                             </SectionContainer>
 
@@ -163,8 +208,8 @@ class ProjectItem extends Component {
                                                 <form className="forms-sample" name="footerSectionForm" id="footerSectionForm">
                                                     {(
                                                         <div>
-                                                            <label htmlFor="footer" className="col-sm-3 col-form-label">Add footerline for your website</label>
-                                                            <div className="col-sm-9">
+                                                            <label htmlFor="footer" className="col-sm-auto col-form-label">Add footerline for your website</label>
+                                                            <div className="col-sm-9" style={autoMargin}>
                                                                 <FormControl
                                                                     name="description"
                                                                     type="textarea" 
@@ -178,8 +223,8 @@ class ProjectItem extends Component {
                                                                 />
                                                             </div>
 
-                                                            <label htmlFor="disclaimer" className="col-sm-3 col-form-label">Disclaimer</label>
-                                                            <div className="col-sm-9">
+                                                            <label htmlFor="disclaimer" className="col-sm-auto col-form-label">Disclaimer</label>
+                                                            <div className="col-sm-9" style={autoMargin}>
                                                                 <FormControl
                                                                     name="disclaimer"
                                                                     type="textarea" 
@@ -195,8 +240,10 @@ class ProjectItem extends Component {
                                                         </div>
                                                     )}
                                                         
-                                                    <button className="btn btn-primary mr-2" onClick={(e) => this.updateProjectInfo(e, 'footer')}>SAVE</button>
-                                                    <button className="btn btn-dark" type="button" >CANCEL</button>
+                                                    <div style={{margin : '15px'}}>
+                                                        <button className="btn btn-primary mr-2" onClick={(e) => this.updateProjectInfo(e, 'footer')}>SAVE</button>
+                                                        <button className="btn btn-dark" type="button" >CANCEL</button>
+                                                    </div>
                                                 </form>   
                                             </SectionContainer>                                        
                                         </div>
@@ -210,7 +257,6 @@ class ProjectItem extends Component {
 
         )
     }
-
 
     processFile = (files) => {
         if(files.length > 0){
@@ -226,8 +272,6 @@ class ProjectItem extends Component {
             });
         }
     }
-
-    
 
     onListUpdatehandler = (data) => {
         const newBanner = this.state.banner;
