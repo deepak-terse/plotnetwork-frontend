@@ -176,7 +176,7 @@ class ProjectItem extends Component {
                                                     <label className="col-sm-auto col-form-label">Virtual Tour Photo</label>
                                                     <BrowseFilesContainer onDropFiles={(files) => this.processFile(files, 'virtualTour')} />
                                                     <div style={{margin:'auto'}}>{virtualTour.imageLink !== "" ? 1 : 0} Photos Selected</div>
-                                                    {/* <ImagePreviewList images={[virtualTour.imageLink]} onUpdate={(data) => this.onListUpdatehandler(data, 'virtualTour')}/> */}
+                                                    <ImagePreviewList images={[virtualTour.imageLink]} onUpdate={(data) => this.onListUpdatehandler(data, 'virtualTour')}/>
                                                 </div>
                                                 <div>
                                                     <label htmlFor="tourLink" className="col-sm-auto col-form-label">Add link of Virtual Tour here</label>

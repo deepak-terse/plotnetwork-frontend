@@ -23,13 +23,19 @@ class ImagePreview extends Component {
             fontSize: '14px',
             textAlign: 'right'
         }
+
+        let imgSource = '';
+        if(typeof data == "object"){
+            imgSource = URL.createObjectURL(data);
+        } else imgSource = data;
+        
         return (
             <div style={imageDiv}>
                 <span style={removeBtn} 
                     onClick={() => onRemove(data)} >X</span>
                 <img 
                     style={imgElement} 
-                    src={URL.createObjectURL(data)} 
+                    src={imgSource} 
                     alt={data.name}/> 
             </div>
         )
