@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import ImagePreviewList from './ImagePreviewList';
-// import { createBucket } from '../utils/aws/s3';
 import { uploadFileToS3 } from '../utils/aws/react-s3';
 import FormControl from '../components/form-input/FormControl';
 import axios from 'axios';
@@ -54,8 +53,18 @@ class ProjectItem extends Component {
 
     uploadHomeImages = () => {
         console.log("to create bucker");
-        // createBucket();
-        uploadFileToS3(this.state.banner.images[0]);
+        const directoryName = this.state.project.partnerName + "_" + this.state.project.projectName;
+        this.state.banner.images.forEach(file => {
+            this.uploafFile(file, directoryName);
+        });
+    }
+
+    uploafFile = (file, directoryName) => {
+        uploadFileToS3(file, directoryName).then(data => {
+            console.log("upload response ",data)
+        }).catch(err => {
+            console.error("upload errr ",err)
+        });
     }
 
     render(){
