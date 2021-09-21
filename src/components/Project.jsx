@@ -6,6 +6,7 @@ import { uploadFileToS3 } from '../utils/aws/react-s3';
 import FormControl from '../components/form-input/FormControl';
 import axios from 'axios';
 import { getAPIs } from '../utils/constants';
+import { isImageFile } from '../utils/commonMethods';
 import SectionContainer from '../components/SectionContainer';
 import BrowseFilesContainer from '../components/BrowseFilesContainer';
 
@@ -13,7 +14,6 @@ class ProjectItem extends Component {
     constructor(props){
         super(props);
 
-        console.log("project ",this.props.data)
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
         this.state = {
             user : user,
@@ -52,7 +52,6 @@ class ProjectItem extends Component {
     }
 
     uploadHomeImages = () => {
-        console.log("to create bucker");
         const directoryName = this.state.project.partnerName + "_" + this.state.project.projectName;
         this.state.banner.images.forEach(file => {
             this.uploafFile(file, directoryName);
@@ -68,11 +67,9 @@ class ProjectItem extends Component {
     }
 
     render(){
-        console.log(this.state)
         const {project, banner, about, amenities, virtualTour, gallery, floorPlans, contactUs, footer} =  this.state;
         const sectionContainer = { width: 'inherit' };
 
-        console.log(project)
         return (
             <div className="row">
                     <div className="col-lg-12 grid-margin stretch-card">
@@ -216,11 +213,10 @@ class ProjectItem extends Component {
 
 
     processFile = (files) => {
-        console.log("process files ", files);
         if(files.length > 0){
             Array.from(files).forEach(file => {
-                const fileExt = file.name.split(".").pop();
-                if(file.type.split('/')[0] === 'image'){
+                const isImage = isImageFile(file);
+                if(isImage){
                     const newBanner = this.state.banner;
                     const files = newBanner.images;
                     files.push(file);
@@ -230,6 +226,8 @@ class ProjectItem extends Component {
             });
         }
     }
+
+    
 
     onListUpdatehandler = (data) => {
         const newBanner = this.state.banner;
@@ -253,8 +251,6 @@ class ProjectItem extends Component {
         let user = JSON.parse(localStorage.getItem('loggedInUser'));
         const updatedProject = this.getUpdatedProject(section, this.state[section]);
         
-        console.log("updated project ",updatedProject);
-
         axios({
             method: 'put',
             url: getAPIs().project,
