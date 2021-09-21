@@ -8,26 +8,45 @@ class ImagePreviewList extends Component {
         super(props);
 
         this.state = {
-            images : this.props.images
+            images : this.props.imageLinks,
+            files : this.props.imageFiles,
         };
     }
 
     componentWillReceiveProps(newProps){
-        this.setState({ images : newProps.images })
-    }
-
-    onRemoveImageHandler = (data) => {
-        this.props.onUpdate(data);
+        this.setState({ 
+            images : newProps.imageLinks,
+            files : newProps.imageFiles 
+        })
     }
 
     render(){
-        const { images } = this.state;
-        const imageList = images.map((image, index) =>
-            <ImagePreview key={index} data={image} onRemove={this.onRemoveImageHandler} />
-        )
+        const { images, files } = this.state;
+        let imageList = '';
+        let imageFileList = '';
+
+        if(images !== undefined){
+            imageList = images.map((image, index) =>
+                <ImagePreview 
+                    key={index} 
+                    data={image} 
+                    onRemove={() => this.props.onRemoveImageLink(image)} />
+            )
+        }
+        if(files !== undefined){
+            imageFileList = files.map((imgFile, index) =>
+                <ImagePreview 
+                    key={index} 
+                    data={imgFile} 
+                    onRemove={() => this.props.onRemoveImageFile(imgFile)} />
+            )
+        }
+        
+        
         return (
             <div >
-                {imageList}
+                {/* {imageList}
+                {imageFileList} */}
             </div>
         )
     }

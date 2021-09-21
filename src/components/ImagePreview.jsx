@@ -35,8 +35,7 @@ class ImagePreview extends Component {
                     onClick={() => onRemove(data)} >X</span>
                 <img 
                     style={imgElement} 
-                    src={imgSource} 
-                    alt={data.name}/> 
+                    src={imgSource} /> 
             </div>
         )
     }

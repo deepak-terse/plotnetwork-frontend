@@ -9,6 +9,7 @@ import { getAPIs, getPresetAmenitiesList} from '../utils/constants';
 import { isImageFile } from '../utils/commonMethods';
 import SectionContainer from '../components/SectionContainer';
 import BrowseFilesContainer from '../components/BrowseFilesContainer';
+import lodashClonedeep from 'lodash.clonedeep';
 
 class ProjectItem extends Component {
     constructor(props){
@@ -19,12 +20,12 @@ class ProjectItem extends Component {
             user : user,
             project : {}, 
             presetAmenities : getPresetAmenitiesList(), 
-            banner : {id : "banner", title : "Home", images : []},
+            banner : {id : "banner", title : "Home", images : [], files : []},
             about : { id: "about", title : "", description : "" },
-            amenities : { id: "amenities", title : "Amenities", list : []},
+            amenities : { id: "amenities", title : "Amenities", list : [], images : [], files : []},
             virtualTour : { id: "virtualTour", title : "Virtual Tour", imageLink : "", tourLink : ""},
-            gallery : { id: "gallery", title : "Gallery", images : []},
-            floorPlans : { id: "floorPlans", title : "Floor Plans", images : []},
+            gallery : { id: "gallery", title : "Gallery", images : [], files : []},
+            floorPlans : { id: "floorPlans", title : "Floor Plans", images : [], files : []},
             contactUs : { id: "contactUs", title : "Contact Us", mapLink : ""},
             footer : { id: "footer", title : "Footer", description : "", disclaimer : ""}
         };
@@ -45,7 +46,10 @@ class ProjectItem extends Component {
             for (let index = 0; index < sectionArr.length; index++) {
                 const section = sectionArr[index];
                 if(section.id){
-                    obj[section.id] = section
+                    obj[section.id] = section;
+                    if(section.id == "banner" || section.id == "gallery" || section.id == "floorPlans" || section.id == "amenities"){
+                        obj[section.id].files = [];
+                    }
                 }
             } 
         }
@@ -54,21 +58,30 @@ class ProjectItem extends Component {
 
     uploadFiles = (section) => {
         const directoryName = this.state.project.partnerName + "_" + this.state.project.projectName + "/" + section;
-        
+        debugger;
         switch (section) {
             case 'banner':  
+            case 'amenities':
             case 'gallery':
             case 'floorPlans':
-                this.state[section].images.forEach((file, index) => {
-                    uploadFileToS3(file, directoryName).then(data => {
-                        console.log("upload response ",data)
-                    }).catch(err => {
-                        console.error("upload errr ",err)
+                const sectionObj = lodashClonedeep(this.state[section]);
+                if(sectionObj.files.length > 0){
+                    sectionObj.files.forEach((file, index) => {
+                        uploadFileToS3(file, directoryName).then(data => {
+                            console.log("upload response ",data);
+                            sectionObj.images.push(data.location);
+                            sectionObj.files.splice(index, 1);
+                            const inputData = {};
+                            inputData[section] = sectionObj;
+                            this.setState(inputData);
+                            this.updateProjectInfo(undefined, section);
+                        }).catch(err => {
+                            console.error("upload errr ",err)
+                        });
                     });
-                });
-                break;
-            
-            case 'amenities':
+                } else {
+                    this.updateProjectInfo(undefined, section);
+                }
                 break;
 
             case 'virtualTour':
@@ -84,7 +97,7 @@ class ProjectItem extends Component {
         const sectionContainer = { width: 'inherit' };
         const autoMargin = {margin: 'auto'}
         const fitContentWidth = {width : 'fit-content', float : 'left'};
-        console.log(gallery);
+
         return (
             <div className="row">
                     <div className="col-lg-12 grid-margin stretch-card">
@@ -96,9 +109,16 @@ class ProjectItem extends Component {
                                         <div >
                                             <h4 className="card-title">{project.projectName}</h4>
                                             <SectionContainer class={sectionContainer} displayTitle="Home"> 
+
                                                 <BrowseFilesContainer onDropFiles={(files) => this.processFile(files, 'banner')} />
-                                                <div style={{margin:'auto'}}>{banner.images.length} Banners Selected</div>
-                                                <ImagePreviewList images={banner.images} onUpdate={(data) => this.onListUpdatehandler(data, 'banner')}/>
+                                                <div style={{margin:'auto'}}>{banner.files.length} Banners Selected</div>
+                                                     
+                                                <ImagePreviewList 
+                                                    imageLinks={banner.images} 
+                                                    imageFiles={banner.files} 
+                                                    onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'banner')}
+                                                    onRemoveImageLink={(data) => this.removeUploadedImage(data, 'banner')} 
+                                                />
 
                                                 <div style={{margin : '15px'}}>
                                                     <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('banner')}}>Upload</button>
@@ -149,7 +169,6 @@ class ProjectItem extends Component {
                                             </SectionContainer>
                                             
                                             <SectionContainer className={sectionContainer} displayTitle="Amenities">
-                                                {/* <div style={{display : 'flex'}}> */}
                                                     {(
                                                         presetAmenities.map((amenity, index) => {
                                                             return <FormControl  key={index}
@@ -163,8 +182,21 @@ class ProjectItem extends Component {
                                                                         style={fitContentWidth}
                                                                     />
                                                         })
-                                                    )}      
-                                                {/* </div> */}
+                                                    )} 
+                                                    <br/>
+                                                    <BrowseFilesContainer onDropFiles={(files) => this.processFile(files, 'amenities')} />
+                                                    <div style={{margin:'auto'}}>{amenities.files.length} Amenity Photos Selected</div>
+                                                        
+                                                    <ImagePreviewList 
+                                                        imageLinks={amenities.images} 
+                                                        imageFiles={amenities.files} 
+                                                        onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'amenities')}
+                                                        onRemoveImageLink={(data) => this.removeUploadedImage(data, 'amenities')} 
+                                                    />    
+
+                                                    <div style={{margin : '15px'}}>
+                                                        <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('amenities')}}>Upload</button>
+                                                    </div>
                                             </SectionContainer>
 
                                             <SectionContainer class={sectionContainer} displayTitle="Virtual Tour"> 
@@ -172,7 +204,7 @@ class ProjectItem extends Component {
                                                     <label className="col-sm-auto col-form-label">Virtual Tour Photo</label>
                                                     <BrowseFilesContainer onDropFiles={(files) => this.processFile(files, 'virtualTour')} />
                                                     <div style={{margin:'auto'}}>{virtualTour.imageLink !== "" ? 1 : 0} Photos Selected</div>
-                                                    <ImagePreviewList images={[virtualTour.imageLink]} onUpdate={(data) => this.onListUpdatehandler(data, 'virtualTour')}/>
+                                                    <ImagePreviewList images={[virtualTour.imageLink]} onUpdate={(data) => this.removeNonUploadedImage(data, 'virtualTour')}/>
                                                 </div>
                                                 <div>
                                                     <label htmlFor="tourLink" className="col-sm-auto col-form-label">Add link of Virtual Tour here</label>
@@ -196,9 +228,16 @@ class ProjectItem extends Component {
                                             </SectionContainer>
 
                                             <SectionContainer class={sectionContainer} displayTitle="Gallery"> 
+
                                                 <BrowseFilesContainer onDropFiles={(files) => this.processFile(files, 'gallery')} />
-                                                <div style={{margin:'auto'}}>{gallery.images.length} Photos Selected</div>
-                                                <ImagePreviewList images={gallery.images} onUpdate={(data) => this.onListUpdatehandler(data, 'gallery')}/>
+                                                <div style={{margin:'auto'}}>{gallery.files.length} Photos Selected</div>
+
+                                                <ImagePreviewList 
+                                                    imageLinks={gallery.images} 
+                                                    imageFiles={gallery.files} 
+                                                    onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'gallery')}
+                                                    onRemoveImageLink={(data) => this.removeUploadedImage(data, 'gallery')} 
+                                                />
 
                                                 <div style={{margin : '15px'}}>
                                                     <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('gallery')}}>Upload</button>
@@ -206,9 +245,16 @@ class ProjectItem extends Component {
                                             </SectionContainer>
                                             
                                             <SectionContainer class={sectionContainer} displayTitle="Floor Plans"> 
+
                                                 <BrowseFilesContainer onDropFiles={(files) => this.processFile(files, 'floorPlans')} />
-                                                <div style={{margin:'auto'}}>{floorPlans.images.length} Floor Plans Selected</div>
-                                                <ImagePreviewList images={floorPlans.images} onUpdate={(data) => this.onListUpdatehandler(data, 'floorPlans')}/>
+                                                <div style={{margin:'auto'}}>{floorPlans.files.length} Floor Plans Selected</div>
+
+                                                <ImagePreviewList 
+                                                    imageLinks={floorPlans.images} 
+                                                    imageFiles={floorPlans.files} 
+                                                    onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'floorPlans')}
+                                                    onRemoveImageLink={(data) => this.removeUploadedImage(data, 'floorPlans')} 
+                                                />
 
                                                 <div style={{margin : '15px'}}>
                                                     <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('floorPlans')}}>Upload</button>
@@ -299,6 +345,7 @@ class ProjectItem extends Component {
     processFile = (files, section) => {
         switch (section) {
             case 'banner':  
+            case 'amenities':
             case 'gallery':
             case 'floorPlans':
                 if(files.length > 0){
@@ -306,9 +353,9 @@ class ProjectItem extends Component {
                         const isImage = isImageFile(file);
                         if(isImage){
                             const newSectionObj = this.state[section];
-                            const newImages = newSectionObj.images;
-                            newImages.push(file);
-                            newSectionObj.images = newImages;
+                            const newFiles = newSectionObj.files;
+                            newFiles.push(file);
+                            newSectionObj.files = newFiles;
 
                             const inputData = {};
                             inputData[section] = newSectionObj;
@@ -316,9 +363,6 @@ class ProjectItem extends Component {
                         }
                     });
                 }
-                break;
-            
-            case 'amenities':
                 break;
 
             case 'virtualTour':
@@ -329,12 +373,23 @@ class ProjectItem extends Component {
         }
     }
 
-    onListUpdatehandler = (data, section) => {
+    removeNonUploadedImage = (data, section) => {
         const newSectionObj = this.state[section];
-        const filteredFiles = newSectionObj.images.filter((img) => {
+        const filteredFiles = newSectionObj.files.filter((img) => {
             return img.name !== data.name;
         })
-        newSectionObj.images = filteredFiles;
+        newSectionObj.files = filteredFiles;
+        const inputData = {};
+        inputData[section] = newSectionObj;
+        this.setState(inputData);
+    }
+
+    removeUploadedImage = (data, section) => {
+        const newSectionObj = this.state[section];
+        const filteredImgLinks = newSectionObj.images.filter((img) => {
+            return img !== data;
+        })
+        newSectionObj.images = filteredImgLinks;
         const inputData = {};
         inputData[section] = newSectionObj;
         this.setState(inputData);
@@ -349,46 +404,62 @@ class ProjectItem extends Component {
     }
 
     updateProjectInfo = (e, section) => {
-        e.preventDefault();
+        if(e !== undefined){
+            e.preventDefault();
+        }
         let user = JSON.parse(localStorage.getItem('loggedInUser'));
         const updatedProject = this.getUpdatedProject(section, this.state[section]);
         console.log('updatedProject ',updatedProject);
-        // axios({
-        //     method: 'put',
-        //     url: getAPIs().project,
-        //     data: {
-        //             "user": {
-        //                 userType:user.userType
-        //             },
-        //             "data": {
-        //                 "id" : updatedProject.id,  
-        //                 "websiteMenus" : updatedProject.websiteMenus
-        //             }
-        //     }
-        // }).then((response) => {
-        //     if (response.status == 200){
-        //         console.log('project updated ',response);
-        //         if(response.data){
-        //             this.setState({ project : response.data.data[0]});
-        //             this.saveProjectInLocalStorage(response.data.data[0]);
-        //         }
-        //     } else if (response.status == 401) {
-        //         console.log("project not exist");
-        //     } else {
-        //         console.log('Error found : ', response.data.message);
-        //     }
-        // }).catch((error)=>{
-        //     console.log('Error found : ', error);
-        // });
+        axios({
+            method: 'put',
+            url: getAPIs().project,
+            data: {
+                    "user": {
+                        userType:user.userType
+                    },
+                    "data": {
+                        "id" : updatedProject.id,  
+                        "websiteMenus" : updatedProject.websiteMenus
+                    }
+            }
+        }).then((response) => {
+            if (response.status == 200){
+                console.log('project updated ',response);
+                if(response.data){
+                    this.setState({ project : response.data.data[0]});
+                    this.saveProjectInLocalStorage(response.data.data[0]);
+                }
+            } else if (response.status == 401) {
+                console.log("project not exist");
+            } else {
+                console.log('Error found : ', response.data.message);
+            }
+        }).catch((error)=>{
+            console.log('Error found : ', error);
+        });
     }
 
     getUpdatedProject = (section, data) => {
-        const project = this.state.project;
-        const sections = project.websiteMenus.sections;
-        project.websiteMenus.sections = [
-            this.state.banner, this.state.about, this.state.amenities, this.state.virtualTour, this.state.gallery,
-             this.state.floorPlans, this.state.contactUs, this.state.footer
-        ]
+        console.log(this.state);
+        const project = Object.assign({}, this.state.project);
+        const sections = [
+            lodashClonedeep(this.state.banner),
+            lodashClonedeep(this.state.about), 
+            lodashClonedeep(this.state.amenities),
+            lodashClonedeep(this.state.virtualTour),
+            lodashClonedeep(this.state.gallery),
+            lodashClonedeep(this.state.floorPlans),
+            lodashClonedeep( this.state.contactUs), 
+            lodashClonedeep(this.state.footer)
+        ];
+        
+         // remove files array key from the object because Its not needed to save in backend db
+        delete sections[0].files;
+        delete sections[2].files;
+        delete sections[4].files;
+        delete sections[5].files;
+        project.websiteMenus.sections = sections;
+
         // switch (section) {
         //     case 'about':
                 

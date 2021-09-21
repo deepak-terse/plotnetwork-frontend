@@ -21,6 +21,7 @@
         "google-spreadsheet": "^3.1.15",
         "i18next": "^20.3.3",
         "i18next-browser-languagedetector": "^6.1.2",
+        "lodash": "^4.17.21",
         "moment": "^2.29.1",
         "node-sass": "^4.13.1",
         "numeral": "^2.0.6",
