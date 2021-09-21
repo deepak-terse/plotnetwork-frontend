@@ -59,8 +59,12 @@ class ProjectItem extends Component {
             case 'banner':  
             case 'gallery':
             case 'floorPlans':
-                this.state[section].images.forEach(file => {
-                    this.uploadFile(file, directoryName);
+                this.state[section].images.forEach((file, index) => {
+                    uploadFileToS3(file, directoryName).then(data => {
+                        console.log("upload response ",data)
+                    }).catch(err => {
+                        console.error("upload errr ",err)
+                    });
                 });
                 break;
             
@@ -73,14 +77,6 @@ class ProjectItem extends Component {
             default:
                 break;
         }
-    }
-
-    uploadFile = (file, directoryName) => {
-        uploadFileToS3(file, directoryName).then(data => {
-            console.log("upload response ",data)
-        }).catch(err => {
-            console.error("upload errr ",err)
-        });
     }
 
     render(){
