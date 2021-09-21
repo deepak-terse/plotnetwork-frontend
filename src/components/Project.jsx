@@ -52,14 +52,30 @@ class ProjectItem extends Component {
         this.setState(obj);
     }
 
-    uploadHomeImages = () => {
-        const directoryName = this.state.project.partnerName + "_" + this.state.project.projectName;
-        this.state.banner.images.forEach(file => {
-            this.uploafFile(file, directoryName);
-        });
+    uploadFiles = (section) => {
+        const directoryName = this.state.project.partnerName + "_" + this.state.project.projectName + "/" + section;
+        
+        switch (section) {
+            case 'banner':  
+            case 'gallery':
+            case 'floorPlans':
+                this.state[section].images.forEach(file => {
+                    this.uploadFile(file, directoryName);
+                });
+                break;
+            
+            case 'amenities':
+                break;
+
+            case 'virtualTour':
+                break;
+        
+            default:
+                break;
+        }
     }
 
-    uploafFile = (file, directoryName) => {
+    uploadFile = (file, directoryName) => {
         uploadFileToS3(file, directoryName).then(data => {
             console.log("upload response ",data)
         }).catch(err => {
@@ -89,7 +105,7 @@ class ProjectItem extends Component {
                                                 <ImagePreviewList images={banner.images} onUpdate={(data) => this.onListUpdatehandler(data, 'banner')}/>
 
                                                 <div style={{margin : '15px'}}>
-                                                    <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadHomeImages()}}>Upload</button>
+                                                    <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('banner')}}>Upload</button>
                                                 </div>
                                             </SectionContainer>
                                             
@@ -179,7 +195,7 @@ class ProjectItem extends Component {
                                                 </div>
 
                                                 <div style={{margin : '15px'}}>
-                                                    <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadHomeImages()}}>Upload</button>
+                                                    <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('virtualTour')}}>Upload</button>
                                                 </div>
                                             </SectionContainer>
 
@@ -189,7 +205,7 @@ class ProjectItem extends Component {
                                                 <ImagePreviewList images={gallery.images} onUpdate={(data) => this.onListUpdatehandler(data, 'gallery')}/>
 
                                                 <div style={{margin : '15px'}}>
-                                                    <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadHomeImages()}}>Upload</button>
+                                                    <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('gallery')}}>Upload</button>
                                                 </div>
                                             </SectionContainer>
                                             
@@ -199,7 +215,7 @@ class ProjectItem extends Component {
                                                 <ImagePreviewList images={floorPlans.images} onUpdate={(data) => this.onListUpdatehandler(data, 'floorPlans')}/>
 
                                                 <div style={{margin : '15px'}}>
-                                                    <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadHomeImages()}}>Upload</button>
+                                                    <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('floorPlans')}}>Upload</button>
                                                 </div>
                                             </SectionContainer>
 
