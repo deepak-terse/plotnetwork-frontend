@@ -18,13 +18,13 @@ class ProjectItem extends Component {
         this.state = {
             user : user,
             project : {}, 
-            presetAmenities : getPresetAmenitiesList(),
+            presetAmenities : getPresetAmenitiesList(), 
             banner : {id : "banner", title : "Home", images : []},
             about : { id: "about", title : "", description : "" },
             amenities : { id: "amenities", title : "Amenities", list : []},
-            virtualTour : { id: "virtualTour", title : "Virtual Tour", imageLink : "", link : ""},
-            gallery : { id: "gallery", title : "Gallery", list : []},
-            floorPlans : { id: "floorPlans", title : "Floor Plans", list : []},
+            virtualTour : { id: "virtualTour", title : "Virtual Tour", imageLink : "", tourLink : ""},
+            gallery : { id: "gallery", title : "Gallery", images : []},
+            floorPlans : { id: "floorPlans", title : "Floor Plans", images : []},
             contactUs : { id: "contactUs", title : "Contact Us", mapLink : ""},
             footer : { id: "footer", title : "Footer", description : "", disclaimer : ""}
         };
@@ -72,7 +72,7 @@ class ProjectItem extends Component {
         const sectionContainer = { width: 'inherit' };
         const autoMargin = {margin: 'auto'}
         const fitContentWidth = {width : 'fit-content', float : 'left'};
-
+        console.log(gallery);
         return (
             <div className="row">
                     <div className="col-lg-12 grid-margin stretch-card">
@@ -84,9 +84,9 @@ class ProjectItem extends Component {
                                         <div >
                                             <h4 className="card-title">{project.projectName}</h4>
                                             <SectionContainer class={sectionContainer} displayTitle="Home"> 
-                                                <BrowseFilesContainer onDropFiles={this.processFile} />
-                                                <div style={{margin:'auto'}}>{this.state.banner.images.length} Banners Selected</div>
-                                                <ImagePreviewList images={this.state.banner.images} onUpdate={this.onListUpdatehandler}/>
+                                                <BrowseFilesContainer onDropFiles={(files) => this.processFile(files, 'banner')} />
+                                                <div style={{margin:'auto'}}>{banner.images.length} Banners Selected</div>
+                                                <ImagePreviewList images={banner.images} onUpdate={(data) => this.onListUpdatehandler(data, 'banner')}/>
 
                                                 <div style={{margin : '15px'}}>
                                                     <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadHomeImages()}}>Upload</button>
@@ -157,16 +157,25 @@ class ProjectItem extends Component {
 
                                             <SectionContainer class={sectionContainer} displayTitle="Virtual Tour"> 
                                                 <div>
-                                                    <label htmlFor="aboutTitle" className="col-sm-auto col-form-label">Virtual Tour Photo</label>
-                                                    <BrowseFilesContainer onDropFiles={this.processFile} />
-                                                    <div style={{margin:'auto'}}>{this.state.banner.images.length} Photos Selected</div>
-                                                    <ImagePreviewList images={this.state.banner.images} onUpdate={this.onListUpdatehandler}/>
+                                                    <label className="col-sm-auto col-form-label">Virtual Tour Photo</label>
+                                                    <BrowseFilesContainer onDropFiles={(files) => this.processFile(files, 'virtualTour')} />
+                                                    <div style={{margin:'auto'}}>{virtualTour.imageLink !== "" ? 1 : 0} Photos Selected</div>
+                                                    {/* <ImagePreviewList images={[virtualTour.imageLink]} onUpdate={(data) => this.onListUpdatehandler(data, 'virtualTour')}/> */}
                                                 </div>
                                                 <div>
-                                                    <label htmlFor="aboutTitle" className="col-sm-auto col-form-label">Virtual Tour Video</label>
-                                                    <BrowseFilesContainer onDropFiles={this.processFile} />
-                                                    <div style={{margin:'auto'}}>{this.state.banner.images.length} Tour Selected</div>
-                                                    <ImagePreviewList images={this.state.banner.images} onUpdate={this.onListUpdatehandler}/>
+                                                    <label htmlFor="tourLink" className="col-sm-auto col-form-label">Add link of Virtual Tour here</label>
+                                                    <div className="col-sm-9" style={autoMargin}>
+                                                        <FormControl
+                                                            name="tourLink"
+                                                            type="text" 
+                                                            value={virtualTour.tourLink}
+                                                            id="tourLink"
+                                                            onChange={(e) => this.onChangeHandler(e, 'virtualTour')} 
+                                                            className="form-control" 
+                                                            placeholder=""
+                                                            required="true"
+                                                        />
+                                                    </div>
                                                 </div>
 
                                                 <div style={{margin : '15px'}}>
@@ -175,9 +184,9 @@ class ProjectItem extends Component {
                                             </SectionContainer>
 
                                             <SectionContainer class={sectionContainer} displayTitle="Gallery"> 
-                                                <BrowseFilesContainer onDropFiles={this.processFile} />
-                                                <div style={{margin:'auto'}}>{this.state.banner.images.length} Photos Selected</div>
-                                                <ImagePreviewList images={this.state.banner.images} onUpdate={this.onListUpdatehandler}/>
+                                                <BrowseFilesContainer onDropFiles={(files) => this.processFile(files, 'gallery')} />
+                                                <div style={{margin:'auto'}}>{gallery.images.length} Photos Selected</div>
+                                                <ImagePreviewList images={gallery.images} onUpdate={(data) => this.onListUpdatehandler(data, 'gallery')}/>
 
                                                 <div style={{margin : '15px'}}>
                                                     <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadHomeImages()}}>Upload</button>
@@ -185,9 +194,9 @@ class ProjectItem extends Component {
                                             </SectionContainer>
                                             
                                             <SectionContainer class={sectionContainer} displayTitle="Floor Plans"> 
-                                                <BrowseFilesContainer onDropFiles={this.processFile} />
-                                                <div style={{margin:'auto'}}>{this.state.banner.images.length} Floor Plans Selected</div>
-                                                <ImagePreviewList images={this.state.banner.images} onUpdate={this.onListUpdatehandler}/>
+                                                <BrowseFilesContainer onDropFiles={(files) => this.processFile(files, 'floorPlans')} />
+                                                <div style={{margin:'auto'}}>{floorPlans.images.length} Floor Plans Selected</div>
+                                                <ImagePreviewList images={floorPlans.images} onUpdate={(data) => this.onListUpdatehandler(data, 'floorPlans')}/>
 
                                                 <div style={{margin : '15px'}}>
                                                     <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadHomeImages()}}>Upload</button>
@@ -205,7 +214,6 @@ class ProjectItem extends Component {
                                                                     type="text" 
                                                                     value={contactUs.mapLink}
                                                                     id="contactUs"
-                                                                    rows="5"
                                                                     onChange={(e) => this.onChangeHandler(e, 'contactUs')} 
                                                                     className="form-control" 
                                                                     placeholder=""
@@ -276,28 +284,48 @@ class ProjectItem extends Component {
         )
     }
 
-    processFile = (files) => {
-        if(files.length > 0){
-            Array.from(files).forEach(file => {
-                const isImage = isImageFile(file);
-                if(isImage){
-                    const newBanner = this.state.banner;
-                    const files = newBanner.images;
-                    files.push(file);
-                    newBanner.images = files
-                    this.setState({banner : newBanner});
+    processFile = (files, section) => {
+        switch (section) {
+            case 'banner':  
+            case 'gallery':
+            case 'floorPlans':
+                if(files.length > 0){
+                    Array.from(files).forEach(file => {
+                        const isImage = isImageFile(file);
+                        if(isImage){
+                            const newSectionObj = this.state[section];
+                            const newImages = newSectionObj.images;
+                            newImages.push(file);
+                            newSectionObj.images = newImages;
+
+                            const inputData = {};
+                            inputData[section] = newSectionObj;
+                            this.setState(inputData);
+                        }
+                    });
                 }
-            });
+                break;
+            
+            case 'amenities':
+                break;
+
+            case 'virtualTour':
+                break;
+        
+            default:
+                break;
         }
     }
 
-    onListUpdatehandler = (data) => {
-        const newBanner = this.state.banner;
-        const filteredFiles = newBanner.images.filter((file) => {
-            return file.name !== data.name;
+    onListUpdatehandler = (data, section) => {
+        const newSectionObj = this.state[section];
+        const filteredFiles = newSectionObj.images.filter((img) => {
+            return img.name !== data.name;
         })
-        newBanner.images = filteredFiles;
-        this.setState({banner : newBanner})
+        newSectionObj.images = filteredFiles;
+        const inputData = {};
+        inputData[section] = newSectionObj;
+        this.setState(inputData);
     }
 
     onChangeHandler = (e, section) => {
@@ -312,34 +340,34 @@ class ProjectItem extends Component {
         e.preventDefault();
         let user = JSON.parse(localStorage.getItem('loggedInUser'));
         const updatedProject = this.getUpdatedProject(section, this.state[section]);
-        
-        axios({
-            method: 'put',
-            url: getAPIs().project,
-            data: {
-                    "user": {
-                        userType:user.userType
-                    },
-                    "data": {
-                        "id" : updatedProject.id,  
-                        "websiteMenus" : updatedProject.websiteMenus
-                    }
-            }
-        }).then((response) => {
-            if (response.status == 200){
-                console.log('project updated ',response);
-                if(response.data){
-                    this.setState({ project : response.data.data[0]});
-                    this.saveProjectInLocalStorage(response.data.data[0]);
-                }
-            } else if (response.status == 401) {
-                console.log("project not exist");
-            } else {
-                console.log('Error found : ', response.data.message);
-            }
-        }).catch((error)=>{
-            console.log('Error found : ', error);
-        });
+        console.log('updatedProject ',updatedProject);
+        // axios({
+        //     method: 'put',
+        //     url: getAPIs().project,
+        //     data: {
+        //             "user": {
+        //                 userType:user.userType
+        //             },
+        //             "data": {
+        //                 "id" : updatedProject.id,  
+        //                 "websiteMenus" : updatedProject.websiteMenus
+        //             }
+        //     }
+        // }).then((response) => {
+        //     if (response.status == 200){
+        //         console.log('project updated ',response);
+        //         if(response.data){
+        //             this.setState({ project : response.data.data[0]});
+        //             this.saveProjectInLocalStorage(response.data.data[0]);
+        //         }
+        //     } else if (response.status == 401) {
+        //         console.log("project not exist");
+        //     } else {
+        //         console.log('Error found : ', response.data.message);
+        //     }
+        // }).catch((error)=>{
+        //     console.log('Error found : ', error);
+        // });
     }
 
     getUpdatedProject = (section, data) => {
