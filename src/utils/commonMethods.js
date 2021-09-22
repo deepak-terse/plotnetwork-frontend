@@ -8,4 +8,8 @@ export function isPDF_File(file){
     else return false;
 }
 
+export function getFileExtension(file){
+    return file.name.split('.').pop();
+}
+
 
