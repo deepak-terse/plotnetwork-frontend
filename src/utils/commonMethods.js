@@ -3,4 +3,9 @@ export function isImageFile(file){
     else return false;
 }
 
+export function isPDF_File(file){
+    if(file.type === 'application/pdf') return true;
+    else return false;
+}
+
 

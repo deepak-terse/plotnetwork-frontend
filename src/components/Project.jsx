@@ -6,7 +6,7 @@ import { uploadFileToS3 } from '../utils/aws/react-s3';
 import FormControl from '../components/form-input/FormControl';
 import axios from 'axios';
 import { getAPIs, getPresetAmenitiesList} from '../utils/constants';
-import { isImageFile } from '../utils/commonMethods';
+import { isImageFile, isPDF_File} from '../utils/commonMethods';
 import SectionContainer from '../components/SectionContainer';
 import BrowseFilesContainer from '../components/BrowseFilesContainer';
 import lodashClonedeep from 'lodash.clonedeep';
@@ -21,9 +21,9 @@ class ProjectItem extends Component {
             project : {}, 
             presetAmenities : getPresetAmenitiesList(), 
             banner : {id : "banner", title : "Home", images : [], files : []},
-            about : { id: "about", title : "", description : "" },
+            about : { id: "about", title : "", description : "", brochureLink : "" , brochureFile : {}},
             amenities : { id: "amenities", title : "Amenities", list : [], images : [], files : []},
-            virtualTour : { id: "virtualTour", title : "Virtual Tour", imageLink : "", tourLink : ""},
+            virtualTour : { id: "virtualTour", title : "Virtual Tour", list : [], files : []},
             gallery : { id: "gallery", title : "Gallery", images : [], files : []},
             floorPlans : { id: "floorPlans", title : "Floor Plans", images : [], files : []},
             contactUs : { id: "contactUs", title : "Contact Us", mapLink : ""},
@@ -46,9 +46,15 @@ class ProjectItem extends Component {
             for (let index = 0; index < sectionArr.length; index++) {
                 const section = sectionArr[index];
                 if(section.id){
+                    // let temp = obj[section.id];
+                    // console.log(temp)
+                    // console.log(section)
                     obj[section.id] = section;
+                    // obj[section.id] = Object.assign(this.state[section], section) ;
                     if(section.id == "banner" || section.id == "gallery" || section.id == "floorPlans" || section.id == "amenities"){
                         obj[section.id].files = [];
+                    } else if(section.id == "about"){
+                        obj[section.id].brochureFile = {};
                     }
                 }
             } 
@@ -58,13 +64,12 @@ class ProjectItem extends Component {
 
     uploadFiles = (section) => {
         const directoryName = this.state.project.partnerName + "_" + this.state.project.projectName + "/" + section;
-        debugger;
+        const sectionObj = lodashClonedeep(this.state[section]);
         switch (section) {
             case 'banner':  
             case 'amenities':
             case 'gallery':
             case 'floorPlans':
-                const sectionObj = lodashClonedeep(this.state[section]);
                 if(sectionObj.files.length > 0){
                     sectionObj.files.forEach((file, index) => {
                         uploadFileToS3(file, directoryName).then(data => {
@@ -84,6 +89,23 @@ class ProjectItem extends Component {
                 }
                 break;
 
+            case 'about':
+                if(this.getIsBrochureSelected()){
+                    uploadFileToS3(sectionObj.brochureFile, directoryName).then(data => {
+                        sectionObj.brochureLink = data.location;
+                        sectionObj.brochureFile = {};
+                        const inputData = {};
+                        inputData[section] = sectionObj;
+                        this.setState(inputData);
+                        this.updateProjectInfo(undefined, section);
+                    }).catch(err => {
+                        console.error("upload errr ",err)
+                    });
+                } else {
+                    this.updateProjectInfo(undefined, section);
+                }
+                break;
+
             case 'virtualTour':
                 break;
         
@@ -97,7 +119,6 @@ class ProjectItem extends Component {
         const sectionContainer = { width: 'inherit' };
         const autoMargin = {margin: 'auto'}
         const fitContentWidth = {width : 'fit-content', float : 'left'};
-
         return (
             <div className="row">
                     <div className="col-lg-12 grid-margin stretch-card">
@@ -157,10 +178,16 @@ class ProjectItem extends Component {
                                                                     required="true"
                                                                 />
                                                             </div>
+
+                                                            <BrowseFilesContainer onDropFiles={(files) => this.processFile(files, 'about')} />
+                                                            <div style={{margin:'auto'}}>{about.brochureLink !== "" ? 1 : 0} Brochure uploaded { this.getIsBrochureSelected() ? 1 : 0 } Brochure Selected</div>
                                                         </div>
                                                         
                                                     )}
-                                                        
+                                                    
+                                                    <div style={{margin : '15px'}}>
+                                                        <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('about')}}>Upload</button>
+                                                    </div>
                                                     <div style={{margin : '15px'}}>
                                                         <button className="btn btn-primary mr-2" onClick={(e) => this.updateProjectInfo(e, 'about')}>SAVE</button>
                                                         <button className="btn btn-dark" type="button" >CANCEL</button>
@@ -204,7 +231,10 @@ class ProjectItem extends Component {
                                                     <label className="col-sm-auto col-form-label">Virtual Tour Photo</label>
                                                     <BrowseFilesContainer onDropFiles={(files) => this.processFile(files, 'virtualTour')} />
                                                     <div style={{margin:'auto'}}>{virtualTour.imageLink !== "" ? 1 : 0} Photos Selected</div>
-                                                    <ImagePreviewList images={[virtualTour.imageLink]} onUpdate={(data) => this.removeNonUploadedImage(data, 'virtualTour')}/>
+                                                    {/* <ImagePreviewList 
+                                                        images={[virtualTour.imageLink]} 
+                                                        imageFiles={virtualTour.files}
+                                                        onUpdate={(data) => this.removeNonUploadedImage(data, 'virtualTour')}/> */}
                                                 </div>
                                                 <div>
                                                     <label htmlFor="tourLink" className="col-sm-auto col-form-label">Add link of Virtual Tour here</label>
@@ -367,6 +397,20 @@ class ProjectItem extends Component {
 
             case 'virtualTour':
                 break;
+
+            case 'about':
+                if(files.length > 0){
+                    const file = files[0];
+                    const isPDF = isPDF_File(file);
+                    if(isPDF){
+                        const newSectionObj = this.state[section];
+                        newSectionObj.brochureFile = file;
+                        const inputData = {};
+                        inputData[section] = newSectionObj;
+                        this.setState(inputData);
+                    }
+                }
+                break;
         
             default:
                 break;
@@ -440,7 +484,6 @@ class ProjectItem extends Component {
     }
 
     getUpdatedProject = (section, data) => {
-        console.log(this.state);
         const project = Object.assign({}, this.state.project);
         const sections = [
             lodashClonedeep(this.state.banner),
@@ -455,6 +498,7 @@ class ProjectItem extends Component {
         
          // remove files array key from the object because Its not needed to save in backend db
         delete sections[0].files;
+        delete sections[0].brochureFile;
         delete sections[2].files;
         delete sections[4].files;
         delete sections[5].files;
@@ -496,6 +540,12 @@ class ProjectItem extends Component {
         user.projects = updatedProjects;
         localStorage.setItem('loggedInUser', JSON.stringify(user));
     }
+
+    getIsBrochureSelected = () => {
+        if("name" in this.state.about.brochureFile) return true;
+        else return false;
+    }
+    
 }
 
 
