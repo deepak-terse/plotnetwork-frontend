@@ -22,7 +22,15 @@ class ProjectItem extends Component {
             presetAmenities : getPresetAmenitiesList(), 
             banner : {id : "banner", title : "Home", images : [], files : []},
             about : { id: "about", title : "", description : "", brochureLink : "" , brochureFile : {}},
-            amenities : { id: "amenities", title : "Amenities", list : [], images : [], files : []},
+            amenities : { 
+                            id: "amenities", title : "Amenities",
+                            list : [{
+                                  tourImageLink : "", tourLink : ""
+                                }], 
+                            files : [{
+                                    tourImageFile : {}, tourLink : ""
+                                }]
+                        },
             virtualTour : { id: "virtualTour", title : "Virtual Tour", list : [], files : []},
             gallery : { id: "gallery", title : "Gallery", images : [], files : []},
             floorPlans : { id: "floorPlans", title : "Floor Plans", images : [], files : []},
@@ -55,6 +63,11 @@ class ProjectItem extends Component {
                         obj[section.id].files = [];
                     } else if(section.id == "about"){
                         obj[section.id].brochureFile = {};
+                    } else if(section.id == "virtualTour"){
+                        obj[section.id].files = [];
+                        if(obj[section.id].list == undefined){
+                            obj[section.id].list = []
+                        }
                     }
                 }
             } 
@@ -107,6 +120,24 @@ class ProjectItem extends Component {
                 break;
 
             case 'virtualTour':
+                if(sectionObj.files.length > 0){
+                    sectionObj.files.forEach((fileObj, index) => {
+                        uploadFileToS3(fileObj.tourImageFile, directoryName).then(data => {
+                            console.log("upload response ", index, " ",data);
+                            console.log(sectionObj.files)
+                            sectionObj.list.push({tourImageLink : data.location, tourLink : sectionObj.files[index].tourLink});
+                            sectionObj.files.splice(index, 1);
+                            const inputData = {};
+                            inputData[section] = sectionObj;
+                            this.setState(inputData);
+                            this.updateProjectInfo(undefined, section);
+                        }).catch(err => {
+                            console.error("upload errr ",err)
+                        });
+                    });
+                } else {
+                    this.updateProjectInfo(undefined, section);
+                }
                 break;
         
             default:
@@ -115,10 +146,12 @@ class ProjectItem extends Component {
     }
 
     render(){
+        console.log(this.state.virtualTour)
         const {project, presetAmenities, banner, about, amenities, virtualTour, gallery, floorPlans, contactUs, footer} =  this.state;
         const sectionContainer = { width: 'inherit' };
         const autoMargin = {margin: 'auto'}
         const fitContentWidth = {width : 'fit-content', float : 'left'};
+        
         return (
             <div className="row">
                     <div className="col-lg-12 grid-margin stretch-card">
@@ -198,7 +231,7 @@ class ProjectItem extends Component {
                                             <SectionContainer className={sectionContainer} displayTitle="Amenities">
                                                     {(
                                                         presetAmenities.map((amenity, index) => {
-                                                            return <FormControl  key={index}
+                                                            return <FormControl key={index}
                                                                         name={'amenities'+index}
                                                                         type="checkbox" 
                                                                         value={amenities.list}
@@ -230,26 +263,30 @@ class ProjectItem extends Component {
                                                 <div>
                                                     <label className="col-sm-auto col-form-label">Virtual Tour Photo</label>
                                                     <BrowseFilesContainer onDropFiles={(files) => this.processFile(files, 'virtualTour')} />
-                                                    <div style={{margin:'auto'}}>{virtualTour.imageLink !== "" ? 1 : 0} Photos Selected</div>
+                                                    <div style={{margin:'auto'}}>{virtualTour.files.length} Photos Selected</div>
                                                     {/* <ImagePreviewList 
                                                         images={[virtualTour.imageLink]} 
                                                         imageFiles={virtualTour.files}
                                                         onUpdate={(data) => this.removeNonUploadedImage(data, 'virtualTour')}/> */}
                                                 </div>
                                                 <div>
-                                                    <label htmlFor="tourLink" className="col-sm-auto col-form-label">Add link of Virtual Tour here</label>
-                                                    <div className="col-sm-9" style={autoMargin}>
-                                                        <FormControl
-                                                            name="tourLink"
-                                                            type="text" 
-                                                            value={virtualTour.tourLink}
-                                                            id="tourLink"
-                                                            onChange={(e) => this.onChangeHandler(e, 'virtualTour')} 
-                                                            className="form-control" 
-                                                            placeholder=""
-                                                            required="true"
-                                                        />
-                                                    </div>
+                                                    <label className="col-sm-auto col-form-label">Add links of Virtual Tour here</label>
+                                                    {(
+                                                        virtualTour.files.map((imgFile, index) => {
+                                                            return <div className="col-sm-9" key={index} style={{ margin: '5px auto'}}>
+                                                               <FormControl 
+                                                                    name={"tourLink"+index}
+                                                                    type="text" 
+                                                                    value={imgFile["tourLink"+index]}
+                                                                    id={"tourLink"+index}
+                                                                    onChange={(e) => this.onChangeHandler(e, 'virtualTour')} 
+                                                                    className="form-control" 
+                                                                    placeholder={"Virtual tour link for photo " + (index + 1)}
+                                                                    required="true"
+                                                                />
+                                                            </div>
+                                                        })
+                                                    )}
                                                 </div>
 
                                                 <div style={{margin : '15px'}}>
@@ -396,6 +433,21 @@ class ProjectItem extends Component {
                 break;
 
             case 'virtualTour':
+                if(files.length > 0){
+                    Array.from(files).forEach(file => {
+                        const isImage = isImageFile(file);
+                        if(isImage){
+                            const newSectionObj = this.state[section];
+                            const newFiles = newSectionObj.files;
+                            newFiles.push({tourImageFile : file, tourLink : "" });
+                            newSectionObj.files = newFiles;
+
+                            const inputData = {};
+                            inputData[section] = newSectionObj;
+                            this.setState(inputData);
+                        }
+                    });
+                }
                 break;
 
             case 'about':
@@ -442,8 +494,15 @@ class ProjectItem extends Component {
     onChangeHandler = (e, section) => {
         const inputData = {}
         inputData[section] = this.state[section];
-
-        inputData[section][e.target.name] = e.target.value;
+        if(section == "virtualTour"){
+            let linkIndex = e.target.name.replace('tourLink', '');
+            console.log(linkIndex);
+            console.log(e.target.name);
+            console.log(inputData[section].files[linkIndex])
+            inputData[section].files[linkIndex][e.target.name] = e.target.value;
+        } else {
+            inputData[section][e.target.name] = e.target.value;
+        }
         this.setState(inputData);
     }
 
@@ -498,8 +557,9 @@ class ProjectItem extends Component {
         
          // remove files array key from the object because Its not needed to save in backend db
         delete sections[0].files;
-        delete sections[0].brochureFile;
+        delete sections[1].brochureFile;
         delete sections[2].files;
+        delete sections[3].files;
         delete sections[4].files;
         delete sections[5].files;
         project.websiteMenus.sections = sections;
