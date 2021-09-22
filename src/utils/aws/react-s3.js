@@ -13,6 +13,7 @@ export function uploadFileToS3(file, directoryName, index){
         uploadFile(file, config)
         .then(data => {
             data.index = index;
+            data.fileName = file.name;
             resolve(data)
         })
         .catch(err => reject(err))

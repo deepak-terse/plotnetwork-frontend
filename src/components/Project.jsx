@@ -23,13 +23,7 @@ class ProjectItem extends Component {
             banner : {id : "banner", title : "Home", images : [], files : []},
             about : { id: "about", title : "", description : "", brochureLink : "" , brochureFile : {}},
             amenities : { 
-                            id: "amenities", title : "Amenities",
-                            list : [{
-                                  tourImageLink : "", tourLink : ""
-                                }], 
-                            files : [{
-                                    tourImageFile : {}, tourLink : ""
-                                }]
+                            id: "amenities", title : "Amenities", images : []
                         },
             virtualTour : { id: "virtualTour", title : "Virtual Tour", list : [], files : []},
             gallery : { id: "gallery", title : "Gallery", images : [], files : []},
@@ -75,7 +69,7 @@ class ProjectItem extends Component {
         this.setState(obj);
     }
 
-    uploadFiles = (section) => {
+    uploadFiles = async (section) => {
         const directoryName = this.state.project.partnerName + "_" + this.state.project.projectName + "/" + section;
         const sectionObj = lodashClonedeep(this.state[section]);
         switch (section) {
@@ -120,20 +114,30 @@ class ProjectItem extends Component {
                 break;
 
             case 'virtualTour':
-                if(sectionObj.files.length > 0){
+                const fileLength = sectionObj.files.length;
+                let noOfFilesUploaded = 0;
+                if(fileLength > 0){
+
                     sectionObj.files.forEach((fileObj, index) => {
                         // fileObj.tourImageFile.name = (this.state.virtualTour.list.length + 1) + getFileExtension(fileObj.tourImageFile);
                         uploadFileToS3(fileObj.tourImageFile, directoryName, index).then(data => {
-                            console.log("upload response ", data.index, " ",data);
-                            console.log(sectionObj.files)
-                            sectionObj.list.push({tourImageLink : data.location, tourLink : sectionObj.files[data.index].tourLink});
-                            sectionObj.files.splice(data.index, 1);
+                            sectionObj.files.forEach((singleFile, i) => {
+                                if(singleFile.tourImageFile.name == data.fileName) {
+                                    sectionObj.list.push({tourImageLink : data.location, tourLink : singleFile.tourLink});
+                                    sectionObj.files.splice(i, 1);
+                                    return false;
+                                }
+                            })
                             const inputData = {};
                             inputData[section] = sectionObj;
+                            noOfFilesUploaded++;
                             this.setState(inputData);
-                            this.updateProjectInfo(undefined, section);
+                            if(noOfFilesUploaded == fileLength){
+                                this.updateProjectInfo(undefined, section);
+                            }
                         }).catch(err => {
-                            console.error("upload errr ",err)
+                            console.error("upload errr ",err);
+                            this.updateProjectInfo(undefined, section);
                         });
                     });
                 } else {
@@ -147,12 +151,12 @@ class ProjectItem extends Component {
     }
 
     render(){
-        console.log(this.state.virtualTour)
         const {project, presetAmenities, banner, about, amenities, virtualTour, gallery, floorPlans, contactUs, footer} =  this.state;
         const sectionContainer = { width: 'inherit' };
         const autoMargin = {margin: 'auto'}
         const fitContentWidth = {width : 'fit-content', float : 'left'};
-        
+        console.log("virtual tour ", virtualTour)
+
         return (
             <div className="row">
                     <div className="col-lg-12 grid-margin stretch-card">
@@ -213,6 +217,7 @@ class ProjectItem extends Component {
                                                                 />
                                                             </div>
 
+                                                            <label className="col-sm-auto col-form-label">Project Brochure</label>
                                                             <BrowseFilesContainer onDropFiles={(files) => this.processFile(files, 'about')} />
                                                             <div style={{margin:'auto'}}>{about.brochureLink !== "" ? 1 : 0} Brochure uploaded { this.getIsBrochureSelected() ? 1 : 0 } Brochure Selected</div>
                                                         </div>
@@ -427,7 +432,6 @@ class ProjectItem extends Component {
     }
 
     processFile = (files, section) => {
-        console.log(files)
         switch (section) {
             case 'banner':  
             case 'amenities':
@@ -521,13 +525,8 @@ class ProjectItem extends Component {
         inputData[section] = this.state[section];
         if(section == "virtualTour"){
             let index = e.target.name.replace('tourLink', '');
-            console.log(index);
-            console.log(e.target.name);
-            console.log(inputData[section][sectionKey][index])
             inputData[section][sectionKey][index].tourLink = e.target.value;
         }
-        
-        
         this.setState(inputData);
     }
 
@@ -569,7 +568,7 @@ class ProjectItem extends Component {
 
     getUpdatedProject = (section, data) => {
         const project = lodashClonedeep(this.state.project);
-        const updatedSection = this.state[section];
+        const updatedSection = lodashClonedeep(this.state[section]);
         const oldSectionArr = project.websiteMenus.sections;
         let newSectionArr = oldSectionArr.map((oldSection) => {
             if(oldSection.id == section) {
