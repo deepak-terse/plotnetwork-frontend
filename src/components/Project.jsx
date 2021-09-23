@@ -5,7 +5,7 @@ import ImagePreviewList from './ImagePreviewList';
 import { uploadFileToS3 } from '../utils/aws/react-s3';
 import FormControl from '../components/form-input/FormControl';
 import axios from 'axios';
-import { getAPIs, getPresetAmenitiesList} from '../utils/constants';
+import { getAPIs, getPresetAmenitiesList, getStaticMicrositeSections} from '../utils/constants';
 import { isImageFile, isPDF_File, getFileExtension} from '../utils/commonMethods';
 import SectionContainer from '../components/SectionContainer';
 import BrowseFilesContainer from '../components/BrowseFilesContainer';
@@ -17,67 +17,46 @@ import styles from '../styles/FileUpload.module.scss';
 class ProjectItem extends Component {
     constructor(props){
         super(props);
+        console.log(props.projectSelected)
 
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
         this.state = {
             user : user,
-            project : {}, 
-            presetAmenities : getPresetAmenitiesList(), 
-            banner : {id : "banner", title : "Home", images : [], files : []},
-            about : { id: "about", title : "", description : "", brochureLink : "" , brochureFile : {}},
-            amenities : { id: "amenities", title : "Amenities", list : [], iconFiles : [], images : [], files : [], count : 0},
-            virtualTour : { id: "virtualTour", title : "Virtual Tour", list : [], files : []},
-            gallery : { id: "gallery", title : "Gallery", images : [], files : []},
-            floorPlans : { id: "floorPlans", title : "Floor Plans", images : [], files : []},
-            contactUs : { id: "contactUs", title : "Contact Us", mapLink : ""},
-            footer : { id: "footer", title : "Footer", description : "", disclaimer : ""}
+            project : props.projectSelected, 
+            presetAmenities : getPresetAmenitiesList(),
+            ...getStaticMicrositeSections()
         };
-        this.getProjectById(this.props.data);
+        this.getProjectById(props.projectSelected);
     }
 
     componentWillReceiveProps(nextProps) {
-        this.getProjectById(nextProps.data);
+        this.getProjectById(nextProps.projectSelected);
       }
 
-    getProjectById = (projectId) => {
-        const user = lodashClonedeep(this.state.user);
-
-        const filteredProjects = user.projects.filter(project => project.id == projectId);
-        const projectObj = filteredProjects.length > 0 ? filteredProjects[0] : {};
-
-        const directoryName = projectObj.partnerName + "_" + projectObj.projectName + "/";
-        const obj = { project : projectObj, directoryName : directoryName};
-
-        if(Object.keys(projectObj).length > 0){
-            const sectionArr = lodashClonedeep(projectObj.websiteMenus.sections);
-            for (let index = 0; index < sectionArr.length; index++) {
-                const section = sectionArr[index];
-                if(section.id){
-                    // let temp = obj[section.id];
-                    // console.log(temp)
-                    // console.log(section)
-                    obj[section.id] = section;
-                    // obj[section.id] = Object.assign(this.state[section], section) ;
-                    
-                    // needs a object merging stragic here
-                    if(section.id == "banner" || section.id == "gallery" || section.id == "floorPlans"){
-                        obj[section.id].files = [];
-                    } else if(section.id == "about"){
-                        obj[section.id].brochureFile = {};
-                    } else if(section.id == "amenities"){
-                        obj[section.id].files = [];
-                        obj[section.id].iconFiles = [];
-                        obj[section.id].count = 0;
-                    } else if(section.id == "virtualTour"){
-                        obj[section.id].files = [];
-                        if(obj[section.id].list == undefined){
-                            obj[section.id].list = []
-                        }
+    getProjectById = (projectObj) => {
+        if(Object.keys(projectObj).length > 0){ // if projectObj not empty
+            // create directoryName for s3
+            const directoryName = projectObj.partnerName + "_" + projectObj.projectName + "/";
+            const obj = { 
+                project : projectObj,
+                directoryName : directoryName,
+                ...getStaticMicrositeSections()
+            };
+            try {
+                const sectionArr = projectObj.websiteMenus.sections;
+                for (let index = 0; index < sectionArr.length; index++) {
+                    const section = sectionArr[index];
+                    if(section.id){
+                        // merge microsite data received from backend with the default data
+                        obj[section.id] = Object.assign(obj[section.id], section) ;
                     }
-                }
-            } 
+                } 
+            } catch (err){
+                console.log("err in merging objects ", err)
+            } finally {
+                this.setState(obj);
+            }            
         }
-        this.setState(obj);
     }
 
     uploadFiles = async (section) => {
@@ -88,23 +67,31 @@ class ProjectItem extends Component {
             case 'amenities':
             case 'gallery':
             case 'floorPlans':
-                if(sectionObj.files.length > 0){
+                var fileLength = sectionObj.files.length;
+                var noOfFilesUploaded = 0;
+                if(fileLength > 0) {
                     sectionObj.files.forEach((file, index) => {
                         // file.customFileName = this.getCustomeFileName(file.name, section, index);
                         uploadFileToS3(file, directoryName).then(data => {
                             console.log("upload response ",data);
-                            sectionObj.images.push(data.location);
-                            sectionObj.files.splice(index, 1);
+                            sectionObj.files.forEach((singleFile, i) => {
+                                if(singleFile.name == data.fileName) {
+                                    sectionObj.images.push(data.location);
+                                    sectionObj.files.splice(i, 1);
+                                    return false;
+                                }
+                            })
                             const inputData = {};
                             inputData[section] = sectionObj;
+                            noOfFilesUploaded++;
                             this.setState(inputData);
-                            this.updateProjectInfo(undefined, section);
+                            if(noOfFilesUploaded == fileLength){
+                                this.updateProjectInfo(undefined, section);
+                            }
                         }).catch(err => {
                             console.error("upload errr ",err)
                         });
                     });
-                } else {
-                    this.updateProjectInfo(undefined, section);
                 }
                 break;
 
@@ -126,8 +113,8 @@ class ProjectItem extends Component {
                 break;
 
             case 'virtualTour':
-                const fileLength = sectionObj.files.length;
-                let noOfFilesUploaded = 0;
+                var fileLength = sectionObj.files.length;
+                var noOfFilesUploaded = 0;
                 if(fileLength > 0){
 
                     sectionObj.files.forEach((fileObj, index) => {
@@ -157,41 +144,13 @@ class ProjectItem extends Component {
                 }
                 break;
                 
-            // case 'amenities':
-            //     const fileLength = sectionObj.files.length;
-            //     let noOfFilesUploaded = 0;
-            //     if(fileLength > 0){
-            //         sectionObj.files.forEach((file, index) => {
-            //             uploadFileToS3(file, directoryName).then(data => {
-            //                 console.log("upload response ",data);
-            //                 sectionObj.files.forEach((singleFile, i) => {
-            //                     if(singleFile.name == data.fileName) {
-            //                         sectionObj.images.push(data.location);
-            //                         sectionObj.files.splice(i, 1);
-            //                         return false;
-            //                     }
-            //                 })
-            //                 const inputData = {};
-            //                 inputData[section] = sectionObj;
-            //                 this.setState(inputData);
-            //                 if(noOfFilesUploaded == fileLength){
-            //                     this.updateProjectInfo(undefined, section);
-            //                 }
-            //             }).catch(err => {
-            //                 console.error("upload errr ",err)
-            //             });
-            //         });
-            //     } else {
-            //         this.updateProjectInfo(undefined, section);
-            //     }
-            //     break;
-
             default:
                 break;
         }
     }
     
     render(){
+        console.log(this.state);
         const { project, presetAmenities, banner, about, amenities, virtualTour, gallery, floorPlans, contactUs, footer} =  this.state;
         const browseContainer = {width: 'inherit'};
         // const fitContentWidth = {width : 'fit-content', float : 'left', margin: '5px' , height: 'auto'};
@@ -859,7 +818,6 @@ class ProjectItem extends Component {
         }
     }
 
-    
     getIsAmenityListvallid = (sectionObj) => {
         let isListValid = true;
 
@@ -941,9 +899,5 @@ class ProjectItem extends Component {
         this.setState(inputData);
     }
 }
-
-
-
-
 
 export default withRouter(ProjectItem);

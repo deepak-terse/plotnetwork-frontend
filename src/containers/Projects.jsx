@@ -15,16 +15,19 @@ class Projects extends Component {
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
         this.state = {
             projects : user.projects,
-            projectSelected : ''
+            projectId : '',
+            projectSelected : {}
         };
     }
 
     onChangeHandler = (e) => {
-        this.setState({ projectSelected : e.target.value })
+        const filteredProjects = this.state.projects.filter(project => project.id == e.target.value); 
+        const projectObj = filteredProjects.length > 0 ? filteredProjects[0] : {};
+        this.setState({ projectId : e.target.value, projectSelected : projectObj });
     }
 
     render(){
-        const { projects, projectSelected} = this.state;
+        const { projects, projectId, projectSelected} = this.state;
 
         return (
             <div>
@@ -42,7 +45,7 @@ class Projects extends Component {
                                                 {
                                                     <select name ="projects"
                                                         className={`${styles.input} form-control`}
-                                                        value={projectSelected}
+                                                        value={projectId}
                                                         onChange={this.onChangeHandler}
                                                     >
                                                         <option value="">Select</option>
@@ -65,7 +68,7 @@ class Projects extends Component {
                     </div>                    
                 </div>
 
-                <ProjectItem data={projectSelected} />
+                <ProjectItem projectSelected={projectSelected} />
                 
             </div>
         )
