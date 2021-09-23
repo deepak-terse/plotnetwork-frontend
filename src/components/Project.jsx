@@ -32,9 +32,6 @@ class ProjectItem extends Component {
             contactUs : { id: "contactUs", title : "Contact Us", mapLink : ""},
             footer : { id: "footer", title : "Footer", description : "", disclaimer : ""}
         };
-        this.setState({
-            directoryName : this.state.project.partnerName + "_" + this.state.project.projectName + "/"
-        })
         this.getProjectById(this.props.data);
     }
 
@@ -44,9 +41,13 @@ class ProjectItem extends Component {
 
     getProjectById = (projectId) => {
         const user = lodashClonedeep(this.state.user);
+
         const filteredProjects = user.projects.filter(project => project.id == projectId);
         const projectObj = filteredProjects.length > 0 ? filteredProjects[0] : {};
-        const obj = { project : projectObj };
+
+        const directoryName = projectObj.partnerName + "_" + projectObj.projectName + "/";
+        const obj = { project : projectObj, directoryName : directoryName};
+
         if(Object.keys(projectObj).length > 0){
             const sectionArr = lodashClonedeep(projectObj.websiteMenus.sections);
             for (let index = 0; index < sectionArr.length; index++) {
@@ -87,6 +88,7 @@ class ProjectItem extends Component {
             case 'floorPlans':
                 if(sectionObj.files.length > 0){
                     sectionObj.files.forEach((file, index) => {
+                        // file.customFileName = this.getCustomeFileName(file.name, section, index);
                         uploadFileToS3(file, directoryName).then(data => {
                             console.log("upload response ",data);
                             sectionObj.images.push(data.location);
@@ -274,7 +276,7 @@ class ProjectItem extends Component {
                                                         </div>
                                                         
                                                     )}
-                                                    
+
                                                     <div style={{margin : '15px'}}>
                                                         <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('about')}}>Upload</button>
                                                         <button className="btn btn-primary mr-2" onClick={(e) => this.updateProjectInfo(e, 'about')}>SAVE</button>
@@ -878,6 +880,22 @@ class ProjectItem extends Component {
             this.setState(inputData);
         } else{
 
+        }
+    }
+
+    getCustomeFileName = (fileName, section, index) => {
+        switch (section) {
+            case 'banner':  
+            case 'amenities':
+            case 'gallery':
+            case 'floorPlans':
+                const sectionObj = this.state[section];
+                const ext = getFileExtension(fileName);
+                return `${sectionObj.images.length + index}.${ext}`; 
+                break;
+        
+            default:
+                break;
         }
     }
 }
