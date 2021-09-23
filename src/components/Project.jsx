@@ -58,6 +58,8 @@ class ProjectItem extends Component {
                     // console.log(section)
                     obj[section.id] = section;
                     // obj[section.id] = Object.assign(this.state[section], section) ;
+                    
+                    // needs a object merging stragic here
                     if(section.id == "banner" || section.id == "gallery" || section.id == "floorPlans"){
                         obj[section.id].files = [];
                     } else if(section.id == "about"){
@@ -227,6 +229,7 @@ class ProjectItem extends Component {
 
                                                 <div style={{margin : '15px'}}>
                                                     <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('banner')}}>Upload</button>
+                                                    <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('banner')}}>Reset</button>
                                                 </div>
                                             </SectionContainer>
                                             
@@ -280,7 +283,7 @@ class ProjectItem extends Component {
                                                     <div style={{margin : '15px'}}>
                                                         <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('about')}}>Upload</button>
                                                         <button className="btn btn-primary mr-2" onClick={(e) => this.updateProjectInfo(e, 'about')}>SAVE</button>
-                                                        <button className="btn btn-dark" type="button" >CANCEL</button>
+                                                        <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('about')}} >Reset</button>
                                                     </div> 
                                                 </form>   
                                             </SectionContainer>
@@ -294,6 +297,7 @@ class ProjectItem extends Component {
                                                                         Add Amenity
                                                             </button>
                                                                 <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadAmenityIcons('amenities')}}>Upload All</button>
+                                                                <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('amenities', 'iconFiles')}} >Reset</button>
                                                         </div>
                                                 
                                                         {/* <div className="row" style={{minHeight: '80px'}}>
@@ -333,6 +337,7 @@ class ProjectItem extends Component {
 
                                                         <div style={{margin : '15px'}}>
                                                             <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('amenities')}}>Upload</button>
+                                                            <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('amenities')}} >Reset</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -394,6 +399,7 @@ class ProjectItem extends Component {
 
                                                 <div style={{margin : '15px'}}>
                                                     <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('virtualTour')}}>Upload</button>
+                                                    <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('virtualTour')}} >Reset</button>
                                                 </div>
                                             </SectionContainer>
 
@@ -418,6 +424,7 @@ class ProjectItem extends Component {
 
                                                 <div style={{margin : '15px'}}>
                                                     <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('gallery')}}>Upload</button>
+                                                    <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('gallery')}} >Reset</button>
                                                 </div>
                                             </SectionContainer>
                                             
@@ -442,6 +449,7 @@ class ProjectItem extends Component {
 
                                                 <div style={{margin : '15px'}}>
                                                     <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('floorPlans')}}>Upload</button>
+                                                    <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('floorPlans')}} >Reset</button>
                                                 </div>
                                             </SectionContainer>
 
@@ -467,7 +475,7 @@ class ProjectItem extends Component {
                                                         
                                                     <div style={{margin : '15px'}}>
                                                         <button className="btn btn-primary mr-2" onClick={(e) => this.updateProjectInfo(e, 'contactUs')}>SAVE</button>
-                                                        <button className="btn btn-dark" type="button" >CANCEL</button>
+                                                        <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('contactUs')}} >Reset</button>
                                                     </div>
                                                 </form>   
                                             </SectionContainer>
@@ -510,7 +518,7 @@ class ProjectItem extends Component {
                                                         
                                                     <div style={{margin : '15px'}}>
                                                         <button className="btn btn-primary mr-2" onClick={(e) => this.updateProjectInfo(e, 'footer')}>SAVE</button>
-                                                        <button className="btn btn-dark" type="button" >CANCEL</button>
+                                                        <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('footer')}} >Reset</button>
                                                     </div>
                                                 </form>   
                                             </SectionContainer>                                        
@@ -897,6 +905,40 @@ class ProjectItem extends Component {
             default:
                 break;
         }
+    }
+
+    resetSection = (section, subSection) => {
+        const inputData = {};
+        const oldSectionArr = lodashClonedeep(this.state.project.websiteMenus.sections);
+        for (let index = 0; index < oldSectionArr.length; index++) {
+            const oldSection = oldSectionArr[index];
+            if(oldSection.id == section){
+                inputData[section] = oldSection;
+                // needs a object merging stragic here
+                if(section == "banner" || section == "gallery" || section == "floorPlans"){
+                    inputData[section].files = [];
+                } else if(section == "about"){
+                    inputData[section].brochureFile = {};
+                } else if(section == "amenities"){
+                    if(subSection == "iconFiles"){
+                        inputData[section].iconFiles = [];
+                        inputData[section].count = 0;
+                        inputData[section].files = this.state[section].files;
+                    } else {
+                        inputData[section].files = [];
+                        inputData[section].iconFiles = this.state[section].iconFiles;
+                        inputData[section].count = this.state[section].count;
+                    }
+                } else if(section == "virtualTour"){
+                    inputData[section].files = [];
+                    if(inputData[section].list == undefined){
+                        inputData[section].list = []
+                    }
+                }
+                break;
+            }
+        }
+        this.setState(inputData);
     }
 }
 
