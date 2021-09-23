@@ -277,8 +277,6 @@ class ProjectItem extends Component {
                                                     
                                                     <div style={{margin : '15px'}}>
                                                         <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('about')}}>Upload</button>
-                                                    </div>
-                                                    <div style={{margin : '15px'}}>
                                                         <button className="btn btn-primary mr-2" onClick={(e) => this.updateProjectInfo(e, 'about')}>SAVE</button>
                                                         <button className="btn btn-dark" type="button" >CANCEL</button>
                                                     </div> 
