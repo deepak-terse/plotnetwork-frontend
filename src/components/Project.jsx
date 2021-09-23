@@ -872,7 +872,9 @@ class ProjectItem extends Component {
             const oldSection = oldSectionArr[index];
             if(oldSection.id == section){
                 inputData[section] = oldSection;
-                // needs a object merging stragic here
+
+                // needs a object merging stragic here // needs to refactor
+                // obj[section.id] = Object.assign(obj[section.id], section) ;
                 if(section == "banner" || section == "gallery" || section == "floorPlans"){
                     inputData[section].files = [];
                 } else if(section == "about"){
