@@ -11,12 +11,12 @@ class BrowseFilesContainer extends Component {
 
     render(){
         const fileDragContainer = { border: '1px solid #ff6e40', ...this.props.css, color: '#ff6e40', padding: 20, margin: 'auto' };
-        const { onDropFiles } = this.props;
+        const { onDropFiles, dropContainerCss } = this.props;
         return (
             <div>
                 <div style={fileDragContainer}>
                     <FileDrop 
-                        className={styles.fileDrop}
+                        className={dropContainerCss}
                         targetClassName={styles.fileDropTarget}
                         draggingOverFrameClassName={styles.fileDropDraggingOverFrame}
                         draggingOverTargetClassName={styles.fileDropDraggingOverTarget}

@@ -8,7 +8,7 @@
   cursor: pointer;
 }
 
-.fileDrop > .fileDropTarget {
+.fileDropTarget {
   /* basic styles */
   position: absolute;
   top: 0;
@@ -46,7 +46,7 @@
   text-align: center;
 }
 
-.fileDrop > .fileDropTarget.fileDropDraggingOverFrame {
+.fileDropTarget.fileDropDraggingOverFrame {
   /* overlay a black mask when dragging over the frame */
   border: none;
   background-color: rgba(0, 0, 0, 0.65);
@@ -58,14 +58,21 @@
   color: white;
 }
 
-.fileDrop > .fileDropTarget.fileDropDraggingOverTarget {
+.fileDropTarget.fileDropDraggingOverTarget {
   /* turn stuff orange when we are dragging over the target */
   color: #ff6e40;
   box-shadow: 0 0 13px 3px #ff6e40;
 }
 
 .sectionContainer { width: 'inherit' }
-.autoMargin {margin: 'auto'}
+.autoMargin {margin: auto}
 .fitContentWidth {width : 'fit-content'; float : 'left'; margin: '5px' ; height: 'auto'}
 .browseContainer {width: '600px'}
-.filesLength { margin: '5px auto' }
+.filesLength { margin: 5px auto }
+.smallFileDrop {
+  /* relatively position the container bc the contents are absolute */
+  position: relative;
+  height: 50px;
+  width: 100%;
+  cursor: pointer;
+}

@@ -11,7 +11,8 @@ import SectionContainer from '../components/SectionContainer';
 import BrowseFilesContainer from '../components/BrowseFilesContainer';
 import lodashClonedeep from 'lodash.clonedeep';
 
-import fileUploadStyles from '../styles/FileUpload.module.scss';
+
+import styles from '../styles/FileUpload.module.scss';
 
 class ProjectItem extends Component {
     constructor(props){
@@ -188,13 +189,8 @@ class ProjectItem extends Component {
     
     render(){
         const { project, presetAmenities, banner, about, amenities, virtualTour, gallery, floorPlans, contactUs, footer} =  this.state;
-        const sectionContainer = { width: 'inherit' };
-        const autoMargin = {margin: 'auto'}
-        const fitContentWidth = {width : 'fit-content', float : 'left', margin: '5px' , height: 'auto'};
-        const browseContainer = {width: '600px'};
-        const filesLength = { margin: '5px auto' };
-
-        console.log(amenities);
+        const browseContainer = {width: 'inherit'};
+        // const fitContentWidth = {width : 'fit-content', float : 'left', margin: '5px' , height: 'auto'};
 
         const amenityList = this.getAmenityList();        
 
@@ -208,13 +204,17 @@ class ProjectItem extends Component {
                                     (
                                         <div >
                                             <h4 className="card-title">{project.projectName}</h4>
-                                            <SectionContainer class={sectionContainer} displayTitle="Home"> 
+                                            <SectionContainer class={styles.sectionContainer} displayTitle="Home"> 
 
-                                                <BrowseFilesContainer 
-                                                    onDropFiles={(files) => this.processFile(files, 'banner')}
-                                                    css={browseContainer} 
-                                                />
-                                                <div style={filesLength}>{banner.files.length} Banners Selected</div>
+                                                <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                    <BrowseFilesContainer 
+                                                        onDropFiles={(files) => this.processFile(files, 'banner')}
+                                                        css={browseContainer} 
+                                                        dropContainerCss={styles.fileDrop}
+                                                    />
+                                                </div>
+                                                
+                                                <div className={styles.filesLength}>{banner.files.length} Banners Selected</div>
                                                      
                                                 <ImagePreviewList 
                                                     imageLinks={banner.images} 
@@ -228,12 +228,12 @@ class ProjectItem extends Component {
                                                 </div>
                                             </SectionContainer>
                                             
-                                            <SectionContainer className={sectionContainer} displayTitle="About Us"> 
+                                            <SectionContainer class={styles.sectionContainer} displayTitle="About Us"> 
                                                 <form className="forms-sample" name="aboutSectionForm" id="aboutSectionForm">
                                                     {(
                                                         <div>
                                                             <label htmlFor="aboutTitle" className="col-sm-auto col-form-label">Title</label>
-                                                            <div className="col-sm-9" style={autoMargin}>
+                                                            <div className={`col-sm-9 ${styles.autoMargin}`}>
                                                                 <FormControl
                                                                     name="title"
                                                                     type="text" 
@@ -247,7 +247,7 @@ class ProjectItem extends Component {
                                                             </div>
 
                                                             <label htmlFor="aboutDescription" className="col-sm-auto col-form-label">Description</label>
-                                                            <div className="col-sm-9" style={autoMargin}>
+                                                            <div className={`col-sm-9 ${styles.autoMargin}`}>
                                                                 <FormControl
                                                                     name="description"
                                                                     type="textarea" 
@@ -262,10 +262,15 @@ class ProjectItem extends Component {
                                                             </div>
 
                                                             <label className="col-sm-auto col-form-label">Project Brochure</label>
-                                                            <BrowseFilesContainer 
-                                                                onDropFiles={(files) => this.processFile(files, 'about')} 
-                                                                css={browseContainer} />
-                                                            <div style={filesLength}>{about.brochureLink !== "" ? 1 : 0} Brochure uploaded { this.getIsBrochureSelected() ? 1 : 0 } Brochure Selected</div>
+                                                            <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                                <BrowseFilesContainer 
+                                                                    onDropFiles={(files) => this.processFile(files, 'about')} 
+                                                                    css={browseContainer} 
+                                                                    dropContainerCss={styles.fileDrop}
+                                                                />
+                                                            </div>
+                                                            
+                                                            <div className={styles.filesLength}>{about.brochureLink !== "" ? 1 : 0} Brochure uploaded { this.getIsBrochureSelected() ? 1 : 0 } Brochure Selected</div>
                                                         </div>
                                                         
                                                     )}
@@ -280,64 +285,74 @@ class ProjectItem extends Component {
                                                 </form>   
                                             </SectionContainer>
                                             
-                                            <SectionContainer className={sectionContainer} displayTitle="Amenities">
-                                            <form className="forms-sample" name="amenitySectionForm" id="amenitySectionForm">
-                                                {amenityList}
-                                                <div style={{margin : '15px'}}>
-                                                    <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.onAddAmenityhandler()}}>
-                                                                Add Amenity
-                                                    </button>
-                                                    <div style={{margin : '15px'}}>
-                                                        <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadAmenityIcons('amenities')}}>Upload</button>
+                                            <SectionContainer class={styles.sectionContainer} displayTitle="Amenities">
+                                                <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                    <form className="forms-sample" name="amenitySectionForm" id="amenitySectionForm">
+                                                    {amenityList}
+                                                    <div style={{margin : '15px auto', justifyContent: 'center'}}>
+                                                        <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.onAddAmenityhandler()}}>
+                                                                    Add Amenity
+                                                        </button>
+                                                            <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadAmenityIcons('amenities')}}>Upload All</button>
                                                     </div>
-                                                </div>
                                                 
-                                                {/* <div className="row" style={{minHeight: '80px'}}>
-                                                    {(
-                                                        presetAmenities.map((amenity, index) => {
-                                                            return <div className="col-sm-auto" style={autoMargin} key={index}>
-                                                                        <FormControl 
-                                                                            name={'amenities'+index}
-                                                                            type="checkbox" 
-                                                                            value={amenities.list}
-                                                                            id={'amenities'+index}
-                                                                            onChange={(e) => this.onAmenitiesChange(e, 'amenities')} 
-                                                                            className="form-control" 
-                                                                            placeholder={amenity.title}
-                                                                            styleCSS={fitContentWidth}
-                                                                        />
-                                                                </div> 
-                                                        })
-                                                    )}     
-                                                </div> */}
+                                                    {/* <div className="row" style={{minHeight: '80px'}}>
+                                                        {(
+                                                            presetAmenities.map((amenity, index) => {
+                                                                return <div className="col-sm-auto" style={autoMargin} key={index}>
+                                                                            <FormControl 
+                                                                                name={'amenities'+index}
+                                                                                type="checkbox" 
+                                                                                value={amenities.list}
+                                                                                id={'amenities'+index}
+                                                                                onChange={(e) => this.onAmenitiesChange(e, 'amenities')} 
+                                                                                className="form-control" 
+                                                                                placeholder={amenity.title}
+                                                                                styleCSS={fitContentWidth}
+                                                                            />
+                                                                    </div> 
+                                                            })
+                                                        )}     
+                                                    </div> */}
                                                      
-                                                <br/>
-                                                <BrowseFilesContainer 
-                                                    onDropFiles={(files) => this.processFile(files, 'amenities')} 
-                                                    css={browseContainer} />
-                                                <div style={filesLength}>{amenities.files.length} Amenity Photos Selected</div>
+                                                    <br/>
+                                                    <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                        <BrowseFilesContainer 
+                                                            onDropFiles={(files) => this.processFile(files, 'amenities')} 
+                                                            css={browseContainer} 
+                                                            dropContainerCss={styles.fileDrop}
+                                                        />
+                                                    </div>
                                                     
-                                                <ImagePreviewList 
-                                                    imageLinks={amenities.images} 
-                                                    imageFiles={amenities.files} 
-                                                    onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'amenities')}
-                                                    onRemoveImageLink={(data) => this.removeUploadedImage(data, 'amenities')} 
-                                                />    
+                                                    <div className={styles.filesLength}>{amenities.files.length} Amenity Photos Selected</div>
+                                                        
+                                                    <ImagePreviewList 
+                                                        imageLinks={amenities.images} 
+                                                        imageFiles={amenities.files} 
+                                                        onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'amenities')}
+                                                        onRemoveImageLink={(data) => this.removeUploadedImage(data, 'amenities')} 
+                                                    />    
 
                                                 <div style={{margin : '15px'}}>
                                                     <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('amenities')}}>Upload</button>
                                                 </div>
                                             </form>
-                                             
+                                                </div>
+                                                
                                             </SectionContainer>
 
-                                            <SectionContainer class={sectionContainer} displayTitle="Virtual Tour"> 
+                                            <SectionContainer class={styles.sectionContainer} displayTitle="Virtual Tour"> 
                                                 <div>
                                                     <label className="col-sm-auto col-form-label">Virtual Tour Photo</label>
-                                                    <BrowseFilesContainer 
-                                                        onDropFiles={(files) => this.processFile(files, 'virtualTour')} 
-                                                        css={browseContainer} />
-                                                    <div style={filesLength}>{virtualTour.files.length} Photos Selected</div>
+                                                    <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                        <BrowseFilesContainer 
+                                                            onDropFiles={(files) => this.processFile(files, 'virtualTour')} 
+                                                            css={browseContainer} 
+                                                            dropContainerCss={styles.fileDrop}
+                                                        />
+                                                    </div>
+                                                    
+                                                    <div className={styles.filesLength}>{virtualTour.files.length} Photos Selected</div>
                                                     {/* <ImagePreviewList 
                                                         images={[virtualTour.imageLink]} 
                                                         imageFiles={virtualTour.files}
@@ -384,12 +399,17 @@ class ProjectItem extends Component {
                                                 </div>
                                             </SectionContainer>
 
-                                            <SectionContainer class={sectionContainer} displayTitle="Gallery"> 
+                                            <SectionContainer class={styles.sectionContainer} displayTitle="Gallery"> 
 
-                                                <BrowseFilesContainer 
-                                                    onDropFiles={(files) => this.processFile(files, 'gallery')} 
-                                                    css={browseContainer} />
-                                                <div style={filesLength}>{gallery.files.length} Photos Selected</div>
+                                                <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                    <BrowseFilesContainer 
+                                                            onDropFiles={(files) => this.processFile(files, 'gallery')} 
+                                                            css={browseContainer} 
+                                                            dropContainerCss={styles.fileDrop}
+                                                    />
+                                                </div>
+                                                
+                                                <div className={styles.filesLength}>{gallery.files.length} Photos Selected</div>
 
                                                 <ImagePreviewList 
                                                     imageLinks={gallery.images} 
@@ -403,12 +423,17 @@ class ProjectItem extends Component {
                                                 </div>
                                             </SectionContainer>
                                             
-                                            <SectionContainer class={sectionContainer} displayTitle="Floor Plans"> 
+                                            <SectionContainer class={styles.sectionContainer} displayTitle="Floor Plans"> 
 
-                                                <BrowseFilesContainer 
-                                                    onDropFiles={(files) => this.processFile(files, 'floorPlans')} 
-                                                    css={browseContainer} />
-                                                <div style={filesLength}>{floorPlans.files.length} Floor Plans Selected</div>
+                                                <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                    <BrowseFilesContainer 
+                                                            onDropFiles={(files) => this.processFile(files, 'floorPlans')} 
+                                                            css={browseContainer} 
+                                                            dropContainerCss={styles.fileDrop}
+                                                    />
+                                                </div>
+                                                
+                                                <div className={styles.filesLength}>{floorPlans.files.length} Floor Plans Selected</div>
 
                                                 <ImagePreviewList 
                                                     imageLinks={floorPlans.images} 
@@ -422,12 +447,12 @@ class ProjectItem extends Component {
                                                 </div>
                                             </SectionContainer>
 
-                                            <SectionContainer className={sectionContainer} displayTitle="Contact Us"> 
+                                            <SectionContainer class={styles.sectionContainer} displayTitle="Contact Us"> 
                                                 <form className="forms-sample" name="contactSectionForm" id="contactSectionForm">
                                                     {(
                                                         <div>
                                                             <label htmlFor="contactUs" className="col-sm-auto col-form-label">Add link of location map here</label>
-                                                            <div className="col-sm-9" style={autoMargin}>
+                                                            <div className={`col-sm-9 ${styles.autoMargin}`}>
                                                                 <FormControl
                                                                     name="mapLink"
                                                                     type="text" 
@@ -449,12 +474,12 @@ class ProjectItem extends Component {
                                                 </form>   
                                             </SectionContainer>
 
-                                            <SectionContainer className={sectionContainer} displayTitle="Footer"> 
+                                            <SectionContainer class={styles.sectionContainer} displayTitle="Footer"> 
                                                 <form className="forms-sample" name="footerSectionForm" id="footerSectionForm">
                                                     {(
                                                         <div>
                                                             <label htmlFor="footer" className="col-sm-auto col-form-label">Add footerline for your website</label>
-                                                            <div className="col-sm-9" style={autoMargin}>
+                                                            <div className={`col-sm-9 ${styles.autoMargin}`}>
                                                                 <FormControl
                                                                     name="description"
                                                                     type="textarea" 
@@ -469,7 +494,7 @@ class ProjectItem extends Component {
                                                             </div>
 
                                                             <label htmlFor="disclaimer" className="col-sm-auto col-form-label">Disclaimer</label>
-                                                            <div className="col-sm-9" style={autoMargin}>
+                                                            <div className={`col-sm-9 ${styles.autoMargin}`}>
                                                                 <FormControl
                                                                     name="disclaimer"
                                                                     type="textarea" 
@@ -504,16 +529,14 @@ class ProjectItem extends Component {
     }
 
     getAmenityList = () => {
-        const autoMargin = {margin: 'auto'}
         const browseContainer = {width: 'inherit'}
-        const filesLength = { margin: '5px auto' };
         const {amenities} = this.state;
 
         const amenityUploadedList = amenities.list.map((amenity, index) => {
             return <div className="row">
                         <div className="col-sm-4">
                             <label htmlFor={"amenityTitle"+index} className="col-sm-auto col-form-label">Title</label>
-                            <div className="col-sm-12" style={autoMargin}>
+                            <div className={`col-sm-12 ${styles.autoMargin}`}>
                                 <FormControl
                                     name={"amenityTitle_list"+index}
                                     type="text" 
@@ -526,24 +549,24 @@ class ProjectItem extends Component {
                                 />
                             </div>
                         </div>
-                        <div className="col-sm-3" style={{verticalAlign: 'middle', margin: 'auto 0'}}>
+                        <div className="col-sm-4" style={{verticalAlign: 'middle', margin: 'auto 0'}}>
                             {/* <BrowseFilesContainer
                                 onDropFiles={(files) => this.processAmenityIconFiles(files, 'amenities', index)}
-                                css={browseContainer} /> */}
-                            <div style={filesLength}>1 Icon Uploaded</div>
+                                css={browseContainer}
+                                dropContainerCss={styles.smallFileDrop} /> */}
+                            <div className={styles.filesLength}>1 Icon Uploaded</div>
                         </div>
                         {/* <div className="col-sm-4">
                             <button className="btn btn-dark" type="button" >Remove</button>
                         </div> */}
                     </div>
-            // return <AmenityList></AmenityList>
         })
 
         const amenityNonUploadedList = Array.apply(null, Array(amenities.count)).map((amenity, index) => {
             return <div className="row">
                         <div className="col-sm-4">
                             <label htmlFor={"amenityTitle"+index} className="col-sm-auto col-form-label">Title</label>
-                            <div className="col-sm-12" style={autoMargin}>
+                            <div className={`col-sm-12 ${styles.autoMargin}`}>
                                 <FormControl
                                     name={`amenityTitle_iconFiles${index}`}
                                     type="text" 
@@ -556,17 +579,17 @@ class ProjectItem extends Component {
                                 />
                             </div>
                         </div>
-                        <div className="col-sm-3">
+                        
+                        <div className="col-sm-4">
                             <BrowseFilesContainer
                                 onDropFiles={(files) => this.processAmenityIconFiles(files, 'amenities', index)}
-                                css={browseContainer} />
-                            <div style={filesLength}>{amenities.iconFiles[index].iconFile.name !== undefined ? 1 : 0} Icon Selected</div>
+                                css={browseContainer} dropContainerCss={styles.smallFileDrop} />
+                            <div className={styles.filesLength}>{amenities.iconFiles[index].iconFile.name !== undefined ? 1 : 0} Icon Selected</div>
                         </div>
                         <div className="col-sm-4">
                             <button className="btn btn-dark" type="button" onClick={() => this.onRemoveAmenityIcon('iconFiles', index)}>Remove</button>
                         </div>
                     </div>
-            // return <AmenityList></AmenityList>
         })
         return <>
             {amenityUploadedList}
