@@ -17,11 +17,13 @@ export default function FormControl(props) {
             return <TextInput 
                 type = {props.type}
                 name = {props.name}
+                id = {props.id}
                 placeholder = {props.placeholder}
                 value = {props.value}
                 className = {props.className}
                 onChange = {props.onChange}
-                disabled={props.disabled}
+                disabled = {props.disabled}
+                required = {props.required}
             />
             break;
         case 'number':
@@ -69,7 +71,7 @@ export default function FormControl(props) {
                 onChange = {props.onChange}
                 className = {props.className}
                 disabled = {props.disabled}
-                style = {props.class}
+                styleCSS = {props.styleCSS}
             />
             break;
         case 'color':

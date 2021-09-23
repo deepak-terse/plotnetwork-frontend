@@ -4,7 +4,7 @@ import styles from '../../styles/FormInput.module.scss'
 
 export default function CheckboxInput(props) {
     console.log(styles.input);
-    return <div className = {props.className}>
+    return <div className = {props.className} style={props.styleCSS}>
             <input 
                 type = {props.type}
                 name = {props.name}

@@ -10,7 +10,7 @@ class BrowseFilesContainer extends Component {
     }
 
     render(){
-        const fileDragContainer = { border: '1px solid #ff6e40', width: 600, color: '#ff6e40', padding: 20, margin: 'auto' };
+        const fileDragContainer = { border: '1px solid #ff6e40', ...this.props.css, color: '#ff6e40', padding: 20, margin: 'auto' };
         const { onDropFiles } = this.props;
         return (
             <div>
