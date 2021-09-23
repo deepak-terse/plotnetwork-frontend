@@ -206,12 +206,12 @@ class ProjectItem extends Component {
                                             <h4 className="card-title">{project.projectName}</h4>
                                             <SectionContainer class={styles.sectionContainer} displayTitle="Home"> 
 
-                                                <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                <div className={`col-sm-7 ${styles.autoMargin}`}>
                                                     <BrowseFilesContainer 
                                                         onDropFiles={(files) => this.processFile(files, 'banner')}
                                                         css={browseContainer} 
                                                         dropContainerCss={styles.fileDrop}
-                                                    />
+                                                    >Drop some banners here or click here to browse the banner!</BrowseFilesContainer>
                                                 </div>
                                                 
                                                 <div className={styles.filesLength}>{banner.files.length} Banners Selected</div>
@@ -232,8 +232,8 @@ class ProjectItem extends Component {
                                                 <form className="forms-sample" name="aboutSectionForm" id="aboutSectionForm">
                                                     {(
                                                         <div>
-                                                            <label htmlFor="aboutTitle" className="col-sm-auto col-form-label">Title</label>
-                                                            <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                            <div className={`col-sm-7 ${styles.autoMargin}`}>
+                                                                <label htmlFor="aboutTitle" className="col-sm-auto col-form-label">Title</label>
                                                                 <FormControl
                                                                     name="title"
                                                                     type="text" 
@@ -246,8 +246,8 @@ class ProjectItem extends Component {
                                                                 />
                                                             </div>
 
-                                                            <label htmlFor="aboutDescription" className="col-sm-auto col-form-label">Description</label>
-                                                            <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                            <div className={`col-sm-7 ${styles.autoMargin}`}>
+                                                                <label htmlFor="aboutDescription" className="col-sm-auto col-form-label">Description</label>
                                                                 <FormControl
                                                                     name="description"
                                                                     type="textarea" 
@@ -261,13 +261,13 @@ class ProjectItem extends Component {
                                                                 />
                                                             </div>
 
-                                                            <label className="col-sm-auto col-form-label">Project Brochure</label>
-                                                            <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                            <div className={`col-sm-7 ${styles.autoMargin}`}>
+                                                                <label className="col-sm-auto col-form-label">Project Brochure</label>
                                                                 <BrowseFilesContainer 
                                                                     onDropFiles={(files) => this.processFile(files, 'about')} 
                                                                     css={browseContainer} 
                                                                     dropContainerCss={styles.fileDrop}
-                                                                />
+                                                                >Drop .pdf file here here or click here to browse the file!</BrowseFilesContainer>
                                                             </div>
                                                             
                                                             <div className={styles.filesLength}>{about.brochureLink !== "" ? 1 : 0} Brochure uploaded { this.getIsBrochureSelected() ? 1 : 0 } Brochure Selected</div>
@@ -286,70 +286,68 @@ class ProjectItem extends Component {
                                             </SectionContainer>
                                             
                                             <SectionContainer class={styles.sectionContainer} displayTitle="Amenities">
-                                                <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                <div className={`col-sm-7 ${styles.autoMargin}`}>
                                                     <form className="forms-sample" name="amenitySectionForm" id="amenitySectionForm">
-                                                    {amenityList}
-                                                    <div style={{margin : '15px auto', justifyContent: 'center'}}>
-                                                        <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.onAddAmenityhandler()}}>
-                                                                    Add Amenity
-                                                        </button>
-                                                            <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadAmenityIcons('amenities')}}>Upload All</button>
-                                                    </div>
+                                                        {amenityList}
+                                                        <div style={{margin : '15px auto', justifyContent: 'center'}}>
+                                                            <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.onAddAmenityhandler()}}>
+                                                                        Add Amenity
+                                                            </button>
+                                                                <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadAmenityIcons('amenities')}}>Upload All</button>
+                                                        </div>
                                                 
-                                                    {/* <div className="row" style={{minHeight: '80px'}}>
-                                                        {(
-                                                            presetAmenities.map((amenity, index) => {
-                                                                return <div className="col-sm-auto" style={autoMargin} key={index}>
-                                                                            <FormControl 
-                                                                                name={'amenities'+index}
-                                                                                type="checkbox" 
-                                                                                value={amenities.list}
-                                                                                id={'amenities'+index}
-                                                                                onChange={(e) => this.onAmenitiesChange(e, 'amenities')} 
-                                                                                className="form-control" 
-                                                                                placeholder={amenity.title}
-                                                                                styleCSS={fitContentWidth}
-                                                                            />
-                                                                    </div> 
-                                                            })
-                                                        )}     
-                                                    </div> */}
+                                                        {/* <div className="row" style={{minHeight: '80px'}}>
+                                                            {(
+                                                                presetAmenities.map((amenity, index) => {
+                                                                    return <div className="col-sm-auto" style={autoMargin} key={index}>
+                                                                                <FormControl 
+                                                                                    name={'amenities'+index}
+                                                                                    type="checkbox" 
+                                                                                    value={amenities.list}
+                                                                                    id={'amenities'+index}
+                                                                                    onChange={(e) => this.onAmenitiesChange(e, 'amenities')} 
+                                                                                    className="form-control" 
+                                                                                    placeholder={amenity.title}
+                                                                                    styleCSS={fitContentWidth}
+                                                                                />
+                                                                        </div> 
+                                                                })
+                                                            )}     
+                                                        </div> */}
                                                      
-                                                    <br/>
-                                                    <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                        <br/>
                                                         <BrowseFilesContainer 
                                                             onDropFiles={(files) => this.processFile(files, 'amenities')} 
                                                             css={browseContainer} 
                                                             dropContainerCss={styles.fileDrop}
-                                                        />
-                                                    </div>
-                                                    
-                                                    <div className={styles.filesLength}>{amenities.files.length} Amenity Photos Selected</div>
+                                                        >Drop some photos here or click here to browse the photo!</BrowseFilesContainer>
                                                         
-                                                    <ImagePreviewList 
-                                                        imageLinks={amenities.images} 
-                                                        imageFiles={amenities.files} 
-                                                        onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'amenities')}
-                                                        onRemoveImageLink={(data) => this.removeUploadedImage(data, 'amenities')} 
-                                                    />    
+                                                        <div className={styles.filesLength}>{amenities.files.length} Amenity Photos Selected</div>
+                                                            
+                                                        <ImagePreviewList 
+                                                            imageLinks={amenities.images} 
+                                                            imageFiles={amenities.files} 
+                                                            onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'amenities')}
+                                                            onRemoveImageLink={(data) => this.removeUploadedImage(data, 'amenities')} 
+                                                        />    
 
-                                                <div style={{margin : '15px'}}>
-                                                    <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('amenities')}}>Upload</button>
-                                                </div>
-                                            </form>
+                                                        <div style={{margin : '15px'}}>
+                                                            <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('amenities')}}>Upload</button>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                                 
                                             </SectionContainer>
 
                                             <SectionContainer class={styles.sectionContainer} displayTitle="Virtual Tour"> 
                                                 <div>
-                                                    <label className="col-sm-auto col-form-label">Virtual Tour Photo</label>
-                                                    <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                    <div className={`col-sm-7 ${styles.autoMargin}`}>
+                                                        <label className="col-sm-auto col-form-label">Virtual Tour Photo</label>
                                                         <BrowseFilesContainer 
                                                             onDropFiles={(files) => this.processFile(files, 'virtualTour')} 
                                                             css={browseContainer} 
                                                             dropContainerCss={styles.fileDrop}
-                                                        />
+                                                        >Drop some photos here or click here to browse the photo!</BrowseFilesContainer>
                                                     </div>
                                                     
                                                     <div className={styles.filesLength}>{virtualTour.files.length} Photos Selected</div>
@@ -362,7 +360,7 @@ class ProjectItem extends Component {
                                                     <label className="col-sm-auto col-form-label">Add links of Virtual Tour here</label>
                                                     {(
                                                         virtualTour.list.map((tourObj, index) => {
-                                                            return <div className="col-sm-9" key={index} style={{ margin: '5px auto'}}>
+                                                            return <div className="col-sm-7" key={index} style={{ margin: '5px auto'}}>
                                                                <FormControl 
                                                                     name={"tourLink"+index}
                                                                     type="text" 
@@ -378,7 +376,7 @@ class ProjectItem extends Component {
                                                     )}
                                                     {(
                                                         virtualTour.files.map((imgFile, index) => {
-                                                            return <div className="col-sm-9" key={index} style={{ margin: '5px auto'}}>
+                                                            return <div className="col-sm-7" key={index} style={{ margin: '5px auto'}}>
                                                                <FormControl 
                                                                     name={"tourLink"+index}
                                                                     type="text" 
@@ -401,12 +399,12 @@ class ProjectItem extends Component {
 
                                             <SectionContainer class={styles.sectionContainer} displayTitle="Gallery"> 
 
-                                                <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                <div className={`col-sm-7 ${styles.autoMargin}`}>
                                                     <BrowseFilesContainer 
                                                             onDropFiles={(files) => this.processFile(files, 'gallery')} 
                                                             css={browseContainer} 
                                                             dropContainerCss={styles.fileDrop}
-                                                    />
+                                                    >Drop some photos here or click here to browse the photo!</BrowseFilesContainer>
                                                 </div>
                                                 
                                                 <div className={styles.filesLength}>{gallery.files.length} Photos Selected</div>
@@ -425,12 +423,12 @@ class ProjectItem extends Component {
                                             
                                             <SectionContainer class={styles.sectionContainer} displayTitle="Floor Plans"> 
 
-                                                <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                <div className={`col-sm-7 ${styles.autoMargin}`}>
                                                     <BrowseFilesContainer 
                                                             onDropFiles={(files) => this.processFile(files, 'floorPlans')} 
                                                             css={browseContainer} 
                                                             dropContainerCss={styles.fileDrop}
-                                                    />
+                                                    >Drop floor plans here or click here to browse the floor plan!</BrowseFilesContainer>
                                                 </div>
                                                 
                                                 <div className={styles.filesLength}>{floorPlans.files.length} Floor Plans Selected</div>
@@ -451,8 +449,8 @@ class ProjectItem extends Component {
                                                 <form className="forms-sample" name="contactSectionForm" id="contactSectionForm">
                                                     {(
                                                         <div>
-                                                            <label htmlFor="contactUs" className="col-sm-auto col-form-label">Add link of location map here</label>
-                                                            <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                            <div className={`col-sm-7 ${styles.autoMargin}`}>
+                                                                <label htmlFor="contactUs" className="col-sm-auto col-form-label">Add link of location map here</label>
                                                                 <FormControl
                                                                     name="mapLink"
                                                                     type="text" 
@@ -478,8 +476,8 @@ class ProjectItem extends Component {
                                                 <form className="forms-sample" name="footerSectionForm" id="footerSectionForm">
                                                     {(
                                                         <div>
-                                                            <label htmlFor="footer" className="col-sm-auto col-form-label">Add footerline for your website</label>
-                                                            <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                            <div className={`col-sm-7 ${styles.autoMargin}`}>
+                                                                <label htmlFor="footer" className="col-sm-auto col-form-label">Add footerline for your website</label>
                                                                 <FormControl
                                                                     name="description"
                                                                     type="textarea" 
@@ -493,8 +491,8 @@ class ProjectItem extends Component {
                                                                 />
                                                             </div>
 
-                                                            <label htmlFor="disclaimer" className="col-sm-auto col-form-label">Disclaimer</label>
-                                                            <div className={`col-sm-9 ${styles.autoMargin}`}>
+                                                            <div className={`col-sm-7 ${styles.autoMargin}`}>
+                                                                <label htmlFor="disclaimer" className="col-sm-auto col-form-label">Disclaimer</label>
                                                                 <FormControl
                                                                     name="disclaimer"
                                                                     type="textarea" 
@@ -583,7 +581,9 @@ class ProjectItem extends Component {
                         <div className="col-sm-4">
                             <BrowseFilesContainer
                                 onDropFiles={(files) => this.processAmenityIconFiles(files, 'amenities', index)}
-                                css={browseContainer} dropContainerCss={styles.smallFileDrop} />
+                                css={browseContainer} 
+                                dropContainerCss={styles.smallFileDrop} 
+                            >Drop a icon here or click here to browse the icon!</BrowseFilesContainer>
                             <div className={styles.filesLength}>{amenities.iconFiles[index].iconFile.name !== undefined ? 1 : 0} Icon Selected</div>
                         </div>
                         <div className="col-sm-4">

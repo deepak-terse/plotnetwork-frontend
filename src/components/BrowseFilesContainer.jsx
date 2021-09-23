@@ -23,7 +23,7 @@ class BrowseFilesContainer extends Component {
     
                         onDrop={(files) => onDropFiles(files)}
                         onTargetClick={(e) => this.fileInputRef.current.click()}>
-                        Drop some files here or click here to browse the files!
+                        {this.props.children}
                     </FileDrop>
                 </div>
                 <input
