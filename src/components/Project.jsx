@@ -70,7 +70,6 @@ class ProjectItem extends Component {
     }
 
     render(){
-        console.log(this.state);
         const { project, presetAmenities, banner, about, amenities, virtualTour, gallery, floorPlans, contactUs, footer} =  this.state;
         const browseContainer = {width: 'inherit'};
         // const fitContentWidth = {width : 'fit-content', float : 'left', margin: '5px' , height: 'auto'};
@@ -108,7 +107,7 @@ class ProjectItem extends Component {
 
                                                 <div style={{margin : '15px'}}>
                                                     <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('banner')}}>Upload</button>
-                                                    <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('banner')}}>Reset</button>
+                                                    <button className="btn btn-dark mr-2" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('banner')}}>RESET</button>
                                                 </div>
                                             </SectionContainer>
                                             
@@ -162,7 +161,7 @@ class ProjectItem extends Component {
                                                     <div style={{margin : '15px'}}>
                                                         <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('about')}}>Upload</button>
                                                         <button className="btn btn-primary mr-2" onClick={(e) => this.updateProjectInfo(e, 'about')}>SAVE</button>
-                                                        <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('about')}} >Reset</button>
+                                                        <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('about')}} >RESET</button>
                                                     </div> 
                                                 </form>   
                                             </SectionContainer>
@@ -176,7 +175,7 @@ class ProjectItem extends Component {
                                                                         Add Amenity
                                                             </button>
                                                                 <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadAmenityIcons('amenities')}}>Upload All</button>
-                                                                <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('amenities', 'iconFiles')}} >Reset</button>
+                                                                <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('amenities', 'iconFiles')}} >RESET</button>
                                                         </div>
                                                 
                                                         {/* <div className="row" style={{minHeight: '80px'}}>
@@ -216,7 +215,7 @@ class ProjectItem extends Component {
 
                                                         <div style={{margin : '15px'}}>
                                                             <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('amenities')}}>Upload</button>
-                                                            <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('amenities')}} >Reset</button>
+                                                            <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('amenities')}} >RESET</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -278,7 +277,7 @@ class ProjectItem extends Component {
 
                                                 <div style={{margin : '15px'}}>
                                                     <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('virtualTour')}}>Upload</button>
-                                                    <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('virtualTour')}} >Reset</button>
+                                                    <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('virtualTour')}} >RESET</button>
                                                 </div>
                                             </SectionContainer>
 
@@ -303,7 +302,7 @@ class ProjectItem extends Component {
 
                                                 <div style={{margin : '15px'}}>
                                                     <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('gallery')}}>Upload</button>
-                                                    <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('gallery')}} >Reset</button>
+                                                    <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('gallery')}} >RESET</button>
                                                 </div>
                                             </SectionContainer>
                                             
@@ -328,7 +327,7 @@ class ProjectItem extends Component {
 
                                                 <div style={{margin : '15px'}}>
                                                     <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('floorPlans')}}>Upload</button>
-                                                    <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('floorPlans')}} >Reset</button>
+                                                    <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('floorPlans')}} >RESET</button>
                                                 </div>
                                             </SectionContainer>
 
@@ -354,7 +353,7 @@ class ProjectItem extends Component {
                                                         
                                                     <div style={{margin : '15px'}}>
                                                         <button className="btn btn-primary mr-2" onClick={(e) => this.updateProjectInfo(e, 'contactUs')}>SAVE</button>
-                                                        <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('contactUs')}} >Reset</button>
+                                                        <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('contactUs')}} >RESET</button>
                                                     </div>
                                                 </form>   
                                             </SectionContainer>
@@ -397,7 +396,7 @@ class ProjectItem extends Component {
                                                         
                                                     <div style={{margin : '15px'}}>
                                                         <button className="btn btn-primary mr-2" onClick={(e) => this.updateProjectInfo(e, 'footer')}>SAVE</button>
-                                                        <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('footer')}} >Reset</button>
+                                                        <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('footer')}} >RESET</button>
                                                     </div>
                                                 </form>   
                                             </SectionContainer>                                        
@@ -895,7 +894,6 @@ class ProjectItem extends Component {
         const oldSectionArr = lodashClonedeep(this.state.project.websiteMenus.sections);
 
         let sectionToreset = oldSectionArr.filter((oldSection) => oldSection.id == sectionId);
-        console.log(sectionToreset)
 
         let temp = getStaticMicrositeSections(); // get static section object
         temp = temp[sectionId];
