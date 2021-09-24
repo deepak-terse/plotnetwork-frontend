@@ -29,7 +29,8 @@ class S3FileUpload {
             "X-Amz-Signature",
             Signature.getSignature(config, dateYMD, Policy.getPolicy(config))
         );
-        fd.append("Content-Disposition", `attachment; filename="${file.customFileName}"`);
+        fd.append("Content-Disposition", `attachment;filename="${file.customFileName}"`);
+        // fd.append("Content-Description", `${file.customFileName}`);
         fd.append("file", file);
 
         const params = {
