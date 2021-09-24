@@ -652,7 +652,7 @@ class ProjectItem extends Component {
                 var noOfFilesUploaded = 0;
                 if(fileLength > 0) {
                     sectionObj.files.forEach((file, index) => {
-                        // file.customFileName = this.getCustomeFileName(file.name, section, index);
+                        file.customFileName = this.getCustomeFileName(file.name, section, index);
                         uploadFileToS3(file, directoryName).then(data => {
                             sectionObj.files.forEach((singleFile, i) => {
                                 if(singleFile.name == data.fileName) {

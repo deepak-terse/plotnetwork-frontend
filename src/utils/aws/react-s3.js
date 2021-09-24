@@ -1,9 +1,9 @@
 // import S3FileUpload from 'react-s3';
  
 //  Optional Import
-import { uploadFile } from 'react-s3';
+// import { uploadFile } from 'react-s3';
 
-// import S3FileUpload from './src/ReactS3';
+import S3FileUpload from './src/ReactS3';
  
 
 import { getAWSConfig } from '../constants';
@@ -15,7 +15,8 @@ export function uploadFileToS3(file, directoryName){
         
         // resolve({location :"", fileName : file.name})
         
-        uploadFile(file, config)
+        S3FileUpload
+        .uploadFile(file, config)
         .then(data => {
             data.fileName = file.name;
             resolve(data)
