@@ -24,131 +24,51 @@ class ProjectItem extends Component {
             user : user,
             project : props.projectSelected, 
             presetAmenities : getPresetAmenitiesList(),
-            ...getStaticMicrositeSections()
+            ...getStaticMicrositeSections(),
+            getProjectById:this.getProjectById.bind(this)
         };
-        this.getProjectById(props.projectSelected);
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.getProjectById(nextProps.projectSelected);
-      }
+    componentDidMount(){
+        const newState = this.getProjectById(this.props.projectSelected);
+        this.setState(newState);
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        // Get new state wnever props changes
+        if (
+          props.projectSelected.id !== state.project.id
+        ) {
+          return state.getProjectById(props.projectSelected);
+        }
+        return null;
+    }
 
     getProjectById = (projectObj) => {
-        if(Object.keys(projectObj).length > 0){ // if projectObj not empty
-            // create directoryName for s3
-            const directoryName = projectObj.partnerName + "_" + projectObj.projectName + "/";
-            const obj = { 
-                project : projectObj,
-                directoryName : directoryName,
-                ...getStaticMicrositeSections()
-            };
-            try {
-                const sectionArr = projectObj.websiteMenus.sections;
-                for (let index = 0; index < sectionArr.length; index++) {
-                    const section = sectionArr[index];
-                    if(section.id){
-                        // merge microsite data received from backend with the default data
-                        obj[section.id] = Object.assign(obj[section.id], section) ;
-                    }
-                } 
-            } catch (err){
-                console.log("err in merging objects ", err)
-            } finally {
-                this.setState(obj);
-            }            
-        }
+        // create directoryName for s3
+        const directoryName = projectObj.partnerName + "_" + projectObj.projectName + "/";
+        const obj = { 
+            project : projectObj,
+            directoryName : directoryName,
+            ...getStaticMicrositeSections()
+        };
+        try {
+            const sectionArr = projectObj.websiteMenus.sections;
+            for (let index = 0; index < sectionArr.length; index++) {
+                const section = sectionArr[index];
+                if(section.id){
+                    // merge microsite data received from backend with the default data
+                    obj[section.id] = Object.assign(obj[section.id], section) ;
+                }
+            } 
+        } catch (err){
+            console.log("err in merging objects ", err)
+        } finally {
+            return obj;
+            // this.setState(obj);
+        }            
     }
 
-    uploadFiles = async (section) => {
-        const directoryName = this.state.directoryName + section;
-        const sectionObj = lodashClonedeep(this.state[section]);
-        switch (section) {
-            case 'banner':  
-            case 'amenities':
-            case 'gallery':
-            case 'floorPlans':
-                var fileLength = sectionObj.files.length;
-                var noOfFilesUploaded = 0;
-                if(fileLength > 0) {
-                    sectionObj.files.forEach((file, index) => {
-                        // file.customFileName = this.getCustomeFileName(file.name, section, index);
-                        uploadFileToS3(file, directoryName).then(data => {
-                            console.log("upload response ",data);
-                            sectionObj.files.forEach((singleFile, i) => {
-                                if(singleFile.name == data.fileName) {
-                                    sectionObj.images.push(data.location);
-                                    sectionObj.files.splice(i, 1);
-                                    return false;
-                                }
-                            })
-                            const inputData = {};
-                            inputData[section] = sectionObj;
-                            noOfFilesUploaded++;
-                            this.setState(inputData);
-                            if(noOfFilesUploaded == fileLength){
-                                this.updateProjectInfo(undefined, section);
-                            }
-                        }).catch(err => {
-                            console.error("upload errr ",err)
-                        });
-                    });
-                }
-                break;
-
-            case 'about':
-                if(this.getIsBrochureSelected()){
-                    uploadFileToS3(sectionObj.brochureFile, directoryName).then(data => {
-                        sectionObj.brochureLink = data.location;
-                        sectionObj.brochureFile = {};
-                        const inputData = {};
-                        inputData[section] = sectionObj;
-                        this.setState(inputData);
-                        this.updateProjectInfo(undefined, section);
-                    }).catch(err => {
-                        console.error("upload errr ",err)
-                    });
-                } else {
-                    this.updateProjectInfo(undefined, section);
-                }
-                break;
-
-            case 'virtualTour':
-                var fileLength = sectionObj.files.length;
-                var noOfFilesUploaded = 0;
-                if(fileLength > 0){
-
-                    sectionObj.files.forEach((fileObj, index) => {
-                        // fileObj.tourImageFile.name = (this.state.virtualTour.list.length + 1) + getFileExtension(fileObj.tourImageFile);
-                        uploadFileToS3(fileObj.tourImageFile, directoryName).then(data => {
-                            sectionObj.files.forEach((singleFile, i) => {
-                                if(singleFile.tourImageFile.name == data.fileName) {
-                                    sectionObj.list.push({tourImageLink : data.location, tourLink : singleFile.tourLink});
-                                    sectionObj.files.splice(i, 1);
-                                    return false;
-                                }
-                            })
-                            const inputData = {};
-                            inputData[section] = sectionObj;
-                            noOfFilesUploaded++;
-                            this.setState(inputData);
-                            if(noOfFilesUploaded == fileLength){
-                                this.updateProjectInfo(undefined, section);
-                            }
-                        }).catch(err => {
-                            console.error("upload errr ",err);
-                            this.updateProjectInfo(undefined, section);
-                        });
-                    });
-                } else {
-                    this.updateProjectInfo(undefined, section);
-                }
-                break;
-                
-            default:
-                break;
-        }
-    }
-    
     render(){
         console.log(this.state);
         const { project, presetAmenities, banner, about, amenities, virtualTour, gallery, floorPlans, contactUs, footer} =  this.state;
@@ -252,7 +172,7 @@ class ProjectItem extends Component {
                                                     <form className="forms-sample" name="amenitySectionForm" id="amenitySectionForm">
                                                         {amenityList}
                                                         <div style={{margin : '15px auto', justifyContent: 'center'}}>
-                                                            <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.onAddAmenityhandler()}}>
+                                                            <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.onAddAmenityHandler()}}>
                                                                         Add Amenity
                                                             </button>
                                                                 <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadAmenityIcons('amenities')}}>Upload All</button>
@@ -564,6 +484,80 @@ class ProjectItem extends Component {
         </>;
     }
 
+    onChangeHandler = (e, section) => {
+        const inputData = {}
+        inputData[section] = this.state[section];
+        inputData[section][e.target.name] = e.target.value;
+        this.setState(inputData);
+    }
+
+    onChangeVirtualTour = (e, section , sectionKey) => {
+        const inputData = {}
+        inputData[section] = this.state[section];
+        let index = e.target.name.replace('tourLink', '');
+        inputData[section][sectionKey][index].tourLink = e.target.value;
+        this.setState(inputData);
+    }
+
+    onAddAmenityHandler = () => {
+        const inputData = {};
+        inputData.amenities = this.state.amenities;
+        inputData.amenities.iconFiles.push({ iconFile : {}, title : ""})
+        inputData.amenities.count++;
+        this.setState(inputData);
+    }
+
+    onRemoveAmenityIcon = (sectionKey, index) => {
+        if (sectionKey == 'iconFiles'){
+            const inputData = {};
+            inputData.amenities = this.state.amenities;
+            inputData.amenities[sectionKey].splice(index, 1);
+            inputData.amenities.count--;
+            this.setState(inputData);
+        } else{
+
+        }
+    }
+
+    onChangeAmenityTitle = (e, section, sectionKey) => {
+        const inputData = {}
+        inputData[section] = this.state[section];
+        let index = e.target.name.replace(`amenityTitle_${sectionKey}`, '');
+        console.log(section);
+        console.log(sectionKey);
+        console.log(index);
+        console.log(inputData[section][sectionKey][index]);
+        if(inputData[section][sectionKey][index] !== undefined){
+            inputData[section][sectionKey][index].title = e.target.value;
+        } else {
+            inputData[section][sectionKey][index] = {};
+            inputData[section][sectionKey][index].title = e.target.value;
+        }
+        this.setState(inputData);
+    }
+
+    removeNonUploadedImage = (data, section) => {
+        const newSectionObj = this.state[section];
+        const filteredFiles = newSectionObj.files.filter((img) => {
+            return img.name !== data.name;
+        })
+        newSectionObj.files = filteredFiles;
+        const inputData = {};
+        inputData[section] = newSectionObj;
+        this.setState(inputData);
+    }
+
+    removeUploadedImage = (data, section) => {
+        const newSectionObj = this.state[section];
+        const filteredImgLinks = newSectionObj.images.filter((img) => {
+            return img !== data;
+        })
+        newSectionObj.images = filteredImgLinks;
+        const inputData = {};
+        inputData[section] = newSectionObj;
+        this.setState(inputData);
+    }
+
     processFile = (files, section) => {
         switch (section) {
             case 'banner':  
@@ -642,141 +636,98 @@ class ProjectItem extends Component {
         }
     }
 
-    removeNonUploadedImage = (data, section) => {
-        const newSectionObj = this.state[section];
-        const filteredFiles = newSectionObj.files.filter((img) => {
-            return img.name !== data.name;
-        })
-        newSectionObj.files = filteredFiles;
-        const inputData = {};
-        inputData[section] = newSectionObj;
-        this.setState(inputData);
-    }
-
-    removeUploadedImage = (data, section) => {
-        const newSectionObj = this.state[section];
-        const filteredImgLinks = newSectionObj.images.filter((img) => {
-            return img !== data;
-        })
-        newSectionObj.images = filteredImgLinks;
-        const inputData = {};
-        inputData[section] = newSectionObj;
-        this.setState(inputData);
-    }
-
-    onChangeHandler = (e, section) => {
-        const inputData = {}
-        inputData[section] = this.state[section];
-        inputData[section][e.target.name] = e.target.value;
-        this.setState(inputData);
-    }
-
-    onChangeVirtualTour = (e, section , sectionKey) => {
-        const inputData = {}
-        inputData[section] = this.state[section];
-        let index = e.target.name.replace('tourLink', '');
-        inputData[section][sectionKey][index].tourLink = e.target.value;
-        this.setState(inputData);
-    }
-
-    onAddAmenityhandler = () => {
-        const inputData = {};
-        inputData.amenities = this.state.amenities;
-        inputData.amenities.iconFiles.push({ iconFile : {}, title : ""})
-        console.log(inputData.amenities.count)
-        inputData.amenities.count++;
-        this.setState(inputData);
-    }
-
-    onChangeAmenityTitle = (e, section, sectionKey) => {
-        const inputData = {}
-        inputData[section] = this.state[section];
-        let index = e.target.name.replace(`amenityTitle_${sectionKey}`, '');
-        console.log(section);
-        console.log(sectionKey);
-        console.log(index);
-        console.log(inputData[section][sectionKey][index]);
-        if(inputData[section][sectionKey][index] !== undefined){
-            inputData[section][sectionKey][index].title = e.target.value;
-        } else {
-            inputData[section][sectionKey][index] = {};
-            inputData[section][sectionKey][index].title = e.target.value;
-        }
-        this.setState(inputData);
-    }
-
-    updateProjectInfo = (e, section) => {
-        if(e !== undefined){
-            e.preventDefault();
-        }
-        let user = JSON.parse(localStorage.getItem('loggedInUser'));
-        const updatedProject = this.getUpdatedProject(section, this.state[section]);
-        console.log('updatedProject ',updatedProject);
-        axios({
-            method: 'put',
-            url: getAPIs().project,
-            data: {
-                    "user": {
-                        userType:user.userType
-                    },
-                    "data": {
-                        "id" : updatedProject.id,  
-                        "websiteMenus" : updatedProject.websiteMenus
-                    }
-            }
-        }).then((response) => {
-            if (response.status == 200){
-                console.log('project updated ',response);
-                if(response.data){
-                    this.setState({ project : response.data.data[0]});
-                    this.saveProjectInLocalStorage(response.data.data[0]);
+    // upload files to s3
+    uploadFiles = async (section) => {
+        const directoryName = this.state.directoryName + section;
+        const sectionObj = lodashClonedeep(this.state[section]);
+        switch (section) {
+            case 'banner':  
+            case 'amenities':
+            case 'gallery':
+            case 'floorPlans':
+                var fileLength = sectionObj.files.length;
+                var noOfFilesUploaded = 0;
+                if(fileLength > 0) {
+                    sectionObj.files.forEach((file, index) => {
+                        // file.customFileName = this.getCustomeFileName(file.name, section, index);
+                        uploadFileToS3(file, directoryName).then(data => {
+                            console.log("upload response ",data);
+                            sectionObj.files.forEach((singleFile, i) => {
+                                if(singleFile.name == data.fileName) {
+                                    sectionObj.images.push(data.location);
+                                    sectionObj.files.splice(i, 1);
+                                    return false;
+                                }
+                            })
+                            const inputData = {};
+                            inputData[section] = sectionObj;
+                            noOfFilesUploaded++;
+                            this.setState(inputData);
+                            if(noOfFilesUploaded == fileLength){
+                                this.updateProjectInfo(undefined, section);
+                            }
+                        }).catch(err => {
+                            console.error("upload errr ",err)
+                        });
+                    });
                 }
-            } else if (response.status == 401) {
-                console.log("project not exist");
-            } else {
-                console.log('Error found : ', response.data.message);
-            }
-        }).catch((error)=>{
-            console.log('Error found : ', error);
-        });
+                break;
+
+            case 'about':
+                if(this.getIsBrochureSelected()){
+                    uploadFileToS3(sectionObj.brochureFile, directoryName).then(data => {
+                        sectionObj.brochureLink = data.location;
+                        sectionObj.brochureFile = {};
+                        const inputData = {};
+                        inputData[section] = sectionObj;
+                        this.setState(inputData);
+                        this.updateProjectInfo(undefined, section);
+                    }).catch(err => {
+                        console.error("upload errr ",err)
+                    });
+                } else {
+                    this.updateProjectInfo(undefined, section);
+                }
+                break;
+
+            case 'virtualTour':
+                var fileLength = sectionObj.files.length;
+                var noOfFilesUploaded = 0;
+                if(fileLength > 0){
+
+                    sectionObj.files.forEach((fileObj, index) => {
+                        // fileObj.tourImageFile.name = (this.state.virtualTour.list.length + 1) + getFileExtension(fileObj.tourImageFile);
+                        uploadFileToS3(fileObj.tourImageFile, directoryName).then(data => {
+                            sectionObj.files.forEach((singleFile, i) => {
+                                if(singleFile.tourImageFile.name == data.fileName) {
+                                    sectionObj.list.push({tourImageLink : data.location, tourLink : singleFile.tourLink});
+                                    sectionObj.files.splice(i, 1);
+                                    return false;
+                                }
+                            })
+                            const inputData = {};
+                            inputData[section] = sectionObj;
+                            noOfFilesUploaded++;
+                            this.setState(inputData);
+                            if(noOfFilesUploaded == fileLength){
+                                this.updateProjectInfo(undefined, section);
+                            }
+                        }).catch(err => {
+                            console.error("upload errr ",err);
+                            this.updateProjectInfo(undefined, section);
+                        });
+                    });
+                } else {
+                    this.updateProjectInfo(undefined, section);
+                }
+                break;
+                
+            default:
+                break;
+        }
     }
 
-    getUpdatedProject = (sectionId, data) => {
-        const project = lodashClonedeep(this.state.project);
-        const updatedSection = lodashClonedeep(data);
-        const oldSectionArr = lodashClonedeep(project.websiteMenus.sections);
-        let newSectionArr = oldSectionArr.map((oldSection) => {
-            if(oldSection.id == sectionId) {
-                if(updatedSection.files) delete updatedSection.files;
-                if(updatedSection.brochureFile) delete updatedSection.brochureFile;
-                if(updatedSection.iconFiles) delete updatedSection.iconFiles;
-                if(updatedSection.count !== undefined) delete updatedSection.count;
-                console.log(`updatedSection `, updatedSection)
-                return updatedSection;
-            }
-            else return oldSection;
-        })
-        project.websiteMenus.sections = newSectionArr;
-        return project;
-    }
-
-    saveProjectInLocalStorage = (data) => {
-        const user = this.state.user;
-        const updatedProjects = user.projects.map(project => {
-            if(project.id == data.id){
-                return data;
-            }
-            return project;
-        });
-        user.projects = updatedProjects;
-        localStorage.setItem('loggedInUser', JSON.stringify(user));
-    }
-
-    getIsBrochureSelected = () => {
-        if("name" in this.state.about.brochureFile) return true;
-        else return false;
-    }
-
+    // upload amenity icons to s3
     uploadAmenityIcons = (sectionId) => {
         var amenitiesForm = document.getElementById('amenitySectionForm');
         if(!amenitiesForm.checkValidity()){ // validation not working here needs to check
@@ -825,6 +776,84 @@ class ProjectItem extends Component {
         }
     }
 
+    // save data in db
+    updateProjectInfo = (e, section) => {
+        if(e !== undefined){
+            e.preventDefault();
+        }
+        let user = JSON.parse(localStorage.getItem('loggedInUser'));
+        const updatedProject = this.getUpdatedProject(section, this.state[section]);
+        console.log('updatedProject ',updatedProject);
+        axios({
+            method: 'put',
+            url: getAPIs().project,
+            data: {
+                    "user": {
+                        userType:user.userType
+                    },
+                    "data": {
+                        "id" : updatedProject.id,  
+                        "websiteMenus" : updatedProject.websiteMenus
+                    }
+            }
+        }).then((response) => {
+            if (response.status == 200){
+                console.log('project updated ',response);
+                if(response.data){
+                    this.setState({ project : response.data.data[0]});
+                    this.saveProjectInLocalStorage(response.data.data[0]);
+                }
+            } else if (response.status == 401) {
+                console.log("project not exist");
+            } else {
+                console.log('Error found : ', response.data.message);
+            }
+        }).catch((error)=>{
+            console.log('Error found : ', error);
+        });
+    }
+
+    // get projectObj to upload
+    // (this fn will return a project object which will contain a updated intended section
+    // & other sections will be old)
+    getUpdatedProject = (sectionId, data) => {
+        const project = lodashClonedeep(this.state.project);
+        const updatedSection = lodashClonedeep(data);
+        const oldSectionArr = lodashClonedeep(project.websiteMenus.sections);
+        let newSectionArr = oldSectionArr.map((oldSection) => {
+            if(oldSection.id == sectionId) {
+                if(updatedSection.files) delete updatedSection.files;
+                if(updatedSection.brochureFile) delete updatedSection.brochureFile;
+                if(updatedSection.iconFiles) delete updatedSection.iconFiles;
+                if(updatedSection.count !== undefined) delete updatedSection.count;
+                console.log(`updatedSection `, updatedSection)
+                return updatedSection;
+            }
+            else return oldSection;
+        })
+        project.websiteMenus.sections = newSectionArr;
+        return project;
+    }
+
+    saveProjectInLocalStorage = (data) => {
+        const user = this.state.user;
+        // get list of updated projects
+        const updatedProjects = user.projects.map(project => {
+            if(project.id == data.id){ // project id matched then return updated project data
+                return data;
+            }
+            return project; // else return old project
+        });
+        user.projects = updatedProjects;
+        localStorage.setItem('loggedInUser', JSON.stringify(user));
+    }
+
+    getIsBrochureSelected = () => {
+        if("name" in this.state.about.brochureFile) return true;
+        else return false;
+    }
+
+    // validate amenity icon list
     getIsAmenityListvallid = (sectionObj) => {
         let isListValid = true;
 
@@ -844,25 +873,13 @@ class ProjectItem extends Component {
         return isListValid;
     }
 
-    onRemoveAmenityIcon = (sectionKey, index) => {
-        if (sectionKey == 'iconFiles'){
-            const inputData = {};
-            inputData.amenities = this.state.amenities;
-            inputData.amenities[sectionKey].splice(index, 1);
-            inputData.amenities.count--;
-            this.setState(inputData);
-        } else{
-
-        }
-    }
-
-    getCustomeFileName = (fileName, section, index) => {
-        switch (section) {
+    getCustomeFileName = (fileName, sectionId, index) => {
+        switch (sectionId) {
             case 'banner':  
             case 'amenities':
             case 'gallery':
             case 'floorPlans':
-                const sectionObj = this.state[section];
+                const sectionObj = this.state[sectionId];
                 const ext = getFileExtension(fileName);
                 return `${sectionObj.images.length + index}.${ext}`; 
                 break;
@@ -872,30 +889,45 @@ class ProjectItem extends Component {
         }
     }
 
+    // Reset a section
     resetSection = (sectionId, subSection) => {
         const inputData = {};
         const oldSectionArr = lodashClonedeep(this.state.project.websiteMenus.sections);
-        for (let index = 0; index < oldSectionArr.length; index++) {
-            const oldSection = oldSectionArr[index];  
-            if(oldSection.id == sectionId){ // section id matched which user wants to reset
 
-                let temp = getStaticMicrositeSections(); // get static section object
-                if(subSection == "iconFiles"){
-                    temp.iconFiles = [];
-                    temp.count = 0;
-                    temp.files = this.state[sectionId].files;
-                } else {
-                    temp.files = [];
-                    temp.iconFiles = this.state[sectionId].iconFiles;
-                    temp.count = this.state[sectionId].count;
-                }
+        let sectionToreset = oldSectionArr.filter((oldSection) => oldSection.id == sectionId);
+        console.log(sectionToreset)
+
+        let temp = getStaticMicrositeSections(); // get static section object
+        temp = temp[sectionId];
+
+        if(sectionToreset.length > 0){
+                sectionToreset = sectionToreset[0];
+                if(sectionId == 'amenities'){
+                    this.getAmenitiesSectionToReset(sectionId, subSection, temp);
+                } 
 
                 // merge old section obj with the static obj(we need some empty members from static for processing files)
-                inputData[sectionId] = Object.assign(temp, oldSection) ; 
-                break;
-            }
+                inputData[sectionId] = Object.assign(temp, sectionToreset) ; 
+        } else {
+            if(sectionId == 'amenities'){
+                this.getAmenitiesSectionToReset(sectionId, subSection, temp);
+            } 
+            inputData[sectionId] = temp;
         }
         this.setState(inputData);
+    }
+
+    getAmenitiesSectionToReset = (sectionId, subSection, temp) => {
+        if(subSection == "iconFiles"){
+            temp.iconFiles = [];
+            temp.count = 0;
+            temp.files = this.state[sectionId].files;
+        } else {
+            temp.files = [];
+            temp.iconFiles = this.state[sectionId].iconFiles;
+            temp.count = this.state[sectionId].count;
+        }
+        return temp;
     }
 }
 

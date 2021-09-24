@@ -67,8 +67,13 @@ class Projects extends Component {
                         </div>
                     </div>                    
                 </div>
-
-                <ProjectItem projectSelected={projectSelected} />
+                
+                {
+                    projectId !== '' ?
+                        <ProjectItem projectSelected={projectSelected} />
+                    : ''
+                }
+                
                 
             </div>
         )
