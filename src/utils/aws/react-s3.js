@@ -13,7 +13,7 @@ export function uploadFileToS3(file, directoryName){
 
         const config = getAWSConfig('project-microsite-data', directoryName, 'ap-south-1');
         
-        
+        // resolve({location :"", fileName : file.name})
         uploadFile(file, config)
         .then(data => {
             data.fileName = file.name;

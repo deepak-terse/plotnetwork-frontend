@@ -711,7 +711,7 @@ class ProjectItem extends Component {
         }
         let user = JSON.parse(localStorage.getItem('loggedInUser'));
         const updatedProject = this.getUpdatedProject(section, this.state[section]);
-        // console.log('updatedProject ',updatedProject);
+        console.log('updatedProject ',updatedProject);
         axios({
             method: 'put',
             url: getAPIs().project,
@@ -741,19 +741,16 @@ class ProjectItem extends Component {
         });
     }
 
-    getUpdatedProject = (section, data) => {
+    getUpdatedProject = (sectionId, data) => {
         const project = lodashClonedeep(this.state.project);
-        const updatedSection = lodashClonedeep(this.state[section]);
-        const oldSectionArr = project.websiteMenus.sections;
+        const updatedSection = lodashClonedeep(data);
+        const oldSectionArr = lodashClonedeep(project.websiteMenus.sections);
         let newSectionArr = oldSectionArr.map((oldSection) => {
-            if(oldSection.id == section) {
+            if(oldSection.id == sectionId) {
                 if(updatedSection.files) delete updatedSection.files;
                 if(updatedSection.brochureFile) delete updatedSection.brochureFile;
                 if(updatedSection.iconFiles) delete updatedSection.iconFiles;
-                if(updatedSection.count) {
-                    updatedSection.count = 0;
-                    updatedSection.count = undefined;
-                }
+                if(updatedSection.count !== undefined) delete updatedSection.count;
                 console.log(`updatedSection `, updatedSection)
                 return updatedSection;
             }
@@ -780,18 +777,21 @@ class ProjectItem extends Component {
         else return false;
     }
 
-    uploadAmenityIcons = (section) => {
+    uploadAmenityIcons = (sectionId) => {
         var amenitiesForm = document.getElementById('amenitySectionForm');
-        if(!amenitiesForm.checkValidity()){
+        if(!amenitiesForm.checkValidity()){ // validation not working here needs to check
             return false;
         }
-        const directoryName = this.state.directoryName + section + "/Icons";
-        const sectionObj = lodashClonedeep(this.state[section]);
+
+        const directoryName = this.state.directoryName + sectionId + "/Icons";
+        const sectionObj = lodashClonedeep(this.state[sectionId]);
+
         const fileLength = sectionObj.iconFiles.length;
         let noOfFilesUploaded = 0;
+
         if(fileLength > 0){
             const isAmenityListValid = this.getIsAmenityListvallid(sectionObj);
-            if(isAmenityListValid){
+            if(isAmenityListValid){ // validated amenity list
                 sectionObj.iconFiles.forEach((file, index) => {
                     uploadFileToS3(file.iconFile, directoryName).then(data => {
                         console.log("upload response ",data);
@@ -802,19 +802,26 @@ class ProjectItem extends Component {
                                 sectionObj.count--;
                                 return false;
                             }
-                        })
+                        });
+
+                        // set new updated section in state
                         const inputData = {};
-                        inputData[section] = sectionObj;
-                        noOfFilesUploaded++;
+                        inputData[sectionId] = sectionObj;
                         this.setState(inputData);
+
+                        noOfFilesUploaded++;
+                        // update data in db once all files are uploaded
                         if(noOfFilesUploaded == fileLength){
-                            this.updateProjectInfo(undefined, section);
+                            this.updateProjectInfo(undefined, sectionId);
                         }
                     }).catch(err => {
                         console.error("upload errr ",err)
                     });
                 });
             }
+        } else {
+            // no new files added/updated hence update static data
+            this.updateProjectInfo(undefined, sectionId); 
         }
     }
 
@@ -865,36 +872,26 @@ class ProjectItem extends Component {
         }
     }
 
-    resetSection = (section, subSection) => {
+    resetSection = (sectionId, subSection) => {
         const inputData = {};
         const oldSectionArr = lodashClonedeep(this.state.project.websiteMenus.sections);
         for (let index = 0; index < oldSectionArr.length; index++) {
-            const oldSection = oldSectionArr[index];
-            if(oldSection.id == section){
-                inputData[section] = oldSection;
+            const oldSection = oldSectionArr[index];  
+            if(oldSection.id == sectionId){ // section id matched which user wants to reset
 
-                // needs a object merging stragic here // needs to refactor
-                // obj[section.id] = Object.assign(obj[section.id], section) ;
-                if(section == "banner" || section == "gallery" || section == "floorPlans"){
-                    inputData[section].files = [];
-                } else if(section == "about"){
-                    inputData[section].brochureFile = {};
-                } else if(section == "amenities"){
-                    if(subSection == "iconFiles"){
-                        inputData[section].iconFiles = [];
-                        inputData[section].count = 0;
-                        inputData[section].files = this.state[section].files;
-                    } else {
-                        inputData[section].files = [];
-                        inputData[section].iconFiles = this.state[section].iconFiles;
-                        inputData[section].count = this.state[section].count;
-                    }
-                } else if(section == "virtualTour"){
-                    inputData[section].files = [];
-                    if(inputData[section].list == undefined){
-                        inputData[section].list = []
-                    }
+                let temp = getStaticMicrositeSections(); // get static section object
+                if(subSection == "iconFiles"){
+                    temp.iconFiles = [];
+                    temp.count = 0;
+                    temp.files = this.state[sectionId].files;
+                } else {
+                    temp.files = [];
+                    temp.iconFiles = this.state[sectionId].iconFiles;
+                    temp.count = this.state[sectionId].count;
                 }
+
+                // merge old section obj with the static obj(we need some empty members from static for processing files)
+                inputData[sectionId] = Object.assign(temp, oldSection) ; 
                 break;
             }
         }
