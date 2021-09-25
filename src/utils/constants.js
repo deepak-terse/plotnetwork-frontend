@@ -73,7 +73,7 @@ export function getStaticProcessingSections(){
         banner : {id : "banner", title : "Home", images : [], files : []},
         about : { id: "about", title : "", description : "", brochureLink : "" , brochureFile : {}},
         amenities : { id: "amenities", title : "Amenities", list : [], iconFiles : [], images : [], files : [], count : 0},
-        virtualTour : { id: "virtualTour", title : "Virtual Tour", list : [], files : []},
+        virtualTour : { id: "virtualTour", title : "Virtual Tour", list : [], files : [], count : 0},
         gallery : { id: "gallery", title : "Gallery", images : [], files : []},
         floorPlans : { id: "floorPlans", title : "Floor Plans", images : [], files : []},
         contactUs : { id: "contactUs", title : "Contact Us", mapLink : ""},

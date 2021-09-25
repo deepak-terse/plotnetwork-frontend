@@ -87,6 +87,7 @@ class ProjectItem extends Component {
         // const fitContentWidth = {width : 'fit-content', float : 'left', margin: '5px' , height: 'auto'};
 
         const amenityList = this.getAmenityList();        
+        const virtualTourList = this.getVirtualTourList();
 
         return (
             <div className="row">
@@ -178,42 +179,26 @@ class ProjectItem extends Component {
                                             </SectionContainer>
                                             
                                             <SectionContainer class={styles.sectionContainer} displayTitle="Amenities">
-                                                <div className={`col-sm-7 ${styles.autoMargin}`}>
-                                                    <form className="forms-sample" name="amenitySectionForm" id="amenitySectionForm">
+                                                
+                                                <form className="forms-sample" name="amenitySectionForm" id="amenitySectionForm">
+                                                    <div className={`col-sm-7 ${styles.autoMargin}`}>
                                                         {amenityList}
                                                         <div style={{margin : '15px auto', justifyContent: 'center'}}>
                                                             <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.onAddAmenityHandler()}}>
-                                                                        Add Amenity
+                                                                        ADD AMENITY
                                                             </button>
                                                                 <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadAmenityIcons('amenities')}}>SAVE</button>
                                                                 <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('amenities', 'iconFiles')}} >RESET</button>
                                                         </div>
-                                                
-                                                        {/* <div className="row" style={{minHeight: '80px'}}>
-                                                            {(
-                                                                presetAmenities.map((amenity, index) => {
-                                                                    return <div className="col-sm-auto" style={autoMargin} key={index}>
-                                                                                <FormControl 
-                                                                                    name={'amenities'+index}
-                                                                                    type="checkbox" 
-                                                                                    value={amenities.list}
-                                                                                    id={'amenities'+index}
-                                                                                    onChange={(e) => this.onAmenitiesChange(e, 'amenities')} 
-                                                                                    className="form-control" 
-                                                                                    placeholder={amenity.title}
-                                                                                    styleCSS={fitContentWidth}
-                                                                                />
-                                                                        </div> 
-                                                                })
-                                                            )}     
-                                                        </div> */}
-                                                     
-                                                        <br/>
                                                         <BrowseFilesContainer 
                                                             onDropFiles={(files) => this.processFile(files, 'amenities')} 
                                                             css={browseContainer} 
-                                                            dropContainerCss={styles.fileDrop}
-                                                        >Drop some photos here or click here to browse the photo!</BrowseFilesContainer>
+                                                            dropContainerCss={styles.fileDrop}>
+                                                                Drop some photos here or click here to browse the photo!
+                                                        </BrowseFilesContainer>
+                                                        
+                                                    </div>
+                                                        <br/>
                                                         
                                                         <div className={styles.filesLength}>{amenities.images.length} Amenity Photos Uploaded, {amenities.files.length} Amenity Photos Selected</div>
                                                             
@@ -228,30 +213,44 @@ class ProjectItem extends Component {
                                                             <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('amenities')}}>SAVE</button>
                                                             <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('amenities')}} >RESET</button>
                                                         </div>
-                                                    </form>
-                                                </div>
+                                                </form>
+                                                
                                                 
                                             </SectionContainer>
 
                                             <SectionContainer class={styles.sectionContainer} displayTitle="Virtual Tour"> 
+                                                <div className={`col-sm-7 ${styles.autoMargin}`}>
+                                                    <form className="forms-sample" name="virtualTourSectionForm" id="virtualTourSectionForm">
+                                                        {virtualTourList}
+                                                        <div style={{margin : '15px auto', justifyContent: 'center'}}>
+                                                            <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.onAddVirtualTour()}}>
+                                                                        ADD VIRTUAL TOUR
+                                                            </button>
+                                                                <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadVirtualTours('virtualTour')}}>SAVE</button>
+                                                                <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('virtualTour')}} >RESET</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                
+
                                                 <div>
-                                                    <div className={`col-sm-7 ${styles.autoMargin}`}>
+                                                    {/* <div className={`col-sm-7 ${styles.autoMargin}`}>
                                                         <label className="col-sm-auto col-form-label">Virtual Tour Photo</label>
                                                         <BrowseFilesContainer 
                                                             onDropFiles={(files) => this.processFile(files, 'virtualTour')} 
                                                             css={browseContainer} 
                                                             dropContainerCss={styles.fileDrop}
                                                         >Drop some photos here or click here to browse the photo!</BrowseFilesContainer>
-                                                    </div>
+                                                    </div> */}
                                                     
-                                                    <div className={styles.filesLength}>{virtualTour.list.length} Photos Uploaded, {virtualTour.files.length} Photos Selected</div>
+                                                    {/* <div className={styles.filesLength}>{virtualTour.list.length} Photos Uploaded, {virtualTour.files.length} Photos Selected</div> */}
                                                     {/* <ImagePreviewList 
                                                         images={[virtualTour.imageLink]} 
                                                         imageFiles={virtualTour.files}
                                                         onUpdate={(data) => this.removeNonUploadedImage(data, 'virtualTour')}/> */}
                                                 </div>
                                                 <div>
-                                                    <label className="col-sm-auto col-form-label">Add links of Virtual Tour here</label>
+                                                    {/* <label className="col-sm-auto col-form-label">Add links of Virtual Tour here</label>
                                                     {(
                                                         virtualTour.list.map((tourObj, index) => {
                                                             return <div className="col-sm-7" key={index} style={{ margin: '5px auto'}}>
@@ -283,13 +282,13 @@ class ProjectItem extends Component {
                                                                 />
                                                             </div>
                                                         })
-                                                    )}
+                                                    )} */}
                                                 </div>
 
-                                                <div style={{margin : '15px'}}>
+                                                {/* <div style={{margin : '15px'}}>
                                                     <button className="btn btn-primary mr-2" onClick={(e) =>  {e.preventDefault(); this.uploadFiles('virtualTour')}}>SAVE</button>
                                                     <button className="btn btn-dark" type="button" onClick={(e) =>  {e.preventDefault(); this.resetSection('virtualTour')}} >RESET</button>
-                                                </div>
+                                                </div> */}
                                             </SectionContainer>
 
                                             <SectionContainer class={styles.sectionContainer} displayTitle="Gallery"> 
@@ -438,7 +437,7 @@ class ProjectItem extends Component {
                         placeholder={"Amenity Title " + (index + 1)}
                         required={true}
                         // Props for image field
-                        icon={amenity.icon}
+                        image={amenity.icon}
                         onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'amenities')}
                         onRemoveImageLink={(data) => this.removeUploadedImage(data, 'amenities')}
                     />
@@ -462,6 +461,7 @@ class ProjectItem extends Component {
                         css={browseContainer} 
                         dropContainerCss={styles.smallFileDrop} 
                         file={amenities.iconFiles[index] !== undefined ? amenities.iconFiles[index].iconFile : {}}
+                        browseText="Drop a icon here or click here to browse the icon!"
                         //props for remove button
                         onRemoveRow={() => this.onRemoveAmenityIcon('iconFiles', index)}
                     />
@@ -469,6 +469,56 @@ class ProjectItem extends Component {
         return <>
             {amenityUploadedList}
             {amenityNonUploadedList}
+        </>;
+    }
+
+    getVirtualTourList = () => {
+        const browseContainer = {width: 'inherit'}
+        const {virtualTour} = this.state;
+
+        const tourUploadedList = virtualTour.list.map((tourObj, index) => {
+            return <TextFieldBrowseFileRowContainer 
+                        // Props for text field
+                        name={"tourTitle_list"+index}
+                        id={"tourTitle_list"+index}
+                        value={tourObj.tourLink}
+                        onChange={(e) => this.onChangeTourLink(e, 'virtualTour', 'list')}
+                        className="form-control"
+                        placeholder={"Tour Link " + (index + 1)}
+                        required={true}
+                        // Props for image field
+                        image={tourObj.tourImageLink}
+                        onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'virtualTour')}
+                        onRemoveImageLink={(data) => this.removeUploadedImage(data, 'virtualTour')}
+                    />
+    })
+
+        const tourNonUploadedList = Array.apply(null, Array(virtualTour.count)).map((tourObj, index) => {
+            return <TextFieldBrowseFileRowContainer 
+                        // Props for text field
+                        name={`tourTitle_files${index}`}
+                        id={`tourTitle_files${index}`}
+                        value={virtualTour.files[index] !== undefined ? virtualTour.files[index].tourLink : ""}
+                        onChange={(e) => this.onChangeTourLink(e, 'virtualTour', 'files')}
+                        className="form-control"
+                        placeholder={"Tour Link " + (index + 1)}
+                        required={true}
+                        // Props for image field
+                        onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'virtualTour')}
+                        onRemoveImageLink={(data) => this.removeUploadedImage(data, 'virtualTour')}
+                        // Props for Browse container
+                        onDropFiles={(files) => this.processVirtualTourFiles(files, 'virtualTour', index)}
+                        css={browseContainer} 
+                        dropContainerCss={styles.smallFileDrop} 
+                        file={virtualTour.files[index] !== undefined ? virtualTour.files[index].tourImageFile : {}}
+                        browseText="Drop a photo here or click here to browse the photo!"
+                        //props for remove button
+                        onRemoveRow={() => this.onRemoveVirtualTour('files', index)}
+                    />
+        })
+        return <>
+            {tourUploadedList}
+            {tourNonUploadedList}
         </>;
     }
 
@@ -507,6 +557,26 @@ class ProjectItem extends Component {
         }
     }
 
+    onRemoveVirtualTour = (sectionKey, index) => {
+        if (sectionKey == 'files'){
+            const inputData = {};
+            inputData.virtualTour = this.state.virtualTour;
+            inputData.virtualTour[sectionKey].splice(index, 1);
+            inputData.virtualTour.count--;
+            this.setState(inputData);
+        } else{
+
+        }
+    }
+
+    onAddVirtualTour = () => {
+        const inputData = {};
+        inputData.virtualTour = this.state.virtualTour;
+        inputData.virtualTour.files.push({tourImageFile : {}, tourLink : "" })
+        inputData.virtualTour.count++;
+        this.setState(inputData);
+    }
+
     onChangeAmenityTitle = (e, section, sectionKey) => {
         const inputData = {}
         inputData[section] = this.state[section];
@@ -516,6 +586,19 @@ class ProjectItem extends Component {
         } else {
             inputData[section][sectionKey][index] = {};
             inputData[section][sectionKey][index].title = e.target.value;
+        }
+        this.setState(inputData);
+    }
+
+    onChangeTourLink = (e, section, sectionKey) => {
+        const inputData = {}
+        inputData[section] = this.state[section];
+        let index = e.target.name.replace(`tourTitle_${sectionKey}`, '');
+        if(inputData[section][sectionKey][index] !== undefined){
+            inputData[section][sectionKey][index].tourLink = e.target.value;
+        } else {
+            inputData[section][sectionKey][index] = {};
+            inputData[section][sectionKey][index].tourLink = e.target.value;
         }
         this.setState(inputData);
     }
@@ -620,6 +703,24 @@ class ProjectItem extends Component {
         }
     }
 
+    processVirtualTourFiles = (files, section, tourFileIndex) => {
+        if(files.length > 0){
+            Array.from(files).forEach(file => {
+                const isImage = isImageFile(file);
+                if(isImage){
+                    const newSectionObj = this.state[section];
+                    const newFiles = newSectionObj.files;
+                    newFiles[tourFileIndex].tourImageFile = file;
+                    newSectionObj.files = newFiles;
+
+                    const inputData = {};
+                    inputData[section] = newSectionObj;
+                    this.setState(inputData);
+                }
+            });
+        }
+    }
+
     // upload files to s3
     uploadFiles = async (section) => {
         const directoryName = this.state.directoryName + section;
@@ -672,41 +773,7 @@ class ProjectItem extends Component {
                 } else {
                     this.updateProjectInfo(undefined, section);
                 }
-                break;
-
-            case 'virtualTour':
-                var fileLength = sectionObj.files.length;
-                var noOfFilesUploaded = 0;
-                if(fileLength > 0){
-
-                    sectionObj.files.forEach((fileObj, index) => {
-                        fileObj.tourImageFile.customFileName = this.getCustomeFileName(fileObj.tourImageFile.name, section, index);
-                        // fileObj.tourImageFile.name = (this.state.virtualTour.list.length + 1) + getFileExtension(fileObj.tourImageFile);
-                        uploadFileToS3(fileObj.tourImageFile, directoryName).then(data => {
-                            sectionObj.files.forEach((singleFile, i) => {
-                                if(singleFile.tourImageFile.name == data.fileName) {
-                                    sectionObj.list.push({tourImageLink : data.location, tourLink : singleFile.tourLink});
-                                    sectionObj.files.splice(i, 1);
-                                    return false;
-                                }
-                            })
-                            const inputData = {};
-                            inputData[section] = sectionObj;
-                            noOfFilesUploaded++;
-                            this.setState(inputData);
-                            if(noOfFilesUploaded == fileLength){
-                                this.updateProjectInfo(undefined, section);
-                            }
-                        }).catch(err => {
-                            console.error("upload errr ",err);
-                            this.updateProjectInfo(undefined, section);
-                        });
-                    });
-                } else {
-                    this.updateProjectInfo(undefined, section);
-                }
-                break;
-                
+                break;                
             default:
                 break;
         }
@@ -758,6 +825,55 @@ class ProjectItem extends Component {
         } else {
             // no new files added/updated hence update static data
             this.updateProjectInfo(undefined, sectionId); 
+        }
+    }
+
+    uploadVirtualTours = (sectionId) => {
+        var tourFormForm = document.getElementById('virtualTourSectionForm');
+        if(!tourFormForm.checkValidity()){ // validation not working here needs to check
+            return false;
+        }
+
+        const directoryName = this.state.directoryName + sectionId;
+        const sectionObj = lodashClonedeep(this.state[sectionId]);
+        var fileLength = sectionObj.files.length;
+        var noOfFilesUploaded = 0;
+
+        if(fileLength > 0){
+            const isTourListListValid = this.getIsTourListvallid(sectionObj);
+            if(isTourListListValid){
+                sectionObj.files.forEach((fileObj, index) => {
+                    fileObj.tourImageFile.customFileName = this.getCustomeFileName(fileObj.tourImageFile.name, sectionId, index);
+                    uploadFileToS3(fileObj.tourImageFile, directoryName).then(data => {
+                        sectionObj.files.forEach((singleFile, i) => {
+                            if(singleFile.tourImageFile.name == data.fileName) {
+                                sectionObj.list.push({tourImageLink : data.location, tourLink : singleFile.tourLink});
+                                sectionObj.files.splice(i, 1);
+                                sectionObj.count--;
+                                return false;
+                            }
+                        })
+    
+                        // Set State
+                        const inputData = {};
+                        inputData[sectionId] = sectionObj;
+                        noOfFilesUploaded++;
+                        this.setState(inputData);
+    
+                        // Save data in db once all files uploaded
+                        if(noOfFilesUploaded == fileLength){
+                            this.updateProjectInfo(undefined, sectionId);
+                        }
+                    }).catch(err => {
+                        console.error("upload errr ",err);
+                        this.updateProjectInfo(undefined, sectionId);
+                    });
+                });
+            }
+            
+        } else {
+            // No files changed then save static data
+            this.updateProjectInfo(undefined, sectionId);
         }
     }
 
@@ -850,6 +966,25 @@ class ProjectItem extends Component {
                 isListValid = false;
                 break;
             } else if (file.iconFile.name == undefined){
+                alert('Choose icon');
+                isListValid = false;
+                break;
+            }
+        }
+
+        return isListValid;
+    }
+
+    getIsTourListvallid = (sectionObj) => {
+        let isListValid = true;
+
+        for (let index = 0; index < sectionObj.files.length; index++) {
+            const file = sectionObj.files[index];
+            if(file.tourLink == ""){
+                document.getElementById(`tourTitle_files${index}`).focus();
+                isListValid = false;
+                break;
+            } else if (file.tourImageFile.name == undefined){
                 alert('Choose icon');
                 isListValid = false;
                 break;
