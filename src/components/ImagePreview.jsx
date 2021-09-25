@@ -16,7 +16,8 @@ class ImagePreview extends Component {
         }
         const imgElement = {
             height: 'inherit',
-            width: 'inherit'
+            width: 'inherit',
+            maxHeight: '151px'
         }
         const removeBtn = {
             fontSize: '14px',

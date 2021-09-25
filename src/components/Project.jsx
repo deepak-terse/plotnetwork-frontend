@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 
 import ImagePreviewList from './ImagePreviewList';
 import ImagePreview from './ImagePreview';
+import TextFieldBrowseFileRowContainer from './TextFieldBrowseFileRowContainer';
 import { uploadFileToS3 } from '../utils/aws/react-s3';
 import FormControl from '../components/form-input/FormControl';
 import axios from 'axios';
@@ -80,6 +81,7 @@ class ProjectItem extends Component {
     }
 
     render(){
+        console.log(this.state)
         const { project, presetAmenities, banner, about, amenities, virtualTour, gallery, floorPlans, contactUs, footer} =  this.state;
         const browseContainer = {width: 'inherit'};
         // const fitContentWidth = {width : 'fit-content', float : 'left', margin: '5px' , height: 'auto'};
@@ -426,74 +428,43 @@ class ProjectItem extends Component {
         const {amenities} = this.state;
 
         const amenityUploadedList = amenities.list.map((amenity, index) => {
-            return <div className="row">
-                        <div className={`col-sm-4 ${styles.verticllyMiddle}`}>
-                            <label htmlFor={"amenityTitle"+index} className="col-sm-auto col-form-label">Title</label>
-                            <div className={`col-sm-12 ${styles.autoMargin}`}>
-                                <FormControl
-                                    name={"amenityTitle_list"+index}
-                                    type="text" 
-                                    value={amenities.list[index].title}
-                                    id={"amenityTitle_list"+index}
-                                    onChange={(e) => this.onChangeAmenityTitle(e, 'amenities', 'list')}
-                                    className="form-control"
-                                    placeholder={"Amenity Title " + (index + 1)}
-                                    required={true}
-                                />
-                            </div>
-                        </div>
-                        <div className="col-sm-4" style={{verticalAlign: 'middle', margin: 'auto 0'}}>
-
-                        <ImagePreview 
-                            data={amenities.list[index].icon} 
-                            onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'floorPlans')}
-                            onRemoveImageLink={(data) => this.removeUploadedImage(data, 'floorPlans')} 
-                        />
-                            {/* <BrowseFilesContainer
-                                onDropFiles={(files) => this.processAmenityIconFiles(files, 'amenities', index)}
-                                css={browseContainer}
-                                dropContainerCss={styles.smallFileDrop} /> */}
-                        </div>
-                        <div className={`col-sm-4 ${styles.verticllyMiddle}`}>
-                            <div className={styles.filesLength}>1 Icon Uploaded</div>
-                            {/* <button className="btn btn-dark" type="button" >Remove</button> */}
-                        </div>
-                    </div>
-        })
+            return <TextFieldBrowseFileRowContainer 
+                        // Props for text field
+                        name={"amenityTitle_list"+index}
+                        id={"amenityTitle_list"+index}
+                        value={amenity.title}
+                        onChange={(e) => this.onChangeAmenityTitle(e, 'amenities', 'list')}
+                        className="form-control"
+                        placeholder={"Amenity Title " + (index + 1)}
+                        required={true}
+                        // Props for image field
+                        icon={amenity.icon}
+                        onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'amenities')}
+                        onRemoveImageLink={(data) => this.removeUploadedImage(data, 'amenities')}
+                    />
+    })
 
         const amenityNonUploadedList = Array.apply(null, Array(amenities.count)).map((amenity, index) => {
-            return <div className="row">
-                        <div className={`col-sm-4 ${styles.verticllyMiddle}`}>
-                            <label htmlFor={"amenityTitle"+index} className="col-sm-auto col-form-label">Title</label>
-                            <div className={`col-sm-12 ${styles.autoMargin}`}>
-                                <FormControl
-                                    name={`amenityTitle_iconFiles${index}`}
-                                    type="text" 
-                                    value={amenities.iconFiles[index] !== undefined ? amenities.iconFiles[index].title : ""}
-                                    id={`amenityTitle_iconFiles${index}`}
-                                    onChange={(e) => this.onChangeAmenityTitle(e, 'amenities', 'iconFiles')}
-                                    className="form-control" 
-                                    placeholder={"Amenity Title " + (index + 1)}
-                                    required={true}
-                                />
-                            </div>
-                        </div>
-                        
-                        <div className="col-sm-4">
-                            <div style={{margin:'5px'}}>
-                                <BrowseFilesContainer
-                                    onDropFiles={(files) => this.processAmenityIconFiles(files, 'amenities', index)}
-                                    css={browseContainer} 
-                                    dropContainerCss={styles.smallFileDrop} 
-                                >Drop a icon here or click here to browse the icon!</BrowseFilesContainer>
-                            </div>
-                            
-                            <div className={styles.filesLength}>{amenities.iconFiles[index].iconFile.name !== undefined ? 1 : 0} Icon Selected</div>
-                        </div>
-                        <div className={`col-sm-4 ${styles.verticllyMiddle}`}>
-                            <button className="btn btn-dark" type="button" onClick={() => this.onRemoveAmenityIcon('iconFiles', index)}>Remove</button>
-                        </div>
-                    </div>
+            return <TextFieldBrowseFileRowContainer 
+                        // Props for text field
+                        name={`amenityTitle_iconFiles${index}`}
+                        id={`amenityTitle_iconFiles${index}`}
+                        value={amenities.iconFiles[index] !== undefined ? amenities.iconFiles[index].title : ""}
+                        onChange={(e) => this.onChangeAmenityTitle(e, 'amenities', 'iconFiles')}
+                        className="form-control"
+                        placeholder={"Amenity Title " + (index + 1)}
+                        required={true}
+                        // Props for image field
+                        onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'amenities')}
+                        onRemoveImageLink={(data) => this.removeUploadedImage(data, 'amenities')}
+                        // Props for Browse container
+                        onDropFiles={(files) => this.processAmenityIconFiles(files, 'amenities', index)}
+                        css={browseContainer} 
+                        dropContainerCss={styles.smallFileDrop} 
+                        file={amenities.iconFiles[index] !== undefined ? amenities.iconFiles[index].iconFile : {}}
+                        //props for remove button
+                        onRemoveRow={() => this.onRemoveAmenityIcon('iconFiles', index)}
+                    />
         })
         return <>
             {amenityUploadedList}
