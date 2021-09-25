@@ -10,7 +10,7 @@ class S3FileUpload {
         // Error Thrower :x:
         throwError(config, file)
         const fd = new FormData();
-        const key = `${config.dirName ? config.dirName + "/" : ""}${file.customFileName}`;
+        const key = `${config.dirName ? config.dirName + "/" : ""}${file.name}`;
         const url = `https://${config.bucketName}.s3.amazonaws.com/`;
         fd.append("key", key);
         fd.append("acl", "public-read");
@@ -29,7 +29,7 @@ class S3FileUpload {
             "X-Amz-Signature",
             Signature.getSignature(config, dateYMD, Policy.getPolicy(config))
         );
-        fd.append("Content-Disposition", `attachment;filename="${file.customFileName}"`);
+        // fd.append("Content-Disposition", `attachment;filename="${file.customFileName}"`);
         // fd.append("Content-Description", `${file.customFileName}`);
         fd.append("file", file);
 
