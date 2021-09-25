@@ -18,6 +18,8 @@ export function uploadFileToS3(file, directoryName){
         S3FileUpload
         .uploadFile(file, config)
         .then(data => {
+            // https://project-microsite-data.s3.amazonaws.com/kohinoor_abcd/banner/Screenshot (124).png
+            data.location = getNewLocation(data.location, file.customFileName);
             data.fileName = file.name;
             resolve(data)
         })
@@ -25,3 +27,10 @@ export function uploadFileToS3(file, directoryName){
     });
 } 
  
+function getNewLocation(location, customFileName){
+    let url = location;
+    url = url.slice(0, url.lastIndexOf('/'));
+    url = url.concat(`/${customFileName}`);
+    console.log(url);
+    return url;
+}

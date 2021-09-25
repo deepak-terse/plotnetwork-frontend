@@ -9,32 +9,38 @@ class ImagePreviewList extends Component {
     }
 
     render(){
-        const { imageLinks, imageFiles } = this.props;
+        const { imageLinks, imageFiles} = this.props;
+        const imageDivCss = { margin: 'auto', justifyContent: 'center'};
+
         let imageList = '';
         let imageFileList = '';
 
         if(imageLinks !== undefined){
             imageList = imageLinks.map((image, index) =>
-                <ImagePreview 
-                    key={index} 
-                    data={image} 
-                    onRemove={() => this.props.onRemoveImageLink(image)} />
+                <div className="col-sm-3">
+                    <ImagePreview 
+                        key={`images${index}`} 
+                        data={image} 
+                        onRemove={() => this.props.onRemoveImageLink(image)} />
+                </div>
             )
         }
         if(imageFiles !== undefined){
             imageFileList = imageFiles.map((imgFile, index) =>
-                <ImagePreview 
-                    key={index} 
-                    data={imgFile} 
-                    onRemove={() => this.props.onRemoveImageFile(imgFile)} />
+                <div className="col-sm-3">
+                    <ImagePreview 
+                        key={`files${index}`} 
+                        data={imgFile} 
+                        onRemove={() => this.props.onRemoveImageFile(imgFile)} />
+                </div>
             )
         }
         
         
         return (
-            <div >
-                {/* {imageList}
-                {imageFileList} */}
+            <div className="row" style={imageDivCss}>
+                {imageList}
+                {imageFileList}
             </div>
         )
     }

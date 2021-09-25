@@ -10,7 +10,7 @@ class S3FileUpload {
         // Error Thrower :x:
         throwError(config, file)
         const fd = new FormData();
-        const key = `${config.dirName ? config.dirName + "/" : ""}${file.name}`;
+        const key = `${config.dirName ? config.dirName + "/" : ""}${file.customFileName}`;
         const url = `https://${config.bucketName}.s3.amazonaws.com/`;
         fd.append("key", key);
         fd.append("acl", "public-read");

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import ImagePreviewList from './ImagePreviewList';
+import ImagePreview from './ImagePreview';
 import { uploadFileToS3 } from '../utils/aws/react-s3';
 import FormControl from '../components/form-input/FormControl';
 import axios from 'axios';
@@ -426,7 +427,7 @@ class ProjectItem extends Component {
 
         const amenityUploadedList = amenities.list.map((amenity, index) => {
             return <div className="row">
-                        <div className="col-sm-4">
+                        <div className={`col-sm-4 ${styles.verticllyMiddle}`}>
                             <label htmlFor={"amenityTitle"+index} className="col-sm-auto col-form-label">Title</label>
                             <div className={`col-sm-12 ${styles.autoMargin}`}>
                                 <FormControl
@@ -435,28 +436,34 @@ class ProjectItem extends Component {
                                     value={amenities.list[index].title}
                                     id={"amenityTitle_list"+index}
                                     onChange={(e) => this.onChangeAmenityTitle(e, 'amenities', 'list')}
-                                    className="form-control" 
+                                    className="form-control"
                                     placeholder={"Amenity Title " + (index + 1)}
                                     required={true}
                                 />
                             </div>
                         </div>
                         <div className="col-sm-4" style={{verticalAlign: 'middle', margin: 'auto 0'}}>
+
+                        <ImagePreview 
+                            data={amenities.list[index].icon} 
+                            onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'floorPlans')}
+                            onRemoveImageLink={(data) => this.removeUploadedImage(data, 'floorPlans')} 
+                        />
                             {/* <BrowseFilesContainer
                                 onDropFiles={(files) => this.processAmenityIconFiles(files, 'amenities', index)}
                                 css={browseContainer}
                                 dropContainerCss={styles.smallFileDrop} /> */}
-                            <div className={styles.filesLength}>1 Icon Uploaded</div>
                         </div>
-                        {/* <div className="col-sm-4">
-                            <button className="btn btn-dark" type="button" >Remove</button>
-                        </div> */}
+                        <div className={`col-sm-4 ${styles.verticllyMiddle}`}>
+                            <div className={styles.filesLength}>1 Icon Uploaded</div>
+                            {/* <button className="btn btn-dark" type="button" >Remove</button> */}
+                        </div>
                     </div>
         })
 
         const amenityNonUploadedList = Array.apply(null, Array(amenities.count)).map((amenity, index) => {
             return <div className="row">
-                        <div className="col-sm-4">
+                        <div className={`col-sm-4 ${styles.verticllyMiddle}`}>
                             <label htmlFor={"amenityTitle"+index} className="col-sm-auto col-form-label">Title</label>
                             <div className={`col-sm-12 ${styles.autoMargin}`}>
                                 <FormControl
@@ -473,14 +480,17 @@ class ProjectItem extends Component {
                         </div>
                         
                         <div className="col-sm-4">
-                            <BrowseFilesContainer
-                                onDropFiles={(files) => this.processAmenityIconFiles(files, 'amenities', index)}
-                                css={browseContainer} 
-                                dropContainerCss={styles.smallFileDrop} 
-                            >Drop a icon here or click here to browse the icon!</BrowseFilesContainer>
+                            <div style={{margin:'5px'}}>
+                                <BrowseFilesContainer
+                                    onDropFiles={(files) => this.processAmenityIconFiles(files, 'amenities', index)}
+                                    css={browseContainer} 
+                                    dropContainerCss={styles.smallFileDrop} 
+                                >Drop a icon here or click here to browse the icon!</BrowseFilesContainer>
+                            </div>
+                            
                             <div className={styles.filesLength}>{amenities.iconFiles[index].iconFile.name !== undefined ? 1 : 0} Icon Selected</div>
                         </div>
-                        <div className="col-sm-4">
+                        <div className={`col-sm-4 ${styles.verticllyMiddle}`}>
                             <button className="btn btn-dark" type="button" onClick={() => this.onRemoveAmenityIcon('iconFiles', index)}>Remove</button>
                         </div>
                     </div>
@@ -677,6 +687,7 @@ class ProjectItem extends Component {
 
             case 'about':
                 if(this.getIsBrochureSelected()){
+                    sectionObj.brochureFile.customFileName = sectionObj.brochureFile.name;
                     uploadFileToS3(sectionObj.brochureFile, directoryName).then(data => {
                         sectionObj.brochureLink = data.location;
                         sectionObj.brochureFile = {};
@@ -698,6 +709,7 @@ class ProjectItem extends Component {
                 if(fileLength > 0){
 
                     sectionObj.files.forEach((fileObj, index) => {
+                        fileObj.tourImageFile.customFileName = this.getCustomeFileName(fileObj.tourImageFile.name, section, index);
                         // fileObj.tourImageFile.name = (this.state.virtualTour.list.length + 1) + getFileExtension(fileObj.tourImageFile);
                         uploadFileToS3(fileObj.tourImageFile, directoryName).then(data => {
                             sectionObj.files.forEach((singleFile, i) => {
@@ -746,6 +758,7 @@ class ProjectItem extends Component {
             const isAmenityListValid = this.getIsAmenityListvallid(sectionObj);
             if(isAmenityListValid){ // validated amenity list
                 sectionObj.iconFiles.forEach((file, index) => {
+                    file.iconFile.customFileName = this.getCustomeFileName(file.iconFile.name, `${sectionId}_IconFiles`, index);
                     uploadFileToS3(file.iconFile, directoryName).then(data => {
                         sectionObj.iconFiles.forEach((singleFile, i) => {
                             if(singleFile.iconFile.name == data.fileName) {
@@ -881,9 +894,21 @@ class ProjectItem extends Component {
             case 'amenities':
             case 'gallery':
             case 'floorPlans':
-                const sectionObj = this.state[sectionId];
-                const ext = getFileExtension(fileName);
-                return `${sectionObj.images.length + index}.${ext}`; 
+                var sectionObj = this.state[sectionId];
+                var ext = getFileExtension(fileName);
+                return `${sectionObj.images.length + (index + 1)}.${ext}`; 
+                break;
+
+            case 'amenities_IconFiles':
+                var sectionObj = this.state.amenities;
+                var ext = getFileExtension(fileName);
+                return `${sectionObj.list.length + (index + 1)}.${ext}`; 
+                break;
+
+            case 'virtualTour':
+                var sectionObj = this.state.virtualTour;
+                var ext = getFileExtension(fileName);
+                return `${sectionObj.list.length + (index + 1)}.${ext}`; 
                 break;
         
             default:
