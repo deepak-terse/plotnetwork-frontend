@@ -989,7 +989,7 @@ class ProjectItem extends Component {
                 isListValid = false;
                 break;
             } else if (file.tourImageFile.name == undefined){
-                alert('Choose icon');
+                alert('Choose photo');
                 isListValid = false;
                 break;
             }

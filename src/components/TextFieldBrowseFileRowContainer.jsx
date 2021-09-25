@@ -40,8 +40,17 @@ export default function TextFieldBrowseFileRowContainer(props) {
                                 dropContainerCss={props.dropContainerCss} >
                                     {props.browseText}
                             </BrowseFilesContainer>
+                            {/* {
+                                props.file !== undefined ?
+                                    <ImagePreview 
+                                        data={props.file} 
+                                        onRemoveImageFile={props.onRemoveImageFile}
+                                        onRemoveImageLink={props.onRemoveImageLink} 
+                                    />
+                                : ''
+                            }                             */}
                         </div>
-                        <div className={styles.filesLength}>{props.file.name !== undefined ? 1 : 0} Icon Selected</div>
+                        <div className={styles.filesLength}>{props.file.name !== undefined ? 1 : 0} Selected</div>
                      </>
                 }
             </div>
@@ -49,7 +58,7 @@ export default function TextFieldBrowseFileRowContainer(props) {
             <div className={`col-sm-4 ${styles.verticllyMiddle}`}>
                 {
                     props.image ? 
-                      <div className={styles.filesLength}>1 Icon Uploaded</div>
+                      <div className={styles.filesLength}>1 Uploaded</div>
                     : <button className="btn btn-dark" type="button" onClick={props.onRemoveRow}>Remove</button>
                 }
             </div>

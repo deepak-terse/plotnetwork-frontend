@@ -25,9 +25,16 @@ class ImagePreview extends Component {
         }
 
         let imgSource = '';
+        console.log(data)
+        console.log(typeof data)
         if(typeof data == "object"){
+            console.log(Object.keys(data).length)
+        }
+        if(typeof data == "object" && data.name !== undefined){
             imgSource = URL.createObjectURL(data);
-        } else imgSource = data;
+        } else if(typeof data == "string"){
+            imgSource = data;
+        }
 
         return (
             
@@ -39,9 +46,11 @@ class ImagePreview extends Component {
                 
                 {/* <span style={removeBtn} 
                     onClick={() => onRemove(data)} >X</span> */}
-                <img 
-                    style={imgElement} 
-                    src={imgSource} /> 
+                {
+                    imgSource !== '' ?
+                        <img style={imgElement} src={imgSource} /> 
+                    : ''
+                }  
             </div>
         )
     }
