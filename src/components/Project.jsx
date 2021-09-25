@@ -429,6 +429,7 @@ class ProjectItem extends Component {
         const amenityUploadedList = amenities.list.map((amenity, index) => {
             return <TextFieldBrowseFileRowContainer 
                         // Props for text field
+                        title="Title"
                         name={"amenityTitle_list"+index}
                         id={"amenityTitle_list"+index}
                         value={amenity.title}
@@ -446,6 +447,7 @@ class ProjectItem extends Component {
         const amenityNonUploadedList = Array.apply(null, Array(amenities.count)).map((amenity, index) => {
             return <TextFieldBrowseFileRowContainer 
                         // Props for text field
+                        title="Title"
                         name={`amenityTitle_iconFiles${index}`}
                         id={`amenityTitle_iconFiles${index}`}
                         value={amenities.iconFiles[index] !== undefined ? amenities.iconFiles[index].title : ""}
@@ -477,44 +479,46 @@ class ProjectItem extends Component {
         const {virtualTour} = this.state;
 
         const tourUploadedList = virtualTour.list.map((tourObj, index) => {
-            return <TextFieldBrowseFileRowContainer 
-                        // Props for text field
-                        name={"tourTitle_list"+index}
-                        id={"tourTitle_list"+index}
-                        value={tourObj.tourLink}
-                        onChange={(e) => this.onChangeTourLink(e, 'virtualTour', 'list')}
-                        className="form-control"
-                        placeholder={"Tour Link " + (index + 1)}
-                        required={true}
-                        // Props for image field
-                        image={tourObj.tourImageLink}
-                        onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'virtualTour')}
-                        onRemoveImageLink={(data) => this.removeUploadedImage(data, 'virtualTour')}
-                    />
+        return <TextFieldBrowseFileRowContainer 
+                    // Props for text field
+                    title="Virtual Tour Link"
+                    name={"tourTitle_list"+index}
+                    id={"tourTitle_list"+index}
+                    value={tourObj.tourLink}
+                    onChange={(e) => this.onChangeTourLink(e, 'virtualTour', 'list')}
+                    className="form-control"
+                    placeholder={"Tour Link " + (index + 1)}
+                    required={true}
+                    // Props for image field
+                    image={tourObj.tourImageLink}
+                    onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'virtualTour')}
+                    onRemoveImageLink={(data) => this.removeUploadedImage(data, 'virtualTour')}
+                />
     })
 
         const tourNonUploadedList = Array.apply(null, Array(virtualTour.count)).map((tourObj, index) => {
-            return <TextFieldBrowseFileRowContainer 
-                        // Props for text field
-                        name={`tourTitle_files${index}`}
-                        id={`tourTitle_files${index}`}
-                        value={virtualTour.files[index] !== undefined ? virtualTour.files[index].tourLink : ""}
-                        onChange={(e) => this.onChangeTourLink(e, 'virtualTour', 'files')}
-                        className="form-control"
-                        placeholder={"Tour Link " + (index + 1)}
-                        required={true}
-                        // Props for image field
-                        onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'virtualTour')}
-                        onRemoveImageLink={(data) => this.removeUploadedImage(data, 'virtualTour')}
-                        // Props for Browse container
-                        onDropFiles={(files) => this.processVirtualTourFiles(files, 'virtualTour', index)}
-                        css={browseContainer} 
-                        dropContainerCss={styles.smallFileDrop} 
-                        file={virtualTour.files[index] !== undefined ? virtualTour.files[index].tourImageFile : {}}
-                        browseText="Drop a photo here or click here to browse the photo!"
-                        //props for remove button
-                        onRemoveRow={() => this.onRemoveVirtualTour('files', index)}
-                    />
+        return <TextFieldBrowseFileRowContainer 
+                    // Props for text field
+                    title="Virtual Tour Link"
+                    name={`tourTitle_files${index}`}
+                    id={`tourTitle_files${index}`}
+                    value={virtualTour.files[index] !== undefined ? virtualTour.files[index].tourLink : ""}
+                    onChange={(e) => this.onChangeTourLink(e, 'virtualTour', 'files')}
+                    className="form-control"
+                    placeholder={"Tour Link " + (index + 1)}
+                    required={true}
+                    // Props for image field
+                    onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'virtualTour')}
+                    onRemoveImageLink={(data) => this.removeUploadedImage(data, 'virtualTour')}
+                    // Props for Browse container
+                    onDropFiles={(files) => this.processVirtualTourFiles(files, 'virtualTour', index)}
+                    css={browseContainer} 
+                    dropContainerCss={styles.smallFileDrop} 
+                    file={virtualTour.files[index] !== undefined ? virtualTour.files[index].tourImageFile : {}}
+                    browseText="Drop a photo here or click here to browse the photo!"
+                    //props for remove button
+                    onRemoveRow={() => this.onRemoveVirtualTour('files', index)}
+                />
         })
         return <>
             {tourUploadedList}

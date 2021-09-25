@@ -10,7 +10,7 @@ export default function TextFieldBrowseFileRowContainer(props) {
     return (
         <div className="row">
             <div className={`col-sm-4 ${styles.verticllyMiddle}`}>
-                <label htmlFor={props.id} className="col-sm-auto col-form-label">Title</label>
+                <label htmlFor={props.id} className="col-sm-auto col-form-label">{props.title}</label>
                 <div className={`col-sm-12 ${styles.autoMargin}`}>
                     <FormControl
                         name={props.name}
