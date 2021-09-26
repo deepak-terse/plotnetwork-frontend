@@ -7,6 +7,7 @@ import SelectInput from './SelectInput';
 import RadioInput from './RadioInput';
 import CheckboxInput from './CheckboxInput';
 import Button from './Button';
+import TextareaInput from './TextareaInput';
 
 export default function FormControl(props) {
     switch(props.type) {
@@ -16,11 +17,13 @@ export default function FormControl(props) {
             return <TextInput 
                 type = {props.type}
                 name = {props.name}
+                id = {props.id}
                 placeholder = {props.placeholder}
                 value = {props.value}
                 className = {props.className}
                 onChange = {props.onChange}
-                disabled={props.disabled}
+                disabled = {props.disabled}
+                required = {props.required}
             />
             break;
         case 'number':
@@ -60,7 +63,46 @@ export default function FormControl(props) {
             break;
         case 'radio':
         case 'checkbox':
+            return <CheckboxInput
+                type = {props.type}
+                name = {props.name}
+                placeholder = {props.placeholder}
+                checked = {props.value}
+                onChange = {props.onChange}
+                className = {props.className}
+                disabled = {props.disabled}
+                styleCSS = {props.styleCSS}
+            />
+            break;
         case 'color':
+            break;
         case 'file':
+            return <FileInput 
+                type = {props.type}
+                name = {props.name}
+                placeholder = {props.placeholder}
+                value = {props.value}
+                className = {props.className}
+                onChange = {props.onChange}
+                disabled={props.disabled}
+            />
+            break;
+        case 'textarea':
+            return <TextareaInput 
+                name = {props.name}
+                type = {props.type}
+                value = {props.value}
+                id= {props.id}
+                rows = {props.rows}
+                onChange = {props.onChange}
+                className = {props.className}
+                placeholder = {props.placeholder}
+                required={props.required}
+                disabled={props.disabled} 
+            />
+            
+            break;
+
+            
     }
 }
