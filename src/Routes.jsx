@@ -10,6 +10,7 @@ const Brokers = lazy(() => import('./containers/Brokers'));
 const SalesTeam = lazy(() => import('./containers/SalesTeam'));
 const Login = lazy(() => import('./containers/Login'));
 const Home = lazy(() => import('./containers/Home'));
+const Settings = lazy(() => import('./containers/Settings'));
 const Projects = lazy(() => import('./containers/Projects'));
 
 const Error404 = lazy(() => import('./components/Error404'));
@@ -46,6 +47,7 @@ export const HomeRoutes = (props) => {
 					<Route path={"/" + partner + "/salesteam"} component={ SalesTeam } />
 					<Route path={"/" + partner + "/leads"} component={ Leads } />
 					<Route path={"/" + partner + "/brokers"} component={ Brokers } />
+					<Route path={"/" + partner + "/settings"} component={ Settings } />
 					<Route path={"/" + partner + "/projects"} component={ Projects } />
 					<Redirect to={"/" + partner + "/dashboard"} />
 				</> : 
