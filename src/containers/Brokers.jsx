@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import '../styles/Home.module.scss';
-import SidePanel from '../components/SidePanel';
+import BrokerSidePanel from '../components/BrokerSidePanel';
 import Datagrid from '../components/Datagrid';
 import Backdrop from '../components/Backdrop';
 
@@ -14,6 +14,8 @@ import moment from 'moment';
 class Brokers extends Component {
     constructor(props) {
         super(props);
+
+        
         this.state = {
             drawerOpen: false,
             datagridProps: datagridData,
@@ -23,6 +25,24 @@ class Brokers extends Component {
         
         this.getBroker(0);
         
+    }
+
+    componentDidMount(){
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        sidePanelData.fields.forEach((field, index) => {
+            if(field.id == 'projectName'){
+                const projects = user.projects;
+                const newProjects = projects.map((project) => {
+                    project.fullName = project.projectName
+                    return project;
+                })
+                field.options = newProjects;
+            }
+        });
+        console.log("sidePanelData ",sidePanelData)
+        this.setState({
+            SidePanelProps: sidePanelData,
+        })
     }
 
     onAddHandler = () => {
@@ -92,7 +112,7 @@ class Brokers extends Component {
         return (
             <React.Fragment>
                 { drawerOpen ? 
-                    <SidePanel 
+                    <BrokerSidePanel 
                         data={SidePanelProps} 
                         show={drawerOpen}
                         onSave={this.onSaveHandler}
@@ -151,6 +171,7 @@ class Brokers extends Component {
                 "partnerName": localStorage.getItem('partner')
             }
         };
+
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
         if(user.userType !== "admin") {
             params.salesManagerId = user.user.id;
