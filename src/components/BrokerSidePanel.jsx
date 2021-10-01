@@ -47,7 +47,7 @@ class BrokerSidePanel extends Component {
             drawerClasses = styles.sideDrawerOpen
         }
         const { data, onSave, onCancel } = this.props;
-        const { formFields } =  this.state
+        const { formFields, action} =  this.state
         return(
             <div className={drawerClasses}>
                  <div className="grid-margin stretch-card">
@@ -57,19 +57,27 @@ class BrokerSidePanel extends Component {
                         <p className="card-description"> {formFields.subtitle} </p>
                         <form className="forms-sample" name="sidePanelForm" id="sidePanelForm">
                             {
-                                <FormControl
-                                    name="search"
-                                    type="text"
-                                    value={this.state.search}
-                                    onChange={this.onChangeHandler} 
-                                    className="form-control" 
-                                    placeholder="Search broker by mobile number"
-                                /> 
+                                action == "CREATE" ? (
+                                    <>
+                                        {
+                                            <FormControl
+                                                name="search"
+                                                type="text"
+                                                value={this.state.search}
+                                                onChange={this.onChangeHandler} 
+                                                className="form-control" 
+                                                placeholder="Search broker by mobile number"
+                                            /> 
+                                            
+                                        }
+                                        <br/>
+                                        <button className="btn btn-primary mr-2" type="button" onClick={this.onSearchBroker}>Search</button>
+                                        <br/>
+                                        <br/>
+                                    </>
+                                ) : ""
                             }
-                            <br/>
-                            <button className="btn btn-primary mr-2" type="button" onClick={this.onSearchBroker}>Search</button>
-                            <br/>
-                            <br/>
+                                                        
                             {(
                                 formFields.fields.map((field, index) =>
                                     <Form.Group className="row" key={index}>
@@ -137,10 +145,9 @@ class BrokerSidePanel extends Component {
                     // Make fields disabled
                     formState.formFields = this.state.formFields;
                     formState.formFields.fields = this.state.formFields.fields.map((field) => {
-                        if(field.id == "projectName" || field.id == "salesManagerName"){
-                            field.disabled = false;
-                        }else field.disabled = true;
-                        
+                        if(field.id == "projectName" || field.id == "salesManagerName") field.disabled = false;                        
+                        else field.disabled = true;
+
                         return field;
                     })
                     

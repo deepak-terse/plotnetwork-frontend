@@ -18,7 +18,7 @@
             "value": "",
             "placeholder": "Sachin Nalawade",
             "hidden": false,
-            "disabled": false
+            "disabled": true
         },
         {
             "id": "projectName",
@@ -49,7 +49,7 @@
             "value": "",
             "placeholder": "Individual",
             "hidden": false,
-            "disabled": false
+            "disabled": true
         },
         {
             "id": "reraNumber",
@@ -58,7 +58,7 @@
             "value": "",
             "placeholder": "A51900010107",
             "hidden": false,
-            "disabled": false
+            "disabled": true
         },
         {
             "id": "mobileNumber",
@@ -67,7 +67,7 @@
             "value": "",
             "placeholder": "8888888888",
             "hidden": false,
-            "disabled": false
+            "disabled": true
         },
         {
             "id": "alternateMobileNo",
@@ -76,7 +76,7 @@
             "value": "",
             "placeholder": "8888888888",
             "hidden": false,
-            "disabled": false
+            "disabled": true
         },
         {
             "id": "address",
@@ -85,7 +85,7 @@
             "value": "",
             "placeholder": "Yudhisthir, 2nd floor, flat no. 4, Dadar west",
             "hidden": false,
-            "disabled": false
+            "disabled": true
         },
         {
             "id": "emailId",
@@ -94,7 +94,7 @@
             "value": "",
             "placeholder": "deepak@gmail.com",
             "hidden": false,
-            "disabled": false
+            "disabled": true
         },
         {
             "id": "alternateEmailId",
@@ -103,7 +103,7 @@
             "value": "",
             "placeholder": "deepak@gmail.com",
             "hidden": false,
-            "disabled": false
+            "disabled": true
         }
     ]
 }

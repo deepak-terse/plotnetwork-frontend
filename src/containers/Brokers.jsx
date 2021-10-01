@@ -53,6 +53,8 @@ class Brokers extends Component {
             } else {
                 sidePanelData.fields[index].value = "";
             }
+            // // Make fields editable
+            sidePanelData.fields[index].disabled = false;
         });
         sidePanelData.action = "CREATE";
         this.setState({
@@ -62,12 +64,15 @@ class Brokers extends Component {
     }
 
     onUpdateHandler = (data) => {
-        sidePanelData.fields.forEach((key, index) => {
-            if(key.id == "salesManagerName"){
-                sidePanelData.fields[index].value = data["salesManagerId"];
+        sidePanelData.fields.forEach((field, index) => {
+            if(field.id == "salesManagerName"){
+                field.value = data["salesManagerId"];
             } else {
-                sidePanelData.fields[index].value = data[key.id];
+                field.value = data[field.id];
             }
+            // Make fields disabled except projectName & salesManagerName
+            if(field.id == "projectName" || field.id == "salesManagerName") field.disabled = false;
+            else field.disabled = true;
         });
         sidePanelData.action = "UPDATE";
         sidePanelData.id = data.id;
