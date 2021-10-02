@@ -32,6 +32,20 @@ class Leads extends Component {
 
     setData = () => {
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        // Assign projects in sidepanel
+        sidePanelData.fields.forEach((field, index) => {
+            if(field.id == 'projectName'){
+                const newProjects = user.projects.map((project) => {
+                    project.fullName = project.projectName
+                    return project;
+                })
+                field.options = newProjects;
+            }
+        });
+        this.setState({
+            SidePanelProps: sidePanelData,
+        });
+
         if(user.userType === "admin") {
             this.getSalesManager();
         } else {

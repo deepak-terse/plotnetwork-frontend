@@ -1,6 +1,7 @@
 {
     "title": "Brokers Form",
     "subtitle": "Fill the below form to add/update Broker",
+    "searchtitle": "Find a broker to continue",
     "fields": [
         {
             "id": "date",
@@ -28,7 +29,7 @@
             "options": [],
             "placeholder": "Select",
             "hidden": false,
-            "disabled": false,
+            "disabled": true,
             "required": false
         },
         {
@@ -39,7 +40,7 @@
             "options": [],
             "placeholder": "Abhijit Singh",
             "hidden": false,
-            "disabled": false,
+            "disabled": true,
             "required": true
         },
         {

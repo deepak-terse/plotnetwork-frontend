@@ -16,9 +16,14 @@ class BrokerSidePanel extends Component {
             formState[field.id] = field.value;
         });
 
-        formState.id = props.data.action === "UPDATE" ? props.data.id : "";
+        if(props.data.action === "UPDATE"){
+            formState.id = props.data.id;
+            formState.addAction = props.data.action;
+        } else {
+            formState.id = "";
+            formState.addAction = "";
+        }
         formState.formFields = props.data;
-        formState.action = props.data.action;
         this.state = formState;
     }
 
@@ -41,71 +46,77 @@ class BrokerSidePanel extends Component {
     }
 
     render() {
-        console.log("this.state ",this.state)
         let drawerClasses = styles.sideDrawer
         if(this.props.show) {
             drawerClasses = styles.sideDrawerOpen
         }
         const { data, onSave, onCancel } = this.props;
-        const { formFields, action} =  this.state
+        const { formFields, addAction} =  this.state
         return(
             <div className={drawerClasses}>
                  <div className="grid-margin stretch-card">
                     <div id={styles.spcard} className="card">
-                    <div className="card-body">
-                        <h4 className="card-title"> {formFields.title} </h4>
-                        <p className="card-description"> {formFields.subtitle} </p>
-                        <form className="forms-sample" name="sidePanelForm" id="sidePanelForm">
-                            {
-                                action == "CREATE" ? (
-                                    <>
-                                        {
-                                            <FormControl
-                                                name="search"
-                                                type="text"
-                                                value={this.state.search}
-                                                onChange={this.onChangeHandler} 
-                                                className="form-control" 
-                                                placeholder="Search broker by mobile number"
-                                            /> 
-                                            
-                                        }
-                                        <br/>
-                                        <button className="btn btn-primary mr-2" type="button" onClick={this.onSearchBroker}>Search</button>
-                                        <br/>
-                                        <br/>
-                                    </>
-                                ) : ""
-                            }
-                                                        
-                            {(
-                                formFields.fields.map((field, index) =>
-                                    <Form.Group className="row" key={index}>
-                                        <label htmlFor={index} className="col-sm-3 col-form-label">{field.label}</label>
-                                        <div className="col-sm-9">
-                                        {
-                                            <FormControl
-                                                name={field.id}
-                                                type={field.type} 
-                                                value={this.state[field.id]} 
-                                                onChange={this.onChangeHandler} 
-                                                className="form-control" 
-                                                id={index} 
-                                                disabled={field.disabled}
-                                                options={field.options}
-                                                placeholder={field.placeholder}
-                                                required={field.required}
-                                            />                                            
-                                        }
+                        <div className="card-body">
+                            <h4 className="card-title"> {formFields.title} </h4>
+                            <form className="forms-sample" name="sidePanelForm" id="sidePanelForm">
+                                {
+                                    this.props.data.action == "CREATE" ? (
+                                        <>
+                                            <p className="card-description"> {formFields.searchtitle} </p>
+                                            {
+                                                <FormControl
+                                                    name="search"
+                                                    type="text"
+                                                    value={this.state.search}
+                                                    onChange={this.onChangeHandler} 
+                                                    className="form-control" 
+                                                    placeholder="Search broker by mobile number"
+                                                /> 
+                                                
+                                            }
+                                            <br/>
+                                            <button className="btn btn-primary mr-2" type="button" onClick={this.onSearchBroker}>Search</button>
+                                            <br/>
+                                            <br/>
+                                        </>
+                                    ) : ""
+                                }
+                                {
+                                    addAction !== "" ? (
+                                        <div>
+                                            <p className="card-description"> {formFields.subtitle} </p>                      
+                                            {
+                                                formFields.fields.map((field, index) =>
+                                                    <Form.Group className="row" key={index}>
+                                                        <label htmlFor={index} className="col-sm-3 col-form-label">{field.label}</label>
+                                                        <div className="col-sm-9">
+                                                        {
+                                                            <FormControl
+                                                                name={field.id}
+                                                                type={field.type} 
+                                                                value={this.state[field.id]} 
+                                                                onChange={this.onChangeHandler} 
+                                                                className="form-control" 
+                                                                id={index} 
+                                                                disabled={field.disabled}
+                                                                options={field.options}
+                                                                placeholder={field.placeholder}
+                                                                required={field.required}
+                                                            />                                            
+                                                        }
 
+                                                        </div>
+                                                    </Form.Group>
+                                                )
+                                            }
+                                            <button className="btn btn-primary mr-2" type="submit" onClick={this.onSaveHandler}>SAVE</button>
+                                            <button className="btn btn-dark" type="button" onClick={onCancel}>CANCEL</button>
+                                            <br/>
+                                            <br/>
                                         </div>
-                                    </Form.Group>
-                                )
-                            )}
-                            <button className="btn btn-primary mr-2" type="submit" onClick={this.onSaveHandler}>SAVE</button>
-                            <button className="btn btn-dark" type="button" onClick={onCancel}>CANCEL</button>
-                            <br/>
-                            <br/>
+                                    ) : ""
+                                }
+                                
                             </form>                    
                         </div>
                     </div>
@@ -128,28 +139,43 @@ class BrokerSidePanel extends Component {
             params: params
         }).then((response) => {
             if (response.status == 200){
-                console.log("BROKER FOUND ",response.data.data);
                 if(response.data.data.length > 0){
                     const broker = response.data.data[0]
-                    // Populate values
-                    const formState = { id : broker.id};
-                    sidePanelData.fields.forEach((field, index) => {
-                        if(field.id == "salesManagerName"){
-                            formState[field.id] = broker.salesManagerId.id;
-                        } else if(field.id == "date"){
-                            formState["date"] = moment(broker.createdAt).format('DD-MM-YYYY, hh:mm A');
-                        }else {
-                            formState[field.id] = broker[field.id];
-                        }
-                    });
-                    // Make fields disabled
+
+                    // Populate values & Make fields disabled
+                    const formState = { id : broker.id, addAction : "UPDATE"};
                     formState.formFields = this.state.formFields;
                     formState.formFields.fields = this.state.formFields.fields.map((field) => {
-                        if(field.id == "projectName" || field.id == "salesManagerName") field.disabled = false;                        
-                        else field.disabled = true;
-
+                        if(field.id == "projectName" || field.id == "salesManagerName") {
+                            field.disabled = false;    
+                            formState[field.id] = ""; 
+                        }                    
+                        else {
+                            field.disabled = true;
+                            if(field.id == "date"){
+                                formState["date"] = moment(broker.createdAt).format('DD-MM-YYYY, hh:mm A');
+                            }else {
+                                formState[field.id] = broker[field.id] ? broker[field.id] : "";
+                            }
+                        }
                         return field;
                     })
+                    
+                    // Set state
+                    this.setState(formState)
+                } else {
+                    const formState = { id : "", addAction : "CREATE"};
+                    formState.formFields = this.state.formFields;
+                    formState.formFields.fields = this.state.formFields.fields.map((field, index) => {
+                            if(field.id == "date"){
+                                formState["date"] = moment().format('DD-MM-YYYY');
+                                field.disabled = true;
+                            }else {
+                                formState[field.id] = "";
+                                field.disabled = false;
+                            }
+                            return field;
+                    });
                     
                     // Set state
                     this.setState(formState)

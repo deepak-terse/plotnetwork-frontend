@@ -31,15 +31,13 @@ class Brokers extends Component {
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
         sidePanelData.fields.forEach((field, index) => {
             if(field.id == 'projectName'){
-                const projects = user.projects;
-                const newProjects = projects.map((project) => {
+                const newProjects = user.projects.map((project) => {
                     project.fullName = project.projectName
                     return project;
                 })
                 field.options = newProjects;
             }
         });
-        console.log("sidePanelData ",sidePanelData)
         this.setState({
             SidePanelProps: sidePanelData,
         })
@@ -54,7 +52,7 @@ class Brokers extends Component {
                 sidePanelData.fields[index].value = "";
             }
             // // Make fields editable
-            sidePanelData.fields[index].disabled = false;
+            sidePanelData.fields[index].disabled = true;
         });
         sidePanelData.action = "CREATE";
         this.setState({
@@ -67,12 +65,14 @@ class Brokers extends Component {
         sidePanelData.fields.forEach((field, index) => {
             if(field.id == "salesManagerName"){
                 field.value = data["salesManagerId"];
+                field.disabled = false;
+            } else if(field.id == "projectName"){
+                field.value = data["projectId"] ? data["projectId"] : "";
+                field.disabled = false;
             } else {
-                field.value = data[field.id];
+                field.value = data[field.id] ? data[field.id] : "";
+                field.disabled = true;
             }
-            // Make fields disabled except projectName & salesManagerName
-            if(field.id == "projectName" || field.id == "salesManagerName") field.disabled = false;
-            else field.disabled = true;
         });
         sidePanelData.action = "UPDATE";
         sidePanelData.id = data.id;
@@ -89,7 +89,7 @@ class Brokers extends Component {
 
     onSaveHandler = (data) => {
         if(this.state.SidePanelProps.action === "CREATE") {
-            this.createBroker(data);
+            data.stateAction == "CREATE" ? this.createBroker(data) : this.updateBroker(data);
         } else {
             this.updateBroker(data);
         }
@@ -226,12 +226,7 @@ class Brokers extends Component {
                         datagridProps: temp
                     })
                     this.getSalesManager();
-                }
-
-                
-
-                
-                
+                }                
             } else if (response.status == 401) {
                 console.log("User not exist");
             } else {
@@ -245,43 +240,78 @@ class Brokers extends Component {
     createBroker = (data) => {
         console.log("Create broker ",data)
         let temp = JSON.parse(localStorage.getItem('loggedInUser'));
-        // axios({
-        //     method: 'post',
-        //     url: getAPIs().broker,
-        //     data: {
-        //         "user": {
-        //             userType:temp.userType
-        //         },
-        //         "data": {
-        //             "fullName": data.fullName,
-        //             "mobileNumber": data.mobileNumber,
-        //             "alternateMobileNo": data.alternateMobileNo,
-        //             "emailId": data.emailId,
-        //             "alternateEmailId": data.alternateEmailId,
-        //             "reraNumber": data.reraNumber,
-        //             "address": data.address,
-        //             "companyName": data.companyName,
-        //             "projectId": data.projectName,
-        //             "salesManagerId": data.salesManagerName,
-        //             "partnerName": localStorage.getItem('partner')
-        //         }
-        //     }
-        // }).then((response) => {
-        //     if (response.status == 200){
-        //         console.log('User created');
-        //         this.getBroker(0);
-        //     } else if (response.status == 401) {
-        //         console.log("Invalid input");
-        //     } else {
-        //         console.log('Error found : ', response.data.message);
-        //     }
-        // }).catch((error)=>{
-        //     console.log('Error found : ', error);
-        // });
+            //      const newdata = {
+            //         "fullName": data.fullName,
+            //         "mobileNumber": data.mobileNumber,
+            //         "alternateMobileNo": data.alternateMobileNo,
+            //         "emailId": data.emailId,
+            //         "alternateEmailId": data.alternateEmailId,
+            //         "reraNumber": data.reraNumber,
+            //         "address": data.address,
+            //         "companyName": data.companyName,
+            //         "projectId": data.projectName,
+            //         "salesManagerId": data.salesManagerName,
+            //         "partnerName": localStorage.getItem('partner')
+            //     }
+            
+            // console.log("data ", newdata)
+
+        axios({
+            method: 'post',
+            url: getAPIs().broker,
+            data: {
+                "user": {
+                    userType:temp.userType
+                },
+                "data": {
+                    "fullName": data.fullName,
+                    "mobileNumber": data.mobileNumber,
+                    "alternateMobileNo": data.alternateMobileNo,
+                    "emailId": data.emailId,
+                    "alternateEmailId": data.alternateEmailId,
+                    "reraNumber": data.reraNumber,
+                    "address": data.address,
+                    "companyName": data.companyName,
+                    "projectId": data.projectName,
+                    "salesManagerId": data.salesManagerName,
+                    "partnerName": localStorage.getItem('partner')
+                }
+            }
+        }).then((response) => {
+            if (response.status == 200){
+                console.log('User created');
+                this.getBroker(0);
+            } else if (response.status == 401) {
+                console.log("Invalid input");
+            } else {
+                console.log('Error found : ', response.data.message);
+            }
+        }).catch((error)=>{
+            console.log('Error found : ', error);
+        });
     }
     
     updateBroker = (data) => {
         let temp = JSON.parse(localStorage.getItem('loggedInUser'));
+        // const newdata =  {
+        //                 "user": {
+        //                     userType:temp.userType
+        //                 },
+        //                 "data": {
+        //                     "fullName": data.fullName,
+        //                     "mobileNumber": data.mobileNumber,
+        //                     "alternateMobileNo": data.alternateMobileNo,
+        //                     "emailId": data.emailId,
+        //                     "alternateEmailId": data.alternateEmailId,
+        //                     "reraNumber": data.reraNumber,
+        //                     "address": data.address,
+        //                     "companyName": data.companyName,
+        //                     "projectId": data.projectName,
+        //                     "salesManagerId": data.salesManagerName,
+        //                     "partnerName": localStorage.getItem('partner')
+        //                 }
+        //             }
+        // console.log("newdata ", newdata)
         axios({
             method: 'put',
             url: getAPIs().broker,
@@ -290,7 +320,6 @@ class Brokers extends Component {
                         userType:temp.userType
                     },
                     "data": {
-                        "id": data.id,
                         "fullName": data.fullName,
                         "mobileNumber": data.mobileNumber,
                         "alternateMobileNo": data.alternateMobileNo,
@@ -299,7 +328,9 @@ class Brokers extends Component {
                         "reraNumber": data.reraNumber,
                         "address": data.address,
                         "companyName": data.companyName,
-                        "salesManagerId": data.salesManagerName
+                        "projectId": data.projectName,
+                        "salesManagerId": data.salesManagerName,
+                        "partnerName": localStorage.getItem('partner')
                     }
             }
         }).then((response) => {
