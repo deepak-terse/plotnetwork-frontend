@@ -243,39 +243,41 @@ class Brokers extends Component {
     }
 
     createBroker = (data) => {
+        console.log("Create broker ",data)
         let temp = JSON.parse(localStorage.getItem('loggedInUser'));
-        axios({
-            method: 'post',
-            url: getAPIs().broker,
-            data: {
-                "user": {
-                    userType:temp.userType
-                },
-                "data": {
-                    "fullName": data.fullName,
-                    "mobileNumber": data.mobileNumber,
-                    "alternateMobileNo": data.alternateMobileNo,
-                    "emailId": data.emailId,
-                    "alternateEmailId": data.alternateEmailId,
-                    "reraNumber": data.reraNumber,
-                    "address": data.address,
-                    "companyName": data.companyName,
-                    "salesManagerId": data.salesManagerName,
-                    "partnerName": localStorage.getItem('partner')
-                }
-            }
-        }).then((response) => {
-            if (response.status == 200){
-                console.log('User created');
-                this.getBroker(0);
-            } else if (response.status == 401) {
-                console.log("Invalid input");
-            } else {
-                console.log('Error found : ', response.data.message);
-            }
-        }).catch((error)=>{
-            console.log('Error found : ', error);
-        });
+        // axios({
+        //     method: 'post',
+        //     url: getAPIs().broker,
+        //     data: {
+        //         "user": {
+        //             userType:temp.userType
+        //         },
+        //         "data": {
+        //             "fullName": data.fullName,
+        //             "mobileNumber": data.mobileNumber,
+        //             "alternateMobileNo": data.alternateMobileNo,
+        //             "emailId": data.emailId,
+        //             "alternateEmailId": data.alternateEmailId,
+        //             "reraNumber": data.reraNumber,
+        //             "address": data.address,
+        //             "companyName": data.companyName,
+        //             "projectId": data.projectName,
+        //             "salesManagerId": data.salesManagerName,
+        //             "partnerName": localStorage.getItem('partner')
+        //         }
+        //     }
+        // }).then((response) => {
+        //     if (response.status == 200){
+        //         console.log('User created');
+        //         this.getBroker(0);
+        //     } else if (response.status == 401) {
+        //         console.log("Invalid input");
+        //     } else {
+        //         console.log('Error found : ', response.data.message);
+        //     }
+        // }).catch((error)=>{
+        //     console.log('Error found : ', error);
+        // });
     }
     
     updateBroker = (data) => {
