@@ -56,7 +56,7 @@
             "placeholder": "Select",
             "hidden": false,
             "disabled": false,
-            "required": false
+            "required": true
         },
         {
             "id": "brokerName",

@@ -8,7 +8,19 @@ import FormControl from '../components/form-input/FormControl';
 class SidePanel extends Component {
     constructor(props) {
         super(props);
-        const formState = {};
+
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        const brokersByProjectId = user.projects.map((project) => {
+            return {
+                projectId : project.id,
+                brokers : project.brokers
+            }
+        })
+
+        const formState = { // Initite state with user's projects with brokers assigned to it
+            brokersByProjectId : brokersByProjectId,
+            formData : this.props.data
+        };
         this.props.data.fields.map((field, index) => {
             formState[field.id] = field.value;
         });
@@ -21,6 +33,45 @@ class SidePanel extends Component {
     onChangeHandler = (event) => {
         const inputData = {}
         inputData[event.target.name] = event.target.value;
+        if(event.target.name == "projectName"){
+            const projectSelected = event.target.value;
+            inputData.formData = this.state.formData;
+            inputData["brokerName"] =  "";
+            inputData.formData.fields = inputData.formData.fields.map(field => {
+                if(field.id == "brokerName"){
+                    const brokerAssignedToProject = this.state.brokersByProjectId.filter((project) => {
+                        if(project.projectId == projectSelected){
+                            return project.brokers;
+                        }
+                    });
+                    if(brokerAssignedToProject.length > 0){
+                        field.options = brokerAssignedToProject[0].brokers;
+                    }
+                }
+                return field;
+            });
+        } else if(event.target.name == "brokerName"){
+            const brokerSelected = event.target.value;
+            inputData.formData = this.state.formData;
+            inputData["salesManagerName"] =  "";
+            inputData.formData.fields = inputData.formData.fields.map(field => {
+                if(field.id == "salesManagerName"){
+                    const projectSelected = this.state.projectName;
+                    for (let index = 0; index < this.state.brokersByProjectId.length; index++) {
+                        const project = this.state.brokersByProjectId[index];
+                        if(project.projectId == projectSelected){
+                            project.brokers.forEach((broker) => {
+                                if(broker.id == brokerSelected) {
+                                    field.options = [broker.salesManagerId];
+                                }
+                            })
+                            break;
+                        }
+                    }
+                }
+                return field;
+            });
+        }
         this.setState(inputData);
     }
 
@@ -38,17 +89,18 @@ class SidePanel extends Component {
             drawerClasses = styles.sideDrawerOpen
         }
         const { data, onSave, onCancel } = this.props;
+        const { formData } = this.state;
 
         return(
             <div className={drawerClasses}>
                  <div className="grid-margin stretch-card">
                     <div id={styles.spcard} className="card">
                     <div className="card-body">
-                        <h4 className="card-title"> {data.title} </h4>
-                        <p className="card-description"> {data.subtitle} </p>
+                        <h4 className="card-title"> {formData.title} </h4>
+                        <p className="card-description"> {formData.subtitle} </p>
                         <form className="forms-sample" name="sidePanelForm" id="sidePanelForm">
                             {(
-                                data.fields.map((field, index) =>
+                                formData.fields.map((field, index) =>
                                     <Form.Group className="row" key={index}>
                                         <label htmlFor={index} className="col-sm-3 col-form-label">{field.label}</label>
                                         <div className="col-sm-9">

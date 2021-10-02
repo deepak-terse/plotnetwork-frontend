@@ -65,17 +65,19 @@ class Leads extends Component {
     }
 
     onAddHandler = () => {
-        sidePanelData.fields.forEach((key, index) => {
-            if(sidePanelData.fields[index].id == "date"){
-                sidePanelData.fields[index].value = moment().format('DD-MM-YYYY');
+        const newSidePanelData = sidePanelData;
+        newSidePanelData.fields.forEach((field, index) => {
+            if(field.id == "date"){
+                field.value = moment().format('DD-MM-YYYY');
             } else {
-                sidePanelData.fields[index].value = "";
-                sidePanelData.fields[index].disabled = false;
+                field.value = "";
+                field.disabled = false;
+                if(field.id == "brokerName" || field.id == "salesManagerName") field.options = [];
             }
         });
-        sidePanelData.action = "CREATE";
+        newSidePanelData.action = "CREATE";
         this.setState({
-            SidePanelProps: sidePanelData,
+            SidePanelProps: newSidePanelData,
             drawerOpen: true
         })
     }
@@ -85,6 +87,8 @@ class Leads extends Component {
     }
 
     onUpdateHandler = (data) => {
+        console.log("data to update ", data)
+
         sidePanelData.fields.forEach((field, index) => {
             switch (field.id) {
                 case 'dob':
@@ -102,10 +106,12 @@ class Leads extends Component {
 
                 case 'salesManagerName':
                     field.value =  data["salesManagerId"];
+                    field.options = [data["salesManagerData"]];
                     break;
 
                 case 'brokerName':
                     field.value =  data["brokerId"];
+                    field.options = [data["brokerData"]];
                     break;
 
                 case 'budget':
@@ -221,13 +227,12 @@ class Leads extends Component {
         }).then((response) => {
             if (response.status == 200){
                 // add logged in SM records in salesManagerName dropdown of Side Panel
-                let temp = this.state.SidePanelProps;
-                temp.fields.forEach((field, index) => {
-                    if(field.id === "salesManagerName") {
-                        field.options = response.data.data
-                        // field.options = field.options.concat(response.data.data);
-                    }
-                });
+                // let temp = this.state.SidePanelProps;
+                // temp.fields.forEach((field, index) => {
+                //     if(field.id === "salesManagerName") {
+                //         field.options = response.data.data
+                //     }
+                // });
 
                 let temp2 = this.state.datagridProps;
                 temp2.filters.forEach((key, index) => {
@@ -238,7 +243,7 @@ class Leads extends Component {
                 });
 
                 this.setState({
-                    SidePanelProps: temp,
+                    // SidePanelProps: temp,
                     datagridProps: temp2
                 })
                 console.log(this.state);
@@ -270,13 +275,13 @@ class Leads extends Component {
             params: params
         }).then((response) => {
             if (response.status == 200){
-                let temp = this.state.SidePanelProps;
-                temp.fields.forEach((field, index) => {
-                    if(field.id === "brokerName") {
-                        field.options = response.data.data;
-                        // field.options = field.options.concat(response.data.data);
-                    }
-                });
+                // let temp = this.state.SidePanelProps;
+                // temp.fields.forEach((field, index) => {
+                //     if(field.id === "brokerName") {
+                //         field.options = response.data.data;
+                //         // field.options = field.options.concat(response.data.data);
+                //     }
+                // });
 
                 let temp2 = this.state.datagridProps;
                 temp2.filters.forEach((key, index) => {
@@ -286,7 +291,7 @@ class Leads extends Component {
                 });
 
                 this.setState({
-                    SidePanelProps: temp,
+                    // SidePanelProps: temp,
                     datagridProps: temp2
                 })
                 
@@ -347,9 +352,11 @@ class Leads extends Component {
                 temp.tableData = response.data.data;
                 temp.tableData.map( (e) => {
                     e.salesManagerName = e.salesManagerId.fullName;
+                    e.salesManagerData = e.salesManagerId;
                     e.salesManagerId = e.salesManagerId.id
 
                     e.brokerName = e.brokerId.fullName;
+                    e.brokerData = e.brokerId;
                     e.brokerId = e.brokerId.id;
 
                     // e.date = new Date(e.createdAt).toUTCString();
