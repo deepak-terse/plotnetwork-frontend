@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styles from '../../styles/FormInput.module.scss'
 
 export default function SelectInput(props) {
-    console.log(styles.input);
+    console.log(props);
     return <select 
         name = {props.name}
         value = {props.value}

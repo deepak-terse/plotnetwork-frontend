@@ -48,6 +48,17 @@
             "disabled": false
         },
         {
+            "id": "projectName",
+            "label": "Project Name",
+            "type": "select",
+            "value": "",
+            "options": [],
+            "placeholder": "Select",
+            "hidden": false,
+            "disabled": false,
+            "required": true
+        },
+        {
             "id": "brokerName",
             "label": "Broker",
             "type": "select",
