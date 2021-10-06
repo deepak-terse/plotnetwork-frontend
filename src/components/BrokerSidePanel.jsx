@@ -170,7 +170,10 @@ class BrokerSidePanel extends Component {
                             if(field.id == "date"){
                                 formState["date"] = moment().format('DD-MM-YYYY');
                                 field.disabled = true;
-                            }else {
+                            } else if(field.id == "mobileNumber"){
+                                formState[field.id] = searchTerm;
+                                field.disabled = true;
+                            } else {
                                 formState[field.id] = "";
                                 field.disabled = false;
                             }

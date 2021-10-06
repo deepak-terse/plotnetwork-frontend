@@ -5,9 +5,16 @@ import Iframe from 'react-iframe'
 import styles from '../styles/Home.module.scss';
 import { isMobile } from '../utils/device';
 
+import axios from 'axios';
+import { getAPIs } from '../utils/constants';
+
 class Dashboard extends Component {
     constructor(props) {
         super(props);
+    }
+
+    componentDidMount(){
+        this.getProjects();
     }
 
     render() {
@@ -42,6 +49,32 @@ class Dashboard extends Component {
                 
             </React.Fragment>
         )
+    }
+
+    getProjects = () => {
+        let params = {
+            filter: {
+                "partnerName": localStorage.getItem('partner')
+            }
+        };
+
+        axios({
+            method: 'get',
+            url: getAPIs().project,
+            params: params
+        }).then((response) => {
+            if (response.status == 200){
+                console.log('User fetched', response.data); 
+                localStorage.setItem("projects",JSON.stringify(response.data.data));
+                
+            } else if (response.status == 401) {
+                console.log("User not exist");
+            } else {
+                console.log('Error found : ', response.data.message);
+            }
+        }).catch((error)=>{
+            console.log('Error found : ', error);
+        });
     }
 }
 

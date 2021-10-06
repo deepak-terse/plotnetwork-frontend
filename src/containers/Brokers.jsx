@@ -28,10 +28,10 @@ class Brokers extends Component {
     }
 
     componentDidMount(){
-        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        const projects = JSON.parse(localStorage.getItem('projects'));
         sidePanelData.fields.forEach((field, index) => {
             if(field.id == 'projectName'){
-                const newProjects = user.projects.map((project) => {
+                const newProjects = projects.map((project) => {
                     project.fullName = project.projectName
                     return project;
                 })
@@ -193,7 +193,12 @@ class Brokers extends Component {
                 temp.tableData = response.data.data;
                 temp.tableData.map( (e) => {
                     e.salesManagerName = e.salesManagerId.fullName;
-                    e.salesManagerId = e.salesManagerId.id
+                    e.salesManagerId = e.salesManagerId.id;
+
+                    e.projectName = e.projectId.projectName;
+                    // e.projectId.fullName = e.projectId.projectName;
+                    // e.projectData = e.projectId;
+                    e.projectId = e.projectId.id;
 
                     e.date = moment(e.createdAt).format('DD-MM-YYYY, hh:mm A'); // format date in required format
 
@@ -238,24 +243,7 @@ class Brokers extends Component {
     }
 
     createBroker = (data) => {
-        console.log("Create broker ",data)
         let temp = JSON.parse(localStorage.getItem('loggedInUser'));
-            //      const newdata = {
-            //         "fullName": data.fullName,
-            //         "mobileNumber": data.mobileNumber,
-            //         "alternateMobileNo": data.alternateMobileNo,
-            //         "emailId": data.emailId,
-            //         "alternateEmailId": data.alternateEmailId,
-            //         "reraNumber": data.reraNumber,
-            //         "address": data.address,
-            //         "companyName": data.companyName,
-            //         "projectId": data.projectName,
-            //         "salesManagerId": data.salesManagerName,
-            //         "partnerName": localStorage.getItem('partner')
-            //     }
-            
-            // console.log("data ", newdata)
-
         axios({
             method: 'post',
             url: getAPIs().broker,
@@ -293,25 +281,6 @@ class Brokers extends Component {
     
     updateBroker = (data) => {
         let temp = JSON.parse(localStorage.getItem('loggedInUser'));
-        // const newdata =  {
-        //                 "user": {
-        //                     userType:temp.userType
-        //                 },
-        //                 "data": {
-        //                     "fullName": data.fullName,
-        //                     "mobileNumber": data.mobileNumber,
-        //                     "alternateMobileNo": data.alternateMobileNo,
-        //                     "emailId": data.emailId,
-        //                     "alternateEmailId": data.alternateEmailId,
-        //                     "reraNumber": data.reraNumber,
-        //                     "address": data.address,
-        //                     "companyName": data.companyName,
-        //                     "projectId": data.projectName,
-        //                     "salesManagerId": data.salesManagerName,
-        //                     "partnerName": localStorage.getItem('partner')
-        //                 }
-        //             }
-        // console.log("newdata ", newdata)
         axios({
             method: 'put',
             url: getAPIs().broker,

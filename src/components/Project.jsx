@@ -129,16 +129,16 @@ class ProjectItem extends Component {
                                                     {(
                                                         <div>
                                                             <div className={`col-sm-7 ${styles.autoMargin}`}>
-                                                                <label htmlFor="aboutTitle" className="col-sm-auto col-form-label">Title</label>
+                                                                <label htmlFor="displayTitle" className="col-sm-auto col-form-label">Title</label>
                                                                 <FormControl
-                                                                    name="title"
+                                                                    name="displayTitle"
                                                                     type="text" 
-                                                                    value={about.title}
-                                                                    id="aboutTitle"
+                                                                    value={about.displayTitle}
+                                                                    id="displayTitle"
                                                                     onChange={(e) => this.onChangeHandler(e, 'about')} 
                                                                     className="form-control" 
                                                                     placeholder=""
-                                                                    required="true"
+                                                                    required={true}
                                                                 />
                                                             </div>
 
@@ -153,14 +153,36 @@ class ProjectItem extends Component {
                                                                     onChange={(e) => this.onChangeHandler(e, 'about')} 
                                                                     className="form-control" 
                                                                     placeholder=""
-                                                                    required="true"
+                                                                    required={true}
                                                                 />
                                                             </div>
 
                                                             <div className={`col-sm-7 ${styles.autoMargin}`}>
+                                                                <BrowseFilesContainer 
+                                                                    onDropFiles={(files) => this.processFile(files, 'about')}
+                                                                    css={browseContainer} 
+                                                                    dropContainerCss={styles.fileDrop}
+                                                                >Drop one photo here or click here to browse the photo!</BrowseFilesContainer>
+                                                            </div>
+                                                            
+                                                            <div className={styles.filesLength}>{about.image !== "" ? 1 : 0} photo Uploaded, {this.isAboutUsPhotoSelected() ? 1 : 0} Photo Selected</div>
+                                                            
+                                                            {/* <ImagePreview 
+                                                                data={about.image} 
+                                                                onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'about')}
+                                                                onRemoveImageLink={(data) => this.removeUploadedImage(data, 'about')} 
+                                                            /> */}
+                                                            <ImagePreviewList 
+                                                                imageLinks={about.image !== "" ? [about.image] : []} 
+                                                                imageFiles={this.isAboutUsPhotoSelected() ? [about.imageFile] : []} 
+                                                                onRemoveImageFile={(data) => this.removeNonUploadedImage(data, 'about')}
+                                                                onRemoveImageLink={(data) => this.removeUploadedImage(data, 'about')} 
+                                                            />
+
+                                                            <div className={`col-sm-7 ${styles.autoMargin}`}>
                                                                 <label className="col-sm-auto col-form-label">Project Brochure</label>
                                                                 <BrowseFilesContainer 
-                                                                    onDropFiles={(files) => this.processFile(files, 'about')} 
+                                                                    onDropFiles={(files) => this.processAboutUsBrochure(files, 'about')} 
                                                                     css={browseContainer} 
                                                                     dropContainerCss={styles.fileDrop}
                                                                 >Drop .pdf file here here or click here to browse the file!</BrowseFilesContainer>
@@ -355,7 +377,7 @@ class ProjectItem extends Component {
                                                                     onChange={(e) => this.onChangeHandler(e, 'contactUs')} 
                                                                     className="form-control" 
                                                                     placeholder=""
-                                                                    required="true"
+                                                                    required={true}
                                                                 />
                                                             </div>
                                                         </div>
@@ -383,7 +405,7 @@ class ProjectItem extends Component {
                                                                     onChange={(e) => this.onChangeHandler(e, 'footer')} 
                                                                     className="form-control" 
                                                                     placeholder=""
-                                                                    required="true"
+                                                                    required={true}
                                                                 />
                                                             </div>
 
@@ -398,7 +420,7 @@ class ProjectItem extends Component {
                                                                     onChange={(e) => this.onChangeHandler(e, 'footer')} 
                                                                     className="form-control" 
                                                                     placeholder=""
-                                                                    required="true"
+                                                                    required={true}
                                                                 />
                                                             </div>
                                                         </div>
@@ -673,10 +695,10 @@ class ProjectItem extends Component {
             case 'about':
                 if(files.length > 0){
                     const file = files[0];
-                    const isPDF = isPDF_File(file);
-                    if(isPDF){
+                    const isImage = isImageFile(file);
+                    if(isImage){
                         const newSectionObj = this.state[section];
-                        newSectionObj.brochureFile = file;
+                        newSectionObj.imageFile = file;
                         const inputData = {};
                         inputData[section] = newSectionObj;
                         this.setState(inputData);
@@ -686,6 +708,20 @@ class ProjectItem extends Component {
         
             default:
                 break;
+        }
+    }
+
+    processAboutUsBrochure = (files, section) => {
+        if(files.length > 0){
+            const file = files[0];
+            const isPDF = isPDF_File(file);
+            if(isPDF){
+                const newSectionObj = this.state[section];
+                newSectionObj.brochureFile = file;
+                const inputData = {};
+                inputData[section] = newSectionObj;
+                this.setState(inputData);
+            }
         }
     }
 
@@ -762,17 +798,34 @@ class ProjectItem extends Component {
                 break;
 
             case 'about':
+                const FilesToUpload = new Array();
                 if(this.getIsBrochureSelected()){
                     sectionObj.brochureFile.customFileName = sectionObj.brochureFile.name;
-                    uploadFileToS3(sectionObj.brochureFile, directoryName).then(data => {
-                        sectionObj.brochureLink = data.location;
-                        sectionObj.brochureFile = {};
-                        const inputData = {};
-                        inputData[section] = sectionObj;
-                        this.setState(inputData);
-                        this.updateProjectInfo(undefined, section);
-                    }).catch(err => {
-                        console.error("upload errr ",err)
+                    sectionObj.brochureFile.subSection = "brochure";
+                    FilesToUpload.push(sectionObj.brochureFile);
+                }
+                if(this.isAboutUsPhotoSelected()){
+                    sectionObj.imageFile.customFileName = "about-us." + getFileExtension(sectionObj.imageFile.name);
+                    sectionObj.imageFile.subSection = "image";
+                    FilesToUpload.push(sectionObj.imageFile);
+                }
+                if(FilesToUpload.length > 0){
+                    FilesToUpload.forEach((file) => {
+                        uploadFileToS3(file, directoryName).then(data => {
+                            if(file.subSection == "brochure"){
+                                sectionObj.brochureLink = data.location;
+                                sectionObj.brochureFile = {};
+                            } else if(file.subSection == "image"){
+                                sectionObj.image = data.location;
+                                sectionObj.imageFile = {};
+                            }
+                            const inputData = {};
+                            inputData[section] = sectionObj;
+                            this.setState(inputData);
+                            this.updateProjectInfo(undefined, section);
+                        }).catch(err => {
+                            console.error("upload errr ",err)
+                        });
                     });
                 } else {
                     this.updateProjectInfo(undefined, section);
@@ -928,6 +981,7 @@ class ProjectItem extends Component {
         newSectionArr = oldSectionArr.map((oldSection) => {
             if(oldSection.id == sectionId) {
                 if(updatedSection.files) delete updatedSection.files;
+                if(updatedSection.imageFile) delete updatedSection.imageFile;
                 if(updatedSection.brochureFile) delete updatedSection.brochureFile;
                 if(updatedSection.iconFiles) delete updatedSection.iconFiles;
                 if(updatedSection.count !== undefined) delete updatedSection.count;
@@ -956,6 +1010,11 @@ class ProjectItem extends Component {
 
     getIsBrochureSelected = () => {
         if("name" in this.state.about.brochureFile) return true;
+        else return false;
+    }
+
+    isAboutUsPhotoSelected = () => {
+        if("name" in this.state.about.imageFile) return true;
         else return false;
     }
 

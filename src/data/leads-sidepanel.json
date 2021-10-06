@@ -208,5 +208,5 @@
             "disabled": false
         }
     ],
-    "disabledFieldsOnEdit": ["salesManagerName", "brokerName", "virtualMeetTime"]
+    "disabledFieldsOnEdit": ["projectName", "salesManagerName", "brokerName", "virtualMeetTime"]
 }

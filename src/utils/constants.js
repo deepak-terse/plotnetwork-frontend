@@ -71,7 +71,7 @@ export function getPresetAmenitiesList(){
 export function getStaticProcessingSections(){
     return {
         banner : {id : "banner", title : "Home", images : [], files : []},
-        about : { id: "about", title : "", description : "", brochureLink : "" , brochureFile : {}},
+        about : { id: "about", title : "About Us", displayTitle : "", description : "", image : "", imageFile : {}, brochureLink : "" , brochureFile : {}},
         amenities : { id: "amenities", title : "Amenities", list : [], iconFiles : [], images : [], files : [], count : 0},
         virtualTour : { id: "virtualTour", title : "Virtual Tour", list : [], files : [], count : 0},
         gallery : { id: "gallery", title : "Gallery", images : [], files : []},
@@ -84,7 +84,7 @@ export function getStaticProcessingSections(){
 export function getStaticMicrositeSections(){
     return {
         banner : {id : "banner", title : "Home", images : []},
-        about : { id: "about", title : "", description : "", brochureLink : ""},
+        about : { id: "about", title : "About Us", displayTitle : "", description : "", image : "", brochureLink : ""},
         amenities : { id: "amenities", title : "Amenities", list : [], images : []},
         virtualTour : { id: "virtualTour", title : "Virtual Tour", list : []},
         gallery : { id: "gallery", title : "Gallery", images : []},

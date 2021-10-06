@@ -18,6 +18,7 @@ class Navbar extends Component {
   logout() {
     localStorage.removeItem("loggedInUser");
     localStorage.removeItem('partner');
+    localStorage.removeItem('projects');
     this.props.history.replace("/");
   }
   render () {

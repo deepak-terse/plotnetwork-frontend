@@ -9,8 +9,8 @@ class SidePanel extends Component {
     constructor(props) {
         super(props);
 
-        const user = JSON.parse(localStorage.getItem('loggedInUser'));
-        const brokersByProjectId = user.projects.map((project) => {
+        const projects = JSON.parse(localStorage.getItem('projects'));
+        const brokersByProjectId = projects.map((project) => {
             return {
                 projectId : project.id,
                 brokers : project.brokers

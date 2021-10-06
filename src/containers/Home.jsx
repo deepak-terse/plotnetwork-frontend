@@ -11,12 +11,15 @@ import '../App.scss';
 import "../utils/i18n";
 
 class Home extends Component {
-    state = {
-        isFullPageLayout: false
-    }
-
     constructor(props) {
         super(props);
+        this.state = {
+            isFullPageLayout: false
+        }
+        
+    }
+
+    componentDidMount(){
         this.onRouteChanged();
     }
 

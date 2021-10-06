@@ -25,6 +25,7 @@ class Leads extends Component {
         }
 
         this.getLead(0);
+        this.getProjects();
         this.getBroker();
         this.setData();
         
@@ -32,19 +33,6 @@ class Leads extends Component {
 
     setData = () => {
         const user = JSON.parse(localStorage.getItem('loggedInUser'));
-        // Assign projects in sidepanel
-        sidePanelData.fields.forEach((field, index) => {
-            if(field.id == 'projectName'){
-                const newProjects = user.projects.map((project) => {
-                    project.fullName = project.projectName
-                    return project;
-                })
-                field.options = newProjects;
-            }
-        });
-        this.setState({
-            SidePanelProps: sidePanelData,
-        });
 
         if(user.userType === "admin") {
             this.getSalesManager();
@@ -54,7 +42,6 @@ class Leads extends Component {
             temp.fields.forEach((field, index) => {
                 if(field.id === "salesManagerName") {
                     field.options = [user.user]
-                    // field.options = field.options.concat(user.user);
                 }
             });
 
@@ -72,7 +59,15 @@ class Leads extends Component {
             } else {
                 field.value = "";
                 field.disabled = false;
-                if(field.id == "brokerName" || field.id == "salesManagerName") field.options = [];
+                if(field.id == "brokerName" || field.id == "salesManagerName" || field.id == "projectName") field.options = [];
+                if(field.id == "projectName"){
+                    const projects = JSON.parse(localStorage.getItem('projects'));
+                    const newProjects = projects.map((project) => {
+                        project.fullName = project.projectName
+                        return project;
+                    })
+                    field.options = newProjects;
+                }
             }
         });
         newSidePanelData.action = "CREATE";
@@ -102,6 +97,11 @@ class Leads extends Component {
                         field.value =  new Date(vmTimeDate.getTime() + new Date().getTimezoneOffset() * -60 * 1000).toISOString().slice(0, 19);
                     }
                     
+                    break;
+
+                case 'projectName':
+                    field.value =  data["projectId"];
+                    field.options = [data["projectData"]];
                     break;
 
                 case 'salesManagerName':
@@ -226,24 +226,15 @@ class Leads extends Component {
             }
         }).then((response) => {
             if (response.status == 200){
-                // add logged in SM records in salesManagerName dropdown of Side Panel
-                // let temp = this.state.SidePanelProps;
-                // temp.fields.forEach((field, index) => {
-                //     if(field.id === "salesManagerName") {
-                //         field.options = response.data.data
-                //     }
-                // });
 
                 let temp2 = this.state.datagridProps;
                 temp2.filters.forEach((key, index) => {
                     if(temp2.filters[index].id === "salesManagerName") {
-                        // temp2.filters[index].isHidden = false;
                         temp2.filters[index].options = response.data.data;
                     }
                 });
 
                 this.setState({
-                    // SidePanelProps: temp,
                     datagridProps: temp2
                 })
                 console.log(this.state);
@@ -275,13 +266,6 @@ class Leads extends Component {
             params: params
         }).then((response) => {
             if (response.status == 200){
-                // let temp = this.state.SidePanelProps;
-                // temp.fields.forEach((field, index) => {
-                //     if(field.id === "brokerName") {
-                //         field.options = response.data.data;
-                //         // field.options = field.options.concat(response.data.data);
-                //     }
-                // });
 
                 let temp2 = this.state.datagridProps;
                 temp2.filters.forEach((key, index) => {
@@ -291,7 +275,6 @@ class Leads extends Component {
                 });
 
                 this.setState({
-                    // SidePanelProps: temp,
                     datagridProps: temp2
                 })
                 
@@ -359,6 +342,11 @@ class Leads extends Component {
                     e.brokerData = e.brokerId;
                     e.brokerId = e.brokerId.id;
 
+                    e.projectName = e.projectId.projectName;
+                    e.projectId.fullName = e.projectId.projectName;
+                    e.projectData = e.projectId;
+                    e.projectId = e.projectId.id;
+
                     // e.date = new Date(e.createdAt).toUTCString();
 
                     e.date = moment(e.createdAt).format('DD-MM-YYYY, hh:mm A')
@@ -420,6 +408,7 @@ class Leads extends Component {
                         "virtualMeetTime": new Date(data.virtualMeetTime).getTime(),
                         "budget": numeral(data.budget)._value,
                         "preference": data.preference,
+                        "projectId": data.projectName,
                         "salesManagerId": data.salesManagerName,
                         "brokerId": data.brokerName,
                         "configuration": data.configuration,
@@ -476,6 +465,38 @@ class Leads extends Component {
             if (response.status == 200){
                 console.log('User updated');
                 this.getLead(0);
+            } else if (response.status == 401) {
+                console.log("User not exist");
+            } else {
+                console.log('Error found : ', response.data.message);
+            }
+        }).catch((error)=>{
+            console.log('Error found : ', error);
+        });
+    }
+
+    getProjects = () => {
+        let params = {
+            filter: {
+                "partnerName": localStorage.getItem('partner')
+            }
+        };
+
+        axios({
+            method: 'get',
+            url: getAPIs().project,
+            params: params
+        }).then((response) => {
+            if (response.status == 200){
+                console.log('User fetched', response.data); 
+                
+                localStorage.setItem("projects",JSON.stringify(response.data.data));
+
+                // this.setState({
+                //     datagridProps: temp
+                // })
+                // this.getSalesManager();
+                
             } else if (response.status == 401) {
                 console.log("User not exist");
             } else {

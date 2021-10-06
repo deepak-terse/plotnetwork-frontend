@@ -26,6 +26,7 @@
         { "key":"dob", "label":"Date of Birth", "isHidden": false },
         { "key":"mobileNumber", "label":"Mobile Number", "isHidden": false },
         { "key":"emailId", "label":"Email ID", "isHidden": true},
+        { "key":"projectName", "label":"Project", "isHidden": false },
         { "key":"brokerName", "label":"Broker", "isHidden": false },
         { "key":"salesManagerName", "label":"Sales Manager", "isHidden": false },
         { "key":"message", "label":"Message", "isHidden": true },

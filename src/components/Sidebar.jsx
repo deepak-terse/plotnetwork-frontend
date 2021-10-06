@@ -30,7 +30,7 @@ class Sidebar extends Component {
 
     return (
       <nav className="sidebar sidebar-offcanvas" id="sidebar">
-        <div style={{"text-align":"center"}} className="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+        <div style={{"textAlign":"center"}} className="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
           <a className="sidebar-brand brand-logo" href="index.html"><img src={logoLong} alt="logo" /></a>
           <a className="sidebar-brand brand-logo-mini" href="index.html"><img src={logoShort} alt="logo" /></a>
         </div>
