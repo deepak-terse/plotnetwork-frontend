@@ -449,7 +449,7 @@ class ProjectItem extends Component {
         const {amenities} = this.state;
 
         const amenityUploadedList = amenities.list.map((amenity, index) => {
-            return <TextFieldBrowseFileRowContainer 
+            return <TextFieldBrowseFileRowContainer key={index}
                         // Props for text field
                         title="Title"
                         name={"amenityTitle_list"+index}
@@ -467,7 +467,7 @@ class ProjectItem extends Component {
     })
 
         const amenityNonUploadedList = Array.apply(null, Array(amenities.count)).map((amenity, index) => {
-            return <TextFieldBrowseFileRowContainer 
+            return <TextFieldBrowseFileRowContainer key={index}
                         // Props for text field
                         title="Title"
                         name={`amenityTitle_iconFiles${index}`}
@@ -501,7 +501,7 @@ class ProjectItem extends Component {
         const {virtualTour} = this.state;
 
         const tourUploadedList = virtualTour.list.map((tourObj, index) => {
-        return <TextFieldBrowseFileRowContainer 
+        return <TextFieldBrowseFileRowContainer key={index}
                     // Props for text field
                     title="Virtual Tour Link"
                     name={"tourTitle_list"+index}
@@ -519,7 +519,7 @@ class ProjectItem extends Component {
     })
 
         const tourNonUploadedList = Array.apply(null, Array(virtualTour.count)).map((tourObj, index) => {
-        return <TextFieldBrowseFileRowContainer 
+        return <TextFieldBrowseFileRowContainer key={index}
                     // Props for text field
                     title="Virtual Tour Link"
                     name={`tourTitle_files${index}`}
@@ -942,6 +942,7 @@ class ProjectItem extends Component {
 
         let user = JSON.parse(localStorage.getItem('loggedInUser'));
         const updatedProject = this.getUpdatedProject(section, this.state[section]);
+        console.log(updatedProject)
         axios({
             method: 'put',
             url: getAPIs().project,
@@ -973,24 +974,35 @@ class ProjectItem extends Component {
     // (this fn will return a project object which will contain a updated intended section
     // & other sections will be old)
     getUpdatedProject = (sectionId, data) => {
-        const project = lodashClonedeep(this.state.project);
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        const project = user.projects.filter(project => project.id == this.state.project.id)[0]; 
+        let websiteMenus = project.websiteMenus;
+        if(typeof websiteMenus !== 'object') project.websiteMenus = {};
+        let sectionArray = project.websiteMenus.sections;
+        if(!Array.isArray(sectionArray)) project.websiteMenus.sections = new Array();
+        
         let updatedSection = lodashClonedeep(data);
-        let oldSectionArr, newSectionArr;
+        if(updatedSection.files) delete updatedSection.files;
+        if(updatedSection.imageFile) delete updatedSection.imageFile;
+        if(updatedSection.brochureFile) delete updatedSection.brochureFile;
+        if(updatedSection.iconFiles) delete updatedSection.iconFiles;
+        if(updatedSection.count !== undefined) delete updatedSection.count;
 
-        oldSectionArr = lodashClonedeep(project.websiteMenus.sections);
-        newSectionArr = oldSectionArr.map((oldSection) => {
-            if(oldSection.id == sectionId) {
-                if(updatedSection.files) delete updatedSection.files;
-                if(updatedSection.imageFile) delete updatedSection.imageFile;
-                if(updatedSection.brochureFile) delete updatedSection.brochureFile;
-                if(updatedSection.iconFiles) delete updatedSection.iconFiles;
-                if(updatedSection.count !== undefined) delete updatedSection.count;
-                return updatedSection;
+        const order = ['banner', 'about', 'amenities', 'virtualTour', 'gallery', 'floorPlans', 'contactUs', 'footer']
+        const newSections = [];
+
+        order.forEach((key) => {
+            if(updatedSection.id == key){
+                newSections.push(updatedSection);
+            } else {
+                const oldSection = project.websiteMenus.sections.filter((section) => section.id == key)
+                if(oldSection.length > 0){
+                    newSections.push(oldSection[0]);
+                }
             }
-            else return oldSection;
         })
-            
-        project.websiteMenus.sections = newSectionArr;
+                    
+        project.websiteMenus.sections = newSections;
         return project;
     }
 

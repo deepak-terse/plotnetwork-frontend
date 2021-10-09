@@ -107,7 +107,7 @@ class Datagrid extends Component {
                                             {(
                                                 data.tableData.map((lead, index) => 
                                                     <tr key={index}>
-                                                        {(
+                                                        {
                                                             data.tableHeaders.map((colHeader, index2) =>
                                                                 !colHeader.customStyle ?
                                                                 <td key={index2} style={colHeader.isHidden ? {display:'none'} : {}}> {lead[colHeader.key] ? lead[colHeader.key] : "-"} </td> :
@@ -115,7 +115,7 @@ class Datagrid extends Component {
                                                                     <label className={colHeader.customStyle[lead[colHeader.key]]}>{lead[colHeader.key] ? lead[colHeader.key] : "-"}</label>
                                                                 </td>
                                                             )
-                                                        )}
+                                                        }
                                                         {
                                                             data.actions.isEdit ?
                                                             <td key="edit"> 
@@ -151,8 +151,8 @@ class Datagrid extends Component {
                     )
                 )}
 
-                <button disabled={this.skip <= 0} style={{'background-color': '#fff', color: '#000'}} className="btn mr-2" onClick = {this.onPrev}> PREV </button>
-                <button disabled={(this.skip + this.limit) > data.totalCount} style={{'background-color': '#fff', color: '#000'}} className="btn mr-2" onClick = {this.onNext}> NEXT </button>
+                <button disabled={this.skip <= 0} style={{'backgroundColor': '#fff', color: '#000'}} className="btn mr-2" onClick = {this.onPrev}> PREV </button>
+                <button disabled={(this.skip + this.limit) > data.totalCount} style={{'backgroundColor': '#fff', color: '#000'}} className="btn mr-2" onClick = {this.onNext}> NEXT </button>
                 <span style={{color:'#d0d0d0'}}> Showing {this.skip}-{this.skip + data.tableData.length} 0f {data.totalCount} records</span>
             </div>
         )

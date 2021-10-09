@@ -17,7 +17,7 @@ class ImagePreviewList extends Component {
 
         if(imageLinks !== undefined){
             imageList = imageLinks.map((image, index) =>
-                <div className="col-sm-3">
+                <div className="col-sm-3" key={index}>
                     <ImagePreview 
                         key={`images${index}`} 
                         data={image} 
@@ -27,7 +27,7 @@ class ImagePreviewList extends Component {
         }
         if(imageFiles !== undefined){
             imageFileList = imageFiles.map((imgFile, index) =>
-                <div className="col-sm-3">
+                <div className="col-sm-3" key={index}>
                     <ImagePreview 
                         key={`files${index}`} 
                         data={imgFile} 
