@@ -8,6 +8,8 @@ import { isMobile } from '../utils/device';
 import axios from 'axios';
 import { getAPIs } from '../utils/constants';
 
+import ErrorBoundary from '../components/ErrorBoundary';
+
 class Dashboard extends Component {
     constructor(props) {
         super(props);
@@ -24,30 +26,14 @@ class Dashboard extends Component {
         const url = isMobile() ? 
             reportMobile :
             reportDesktop
+
         return (
-            <React.Fragment>
+            <ErrorBoundary>
                 {
-                    isMobile() ? 
-                    <Iframe url= {url}
-                        width="100%"
-                        height="100%"
-                        id={styles.mobilereport}
-                        className="myClassname"
-                        display="initial"
-                        position="relative"
-                        allowfullscreen={true}/>
-                    :
-                    <Iframe url= {url}
-                        width="100%"
-                        height="100%"
-                        id={styles.desktopreport}
-                        className="myClassname"
-                        display="initial"
-                        position="relative"
-                        allowfullscreen={true}/>
+                    url ? <ReportsView isMobile={isMobile()} url={url}/>
+                        : <NoDashboardView/>
                 }
-                
-            </React.Fragment>
+            </ErrorBoundary>
         )
     }
 
@@ -79,4 +65,37 @@ class Dashboard extends Component {
 }
 
 export default withRouter(Dashboard)
+
+function NoDashboardView() {
+    return (
+        <div className={styles.noDashboardView}>
+            <h4>Coming Soon</h4>
+            <p>This reports will be available once microsites for brokers are created</p>
+        </div>
+    )
+}
+
+function ReportsView(props) {
+    const { isMobile, url } = props;
+    return (
+        isMobile ? 
+            <Iframe url= {url}
+                width="100%"
+                height="100%"
+                id={styles.mobilereport}
+                className="myClassname"
+                display="initial"
+                position="relative"
+                allowfullscreen={true}/>
+        :
+            <Iframe url= {url}
+                width="100%"
+                height="100%"
+                id={styles.desktopreport}
+                className="myClassname"
+                display="initial"
+                position="relative"
+                allowfullscreen={true}/>
+    )
+}
 
