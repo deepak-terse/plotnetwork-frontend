@@ -11,6 +11,7 @@ export default function DateInput(props) {
         value = {props.value}
         className = {props.className}
         onChange = {props.onChange}
+        disabled={props.disabled}
         />
 }
 

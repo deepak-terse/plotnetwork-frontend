@@ -13,6 +13,7 @@ export default function TextInput(props) {
         onChange = {props.onChange}
         disabled = {props.disabled}
         id = {props.id}
+        required = {props.required}
         />
 }
 

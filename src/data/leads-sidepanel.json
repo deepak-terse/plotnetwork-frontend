@@ -18,7 +18,8 @@
             "value": "",
             "placeholder": "Sachin Nalawade",
             "hidden": false,
-            "disabled": false
+            "disabled": false,
+            "required": true
         },
         {
             "id": "dob",
@@ -36,16 +37,18 @@
             "value": "",
             "placeholder": "8888888888",
             "hidden": false,
-            "disabled": false
+            "disabled": false,
+            "required": true
         },
         {
             "id": "emailId",
             "label": "Email ID",
-            "type": "text",
+            "type": "email",
             "value": "",
             "placeholder": "",
             "hidden": false,
-            "disabled": false
+            "disabled": false,
+            "required": true
         },
         {
             "id": "projectName",
@@ -208,5 +211,5 @@
             "disabled": false
         }
     ],
-    "disabledFieldsOnEdit": ["projectName", "salesManagerName", "brokerName", "virtualMeetTime"]
+    "disabledFieldsOnEdit": ["projectName", "salesManagerName", "brokerName"]
 }

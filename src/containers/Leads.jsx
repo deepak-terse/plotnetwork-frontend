@@ -11,6 +11,7 @@ import axios from 'axios';
 import { getAPIs } from '../utils/constants';
 import moment from 'moment'
 import numeral from 'numeral';
+import { isNaN } from 'lodash';
 
 class Leads extends Component {
     constructor(props) {
@@ -95,6 +96,8 @@ class Leads extends Component {
                     if(data[field.id] !== "-"){ // if meetTime exists then only format it
                         var vmTimeDate = new Date(moment(data[field.id],['DD-MM-YYYY, hh:mm A']).format());
                         field.value =  new Date(vmTimeDate.getTime() + new Date().getTimezoneOffset() * -60 * 1000).toISOString().slice(0, 19);
+                    } else {
+                        field.value = "";
                     }
                     
                     break;
@@ -124,6 +127,8 @@ class Leads extends Component {
                     break;
             }
 
+            console.log(field.id)
+            console.log(sidePanelData.disabledFieldsOnEdit.includes(field.id))
             if(sidePanelData.disabledFieldsOnEdit.includes(field.id)){
                 field.disabled = true;
             }
@@ -390,8 +395,32 @@ class Leads extends Component {
         if(user.userType !== "admin") {
             data.salesManagerName = user.user.id;
         }
-
+        
         moment(data.virtualMeetTime).format('YYYY-MM-DDTHH:MM:SSZ') // working partially
+        const dataObj = {
+            "fullName": data.fullName,
+            "mobileNumber": data.mobileNumber,
+            "emailId": data.emailId,
+            "message": data.message,
+            "budget": data.budget? numeral(data.budget)._value : undefined,
+            "preference": data.preference,
+            "projectId": data.projectName,
+            "salesManagerId": data.salesManagerName,
+            "brokerId": data.brokerName,
+            "configuration": data.configuration,
+            "purchasePurpose": data.purchasePurpose,
+            "occupation": data.occupation,
+            "leadSource": data.leadSource,
+            "status": data.status,
+            "partnerName": localStorage.getItem('partner')
+        }
+
+        const dob = new Date(data.dob).getTime();
+        if(dob !== 0 && typeof dob == 'number' && !isNaN(dob)) dataObj.dob = dob;
+
+        const vmTime = new Date(data.virtualMeetTime).getTime();
+        if(vmTime !== 0 && typeof vmTime == 'number' && !isNaN(vmTime)) dataObj.virtualMeetTime = vmTime;
+
         axios({
             method: 'post',
             url: getAPIs().lead,
@@ -399,25 +428,7 @@ class Leads extends Component {
                     "user": {
                         userType:user.userType
                     },
-                    "data": {
-                        "fullName": data.fullName,
-                        "mobileNumber": data.mobileNumber,
-                        "dob": new Date(data.dob).getTime(),
-                        "emailId": data.emailId,
-                        "message": data.message,
-                        "virtualMeetTime": new Date(data.virtualMeetTime).getTime(),
-                        "budget": numeral(data.budget)._value,
-                        "preference": data.preference,
-                        "projectId": data.projectName,
-                        "salesManagerId": data.salesManagerName,
-                        "brokerId": data.brokerName,
-                        "configuration": data.configuration,
-                        "purchasePurpose": data.purchasePurpose,
-                        "occupation": data.occupation,
-                        "leadSource": data.leadSource,
-                        "status": data.status,
-                        "partnerName": localStorage.getItem('partner')
-                    }
+                    "data": dataObj
             }
         }).then((response) => {
             if (response.status == 200){
@@ -437,6 +448,26 @@ class Leads extends Component {
 
     updateLead = (data) => {
         let temp = JSON.parse(localStorage.getItem('loggedInUser'));
+        const dataObj = {
+            "id": data.id,
+            "fullName": data.fullName,
+            "mobileNumber": data.mobileNumber,
+            "emailId": data.emailId,
+            "message": data.message,
+            "budget": numeral(data.budget)._value,
+            "preference": data.preference,
+            "configuration": data.configuration,
+            "purchasePurpose": data.purchasePurpose,
+            "occupation": data.occupation,
+            "leadSource": data.leadSource,
+            "status": data.status,
+        }
+
+        const dob = new Date(data.dob).getTime();
+        if(dob !== 0 && typeof dob == 'number' && !isNaN(dob)) dataObj.dob = dob;
+
+        const vmTime = new Date(data.virtualMeetTime).getTime();
+        if(vmTime !== 0 && typeof vmTime == 'number' && !isNaN(vmTime)) dataObj.virtualMeetTime = vmTime;
 
         axios({
             method: 'put',
@@ -445,21 +476,7 @@ class Leads extends Component {
                     "user": {
                         userType:temp.userType
                     },
-                    "data": {
-                        "id": data.id,
-                        "fullName": data.fullName,
-                        "mobileNumber": data.mobileNumber,
-                        "emailId": data.emailId,
-                        "message": data.message,
-                        "budget": numeral(data.budget)._value,
-                        "preference": data.preference,
-                        "configuration": data.configuration,
-                        "purchasePurpose": data.purchasePurpose,
-                        "occupation": data.occupation,
-                        "leadSource": data.leadSource,
-                        "status": data.status,
-                        "dob": new Date(data.dob).getTime()
-                    }
+                    "data": dataObj
             }
         }).then((response) => {
             if (response.status == 200){
