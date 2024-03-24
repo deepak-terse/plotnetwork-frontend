@@ -1,79 +1,54 @@
-<p align="center"><img width="100"src="public/favicon_io/android-chrome-512x512.png"></p>
+# PlotNetwork (Front-end)
 
-<h1 align="center"><strong>React Boilerplate</strong></h1>
-
-<div align="center">
-	<strong>
-		A simple, minimalistic react template to build single page applications
-	</strong>
-</div>
-
-<br>
-
-<div align="center">
-	<a href="https://nodejs.org/en/">
-		<img src="https://img.shields.io/badge/node-%3E%3D%208.0.0-green.svg" alt="node version">
-	</a>
-	<a href="https://github.com/deepak-terse/vue-boilerplate">
-		<img src="https://img.shields.io/badge/License-MIT-green.svg" alt="LICENSE">
-	</a>
-	<a href="https://medium.com/@iamdeepakterse">
-		<img src="https://img.shields.io/badge/Blog-medium-orange" alt="Chat">
-	</a>
-	<a href="https://www.linkedin.com/in/deepak-terse/">
-		<img src="https://img.shields.io/badge/Connect-linkedin-blue" alt="connect">
-	</a>
-	<a href="https://github.com/deepak-terse">
-		<img src="https://img.shields.io/badge/Author-deepak--terse-blue" alt="Author deepak-terse">
-	</a>
-</div>
-
-<br>
-
-## Templates
+A comprehensive platform tailored for real estate administrators, brokers, and their sales teams to efficiently manage microsites, leads, and team activities.
 
 
-<br>
-<br>
+## About the Project
 
-## Prerequisites
-* Node
-* npm
+Developed as a proof of concept for a client during my freelance tenure, this project aimed to swiftly deliver a minimum viable product (MVP), conduct user acceptance testing within the internal team, and pilot it with a partner to assess product effectiveness. Upon successful evaluation, the plan was to scale the platform to additional partners.
 
+Over a 6-month engagement, the platform expanded to serve 5 partners, accommodating over 150 users including brokers and sales teams, and handling 500+ daily incoming leads.
 
-## Build Setup
-
-``` bash
-# clone the project
-git clone https://github.com/deepak-terse/react-boilerplate.git
-cd react-boilerplate
-
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run start
-
-# build for production with minification
-npm run build
-```
+During the project, I crafted a UI template to expedite development. Further details can be found below:
 
 
-## Dependencies
+## React UI Templates
 
-* react
-* react-dom
-* react-scripts
-* node-sass
-* typescript
+- It was designed to simplify and speed up development of modules with CRUD operations
+
+- Developed two versatile templates:
+  - **Grid Page**: featuring data listing with pagination, filters, and options for update and delete operations.
+  - **Side Panel**: displaying add/update forms with validations.
+
+- Configured all these functionalities and styles using JSON configurations, facilitating swift integration of new modules without additional coding.
+
+- This approach significantly reduced development time for adding new modules and undertaking subsequent projects.
+
+- Future plans involve streamlining and automating common development operations further.
 
 
-## References
-* https://reactjs.org/docs/getting-started.html
 
-## Licence
+## Key Features
 
-[MIT](https://opensource.org/licenses/MIT)
+- **Lead Management**: Track and manage leads from inception to conversion.
 
-Copyright (c) 2020-present, [deepak-terse](https://github.com/deepak-terse).
+- **Team Management**: Efficiently manage brokers and sales personnel, and assign leads to them.
 
+- **Builder Microsite configuration**: Provision for builder partners to showcase new projects via microsites, with the platform serving as a CMS.
+
+- **Dashboard**: Provides comprehensive performance reports for team members and lead statistics, offering insights into team and lead performance.
+
+- **Translations**: Implemented support for language translations.
+
+- **Responsive Design**: Access the website from various devices, including desktops, tablets, and smartphones. The responsive design ensures a consistent experience across platforms.
+
+- **PWA support** Engineered to embrace Progressive Web App (PWA) features such as installability and caching.
+
+
+## Technologies Used
+
+- **React**: A frontend framework for building dynamic user interfaces based on reusable components.
+
+- **Google Spreadsheet APIs**: Supports read-write operations to Google Sheets, facilitating lead integration.
+
+- **AWS APIs**: Utilized for interaction with AWS services like S3, mainly for asset read/write operations to S3 buckets.

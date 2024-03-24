@@ -16,8 +16,8 @@ export function getAPIs(){
 }
 
 export function getAWSConfig(bucketName, dirName, region){
-    const accessKeyId = 'AKIAROY2ZL6PJFJ2RYOS';
-    const secretAccessKey = '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';
+    const accessKeyId = process.env.accessKeyId;
+    const secretAccessKey = process.env.secretAccessKey;
 
     return {
         bucketName: bucketName,
